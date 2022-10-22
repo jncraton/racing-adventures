@@ -5,32 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title></title>
-    <style></style>
-    <script type="module" src="main.js"></script>
-    <script id="shader-fs" type="x-shader/x-fragment">
-        precision mediump float;
+ <style>
+   body { margin: 0; }
+  </style>
+ </head>
+ <body>
+  <script src="three.js"></script>
+  <script>
+   const scene = new THREE.Scene();
+   const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-        void main(void) {
-            gl_FragColor = vec4(0.9, 0.3, 0.6, 1.0);
-        }
-    </script>
+   const renderer = new THREE.WebGLRenderer();
+   renderer.setSize( window.innerWidth, window.innerHeight );
+   document.body.appendChild( renderer.domElement );
 
-    <script id="shader-vs" type="x-shader/x-vertex">
-        attribute vec3 Position;
+   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+   const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+   const cube = new THREE.Mesh( geometry, material );
+   scene.add( cube );
 
-        uniform mat4 u_ModelView;
-        uniform mat4 u_Persp;
+   camera.position.z = 5;
 
-        void main(void) {
-            gl_Position = u_Persp * u_ModelView * vec4(Position, 1.0);
-        }
-    </script>
-    </head>
+   function animate() {
+    requestAnimationFrame( animate );
 
-<body>
-    <canvas id="webgl_hello_world" width="800" height="600"></canvas>
-</body>
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
 
-<script type="text/javascript">
-</script>
+    renderer.render( scene, camera );
+   };
+
+   animate();
+  </script>
+ </body>
 </html>

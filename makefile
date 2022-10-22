@@ -1,5 +1,5 @@
-gl-matrix.js:
-	wget https://raw.githubusercontent.com/toji/gl-matrix/master/dist/gl-matrix.js
+three.js:
+	wget https://threejs.org/build/three.js
 
 clean:
-	rm gl-matrix.js
+	rm three.js
