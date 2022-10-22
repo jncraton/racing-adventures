@@ -1,5 +1,10 @@
+all: three.js ammo.js OrbitControls.js
+
 three.js:
 	wget https://threejs.org/build/three.js
 
+ammo.js:
+	wget https://raw.githubusercontent.com/kripken/ammo.js/main/builds/ammo.js
+
 clean:
-	rm three.js
+	rm three.js ammo.js
