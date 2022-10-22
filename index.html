@@ -19,14 +19,17 @@
    renderer.setSize( window.innerWidth, window.innerHeight );
    document.body.appendChild( renderer.domElement );
 
-   const geometry = new THREE.BoxGeometry( 1, 1, 1 );
    const material = new THREE.MeshLambertMaterial( { side: THREE.DoubleSide } );
-   const cube = new THREE.Mesh( geometry, material );
+
+   const trackPiece = new THREE.BoxGeometry(10, 1, 1);
+   
+   const side1 = new THREE.Mesh( trackPiece, material );
+   
    const ambientLight = new THREE.AmbientLight( 0x333333 );
    const light = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
    light.position.set( 0.32, 0.39, 0.7 );
 
-   scene.add( cube );
+   scene.add( side1 );
    scene.add( ambientLight );
    scene.add( light );
 
@@ -35,8 +38,8 @@
    function animate() {
     requestAnimationFrame( animate );
 
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    side1.rotation.x += 0.01;
+    side1.rotation.y += 0.01;
 
     renderer.render( scene, camera );
    };
