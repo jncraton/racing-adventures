@@ -1,4 +1,5 @@
 import { mat4} from "./gl-matrix.js";
+
 var gl;
 function initGL(canvas) {
     try {
