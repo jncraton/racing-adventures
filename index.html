@@ -33,14 +33,18 @@
    scene.add( ambientLight );
    scene.add( light );
 
-   camera.position.z = 5;
+   let frame = 0
 
    function animate() {
     requestAnimationFrame( animate );
 
-    side1.rotation.x += 0.01;
-    side1.rotation.y += 0.01;
+    frame += 1
 
+    camera.position.x = 15*Math.cos(frame/100);
+    camera.position.z = 15*Math.sin(frame/100);
+    camera.position.y = 5;
+    camera.lookAt(0,0,0)
+  
     renderer.render( scene, camera );
    };
 
