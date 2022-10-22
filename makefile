@@ -7,7 +7,7 @@ ammo.js:
 	wget https://raw.githubusercontent.com/kripken/ammo.js/main/builds/ammo.js
 
 format:
-	npx prettier --write index.html Detector.js OrbitControls.js
+	npx prettier --write index.html Detector.js
 
 clean:
 	rm three.js ammo.js

@@ -44,7 +44,6 @@
     <script src="ammo.js"></script>
 
     <script src="three.js"></script>
-    <script src="OrbitControls.js"></script>
     <script src="Detector.js"></script>
 
     <script>
@@ -62,7 +61,7 @@
 
         // Graphics variables
         var container, speedometer
-        var camera, controls, scene, renderer
+        var camera, scene, renderer
         var terrainMesh, texture
         var clock = new THREE.Clock()
         var materialDynamic, materialStatic, materialInteractive
@@ -107,7 +106,6 @@
           camera.position.y = 4.39
           camera.position.z = -35.11
           camera.lookAt(new THREE.Vector3(0.33, -0.4, 0.85))
-          controls = new THREE.OrbitControls(camera)
 
           renderer = new THREE.WebGLRenderer({ antialias: true })
           renderer.setClearColor(0xbfd1e5)
@@ -161,7 +159,6 @@
           var dt = clock.getDelta()
           for (var i = 0; i < syncList.length; i++) syncList[i](dt)
           physicsWorld.stepSimulation(dt, 10)
-          controls.update(dt)
           renderer.render(scene, camera)
           time += dt
         }
