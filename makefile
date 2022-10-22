@@ -1,4 +1,4 @@
-all: three.js ammo.js OrbitControls.js
+all: three.js ammo.js
 
 three.js:
 	wget https://threejs.org/build/three.js
