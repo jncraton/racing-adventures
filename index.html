@@ -480,6 +480,13 @@
             q = tm.getRotation()
             chassisMesh.position.set(p.x(), p.y(), p.z())
             chassisMesh.quaternion.set(q.x(), q.y(), q.z(), q.w())
+
+            let camera_offset = new THREE.Vector3(0, 2, -6)
+            camera_offset.applyQuaternion(chassisMesh.quaternion)
+            camera_position = camera_offset.add(chassisMesh.position)
+
+            camera.position.set(camera_position.x, camera_position.y, camera_position.z)
+            camera.lookAt(chassisMesh.position)
           }
 
           syncList.push(sync)
