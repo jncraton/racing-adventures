@@ -485,7 +485,11 @@
             camera_offset.applyQuaternion(chassisMesh.quaternion)
             camera_position = camera_offset.add(chassisMesh.position)
 
-            camera.position.set(camera_position.x, camera_position.y, camera_position.z)
+            camera.position.set(
+              camera_position.x,
+              camera_position.y,
+              camera_position.z
+            )
             camera.lookAt(chassisMesh.position)
           }
 
@@ -514,7 +518,7 @@
           )
 
           createBox(
-            new THREE.Vector3(75/2, -0.5, 75/2),
+            new THREE.Vector3(75 / 2, -0.5, 75 / 2),
             ZERO_QUATERNION,
             75,
             1,
@@ -524,7 +528,7 @@
           )
 
           createBox(
-            new THREE.Vector3(75/2, -0.5, -75/2),
+            new THREE.Vector3(75 / 2, -0.5, -75 / 2),
             ZERO_QUATERNION,
             75,
             1,
