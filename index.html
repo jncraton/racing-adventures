@@ -55,33 +55,33 @@
         }
 
         // - Global variables -
-        var DISABLE_DEACTIVATION = 4
-        var TRANSFORM_AUX = new Ammo.btTransform()
-        var ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
+        let DISABLE_DEACTIVATION = 4
+        let TRANSFORM_AUX = new Ammo.btTransform()
+        let ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
 
         // Graphics variables
-        var container, speedometer
-        var camera, scene, renderer
-        var terrainMesh, texture
-        var clock = new THREE.Clock()
-        var materialDynamic, materialStatic, materialInteractive
+        let container, speedometer
+        let camera, scene, renderer
+        let terrainMesh, texture
+        let clock = new THREE.Clock()
+        let materialDynamic, materialStatic, materialInteractive
 
         // Physics variables
-        var collisionConfiguration
-        var dispatcher
-        var broadphase
-        var solver
-        var physicsWorld
+        let collisionConfiguration
+        let dispatcher
+        let broadphase
+        let solver
+        let physicsWorld
 
-        var syncList = []
-        var time = 0
-        var objectTimePeriod = 3
-        var timeNextSpawn = time + objectTimePeriod
-        var maxNumObjects = 30
+        let syncList = []
+        let time = 0
+        let objectTimePeriod = 3
+        let timeNextSpawn = time + objectTimePeriod
+        let maxNumObjects = 30
 
         // Keybord actions
-        var actions = {}
-        var keysActions = {
+        let actions = {}
+        let keysActions = {
           KeyW: 'acceleration',
           KeyS: 'braking',
           KeyA: 'left',
@@ -112,10 +112,10 @@
           renderer.setPixelRatio(window.devicePixelRatio)
           renderer.setSize(window.innerWidth, window.innerHeight)
 
-          var ambientLight = new THREE.AmbientLight(0x404040)
+          let ambientLight = new THREE.AmbientLight(0x404040)
           scene.add(ambientLight)
 
-          var dirLight = new THREE.DirectionalLight(0xffffff, 1)
+          let dirLight = new THREE.DirectionalLight(0xffffff, 1)
           dirLight.position.set(10, 10, 5)
           scene.add(dirLight)
 
@@ -156,8 +156,8 @@
 
         function tick() {
           requestAnimationFrame(tick)
-          var dt = clock.getDelta()
-          for (var i = 0; i < syncList.length; i++) syncList[i](dt)
+          let dt = clock.getDelta()
+          for (let i = 0; i < syncList.length; i++) syncList[i](dt)
           physicsWorld.stepSimulation(dt, 10)
           renderer.render(scene, camera)
           time += dt
@@ -181,38 +181,38 @@
         }
 
         function createBox(pos, quat, w, l, h, mass, friction) {
-          var material = mass > 0 ? materialDynamic : materialStatic
-          var shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
-          var geometry = new Ammo.btBoxShape(
+          let material = mass > 0 ? materialDynamic : materialStatic
+          let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+          let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
           )
 
           if (!mass) mass = 0
           if (!friction) friction = 1
 
-          var mesh = new THREE.Mesh(shape, material)
+          let mesh = new THREE.Mesh(shape, material)
           mesh.position.copy(pos)
           mesh.quaternion.copy(quat)
           scene.add(mesh)
 
-          var transform = new Ammo.btTransform()
+          let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
           transform.setRotation(
             new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
           )
-          var motionState = new Ammo.btDefaultMotionState(transform)
+          let motionState = new Ammo.btDefaultMotionState(transform)
 
-          var localInertia = new Ammo.btVector3(0, 0, 0)
+          let localInertia = new Ammo.btVector3(0, 0, 0)
           geometry.calculateLocalInertia(mass, localInertia)
 
-          var rbInfo = new Ammo.btRigidBodyConstructionInfo(
+          let rbInfo = new Ammo.btRigidBodyConstructionInfo(
             mass,
             motionState,
             geometry,
             localInertia
           )
-          var body = new Ammo.btRigidBody(rbInfo)
+          let body = new Ammo.btRigidBody(rbInfo)
 
           body.setFriction(friction)
           //body.setRestitution(.9);
@@ -224,11 +224,11 @@
             body.setActivationState(DISABLE_DEACTIVATION)
             // Sync physics and graphics
             function sync(dt) {
-              var ms = body.getMotionState()
+              let ms = body.getMotionState()
               if (ms) {
                 ms.getWorldTransform(TRANSFORM_AUX)
-                var p = TRANSFORM_AUX.getOrigin()
-                var q = TRANSFORM_AUX.getRotation()
+                let p = TRANSFORM_AUX.getOrigin()
+                let q = TRANSFORM_AUX.getRotation()
                 mesh.position.set(p.x(), p.y(), p.z())
                 mesh.quaternion.set(q.x(), q.y(), q.z(), q.w())
               }
@@ -239,9 +239,9 @@
         }
 
         function createWheelMesh(radius, width) {
-          var t = new THREE.CylinderGeometry(radius, radius, width, 24, 1)
+          let t = new THREE.CylinderGeometry(radius, radius, width, 24, 1)
           t.rotateZ(Math.PI / 2)
-          var mesh = new THREE.Mesh(t, materialInteractive)
+          let mesh = new THREE.Mesh(t, materialInteractive)
           mesh.add(
             new THREE.Mesh(
               new THREE.BoxGeometry(
@@ -260,8 +260,8 @@
         }
 
         function createChassisMesh(w, l, h) {
-          var shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
-          var mesh = new THREE.Mesh(shape, materialInteractive)
+          let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+          let mesh = new THREE.Mesh(shape, materialInteractive)
           scene.add(mesh)
           return mesh
         }
@@ -269,53 +269,53 @@
         function createVehicle(pos, quat) {
           // Vehicle contants
 
-          var chassisWidth = 1.8
-          var chassisHeight = 0.6
-          var chassisLength = 4
-          var massVehicle = 800
+          let chassisWidth = 1.8
+          let chassisHeight = 0.6
+          let chassisLength = 4
+          let massVehicle = 800
 
-          var wheelAxisPositionBack = -1
-          var wheelRadiusBack = 0.4
-          var wheelWidthBack = 0.3
-          var wheelHalfTrackBack = 1
-          var wheelAxisHeightBack = 0.3
+          let wheelAxisPositionBack = -1
+          let wheelRadiusBack = 0.4
+          let wheelWidthBack = 0.3
+          let wheelHalfTrackBack = 1
+          let wheelAxisHeightBack = 0.3
 
-          var wheelAxisFrontPosition = 1.7
-          var wheelHalfTrackFront = 1
-          var wheelAxisHeightFront = 0.3
-          var wheelRadiusFront = 0.35
-          var wheelWidthFront = 0.2
+          let wheelAxisFrontPosition = 1.7
+          let wheelHalfTrackFront = 1
+          let wheelAxisHeightFront = 0.3
+          let wheelRadiusFront = 0.35
+          let wheelWidthFront = 0.2
 
-          var friction = 1000
-          var suspensionStiffness = 20.0
-          var suspensionDamping = 2.3
-          var suspensionCompression = 4.4
-          var suspensionRestLength = 0.6
-          var rollInfluence = 0.2
+          let friction = 1000
+          let suspensionStiffness = 20.0
+          let suspensionDamping = 2.3
+          let suspensionCompression = 4.4
+          let suspensionRestLength = 0.6
+          let rollInfluence = 0.2
 
-          var steeringIncrement = 0.04
-          var steeringClamp = 0.5
-          var maxEngineForce = 2000
-          var maxBreakingForce = 100
+          let steeringIncrement = 0.04
+          let steeringClamp = 0.5
+          let maxEngineForce = 2000
+          let maxBreakingForce = 100
 
           // Chassis
-          var geometry = new Ammo.btBoxShape(
+          let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(
               chassisWidth * 0.5,
               chassisHeight * 0.5,
               chassisLength * 0.5
             )
           )
-          var transform = new Ammo.btTransform()
+          let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
           transform.setRotation(
             new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
           )
-          var motionState = new Ammo.btDefaultMotionState(transform)
-          var localInertia = new Ammo.btVector3(0, 0, 0)
+          let motionState = new Ammo.btDefaultMotionState(transform)
+          let localInertia = new Ammo.btVector3(0, 0, 0)
           geometry.calculateLocalInertia(massVehicle, localInertia)
-          var body = new Ammo.btRigidBody(
+          let body = new Ammo.btRigidBody(
             new Ammo.btRigidBodyConstructionInfo(
               massVehicle,
               motionState,
@@ -325,33 +325,33 @@
           )
           body.setActivationState(DISABLE_DEACTIVATION)
           physicsWorld.addRigidBody(body)
-          var chassisMesh = createChassisMesh(
+          let chassisMesh = createChassisMesh(
             chassisWidth,
             chassisHeight,
             chassisLength
           )
 
           // Raycast Vehicle
-          var engineForce = 0
-          var vehicleSteering = 0
-          var breakingForce = 0
-          var tuning = new Ammo.btVehicleTuning()
-          var rayCaster = new Ammo.btDefaultVehicleRaycaster(physicsWorld)
-          var vehicle = new Ammo.btRaycastVehicle(tuning, body, rayCaster)
+          let engineForce = 0
+          let vehicleSteering = 0
+          let breakingForce = 0
+          let tuning = new Ammo.btVehicleTuning()
+          let rayCaster = new Ammo.btDefaultVehicleRaycaster(physicsWorld)
+          let vehicle = new Ammo.btRaycastVehicle(tuning, body, rayCaster)
           vehicle.setCoordinateSystem(0, 1, 2)
           physicsWorld.addAction(vehicle)
 
           // Wheels
-          var FRONT_LEFT = 0
-          var FRONT_RIGHT = 1
-          var BACK_LEFT = 2
-          var BACK_RIGHT = 3
-          var wheelMeshes = []
-          var wheelDirectionCS0 = new Ammo.btVector3(0, -1, 0)
-          var wheelAxleCS = new Ammo.btVector3(-1, 0, 0)
+          let FRONT_LEFT = 0
+          let FRONT_RIGHT = 1
+          let BACK_LEFT = 2
+          let BACK_RIGHT = 3
+          let wheelMeshes = []
+          let wheelDirectionCS0 = new Ammo.btVector3(0, -1, 0)
+          let wheelAxleCS = new Ammo.btVector3(-1, 0, 0)
 
           function addWheel(isFront, pos, radius, width, index) {
-            var wheelInfo = vehicle.addWheel(
+            let wheelInfo = vehicle.addWheel(
               pos,
               wheelDirectionCS0,
               wheelAxleCS,
@@ -417,7 +417,7 @@
 
           // Sync keybord actions and physics and graphics
           function sync(dt) {
-            var speed = vehicle.getCurrentSpeedKmHour()
+            let speed = vehicle.getCurrentSpeedKmHour()
 
             speedometer.innerHTML =
               (speed < 0 ? '(R) ' : '') + Math.abs(speed).toFixed(1) + ' km/h'
@@ -464,8 +464,8 @@
             vehicle.setSteeringValue(vehicleSteering, FRONT_LEFT)
             vehicle.setSteeringValue(vehicleSteering, FRONT_RIGHT)
 
-            var tm, p, q, i
-            var n = vehicle.getNumWheels()
+            let tm, p, q, i
+            let n = vehicle.getNumWheels()
             for (i = 0; i < n; i++) {
               vehicle.updateWheelTransform(i, true)
               tm = vehicle.getWheelTransformWS(i)
@@ -533,15 +533,15 @@
             2
           )
 
-          var quaternion = new THREE.Quaternion(0, 0, 0, 1)
+          let quaternion = new THREE.Quaternion(0, 0, 0, 1)
           quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 18)
           createBox(new THREE.Vector3(0, -1.5, 0), quaternion, 8, 4, 10, 0)
 
-          var size = 3
-          var nw = 2
-          var nh = 2
-          for (var j = 0; j < nw; j++)
-            for (var i = 0; i < nh; i++)
+          let size = 3
+          let nw = 2
+          let nh = 2
+          for (let j = 0; j < nw; j++)
+            for (let i = 0; i < nh; i++)
               createBox(
                 new THREE.Vector3(
                   size * j - (size * (nw - 1)) / 2,
