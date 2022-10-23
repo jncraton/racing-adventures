@@ -503,6 +503,36 @@
             2
           )
 
+          createBox(
+            new THREE.Vector3(75, -0.5, 0),
+            ZERO_QUATERNION,
+            8,
+            1,
+            75,
+            0,
+            2
+          )
+
+          createBox(
+            new THREE.Vector3(75/2, -0.5, 75/2),
+            ZERO_QUATERNION,
+            75,
+            1,
+            8,
+            0,
+            2
+          )
+
+          createBox(
+            new THREE.Vector3(75/2, -0.5, -75/2),
+            ZERO_QUATERNION,
+            75,
+            1,
+            8,
+            0,
+            2
+          )
+
           var quaternion = new THREE.Quaternion(0, 0, 0, 1)
           quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 18)
           createBox(new THREE.Vector3(0, -1.5, 0), quaternion, 8, 4, 10, 0)
