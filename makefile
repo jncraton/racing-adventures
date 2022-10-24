@@ -9,5 +9,8 @@ ammo.js:
 format:
 	npx prettier --write index.html Detector.js
 
+check:
+	npx prettier --check index.html Detector.js
+
 clean:
 	rm three.js ammo.js
