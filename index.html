@@ -487,7 +487,9 @@
             )
             camera.lookAt(chassisMesh.position)
 
-            speedometer.innerHTML = `${speed.toFixed(1)} km/h ${p.x().toFixed(2)} ${p.y().toFixed(2)} ${p.z().toFixed(2)}`
+            speedometer.innerHTML = `${speed.toFixed(1)} km/h ${p
+              .x()
+              .toFixed(2)} ${p.y().toFixed(2)} ${p.z().toFixed(2)}`
           }
 
           syncList.push(sync)
@@ -495,28 +497,28 @@
 
         function createObjects() {
           let course = [
-            {x:0,  y:0, z:0},
-            {x:0,  y:0, z:75},
-            {x:75, y:0, z:75},
-            {x:75, y:0, z:0},
-            {x:0,  y:0, z:0},
+            { x: 0, y: 0, z: 0 },
+            { x: 0, y: 0, z: 75 },
+            { x: 75, y: 0, z: 75 },
+            { x: 75, y: 0, z: 0 },
+            { x: 0, y: 0, z: 0 },
           ]
 
           let start = course.shift()
 
           course.forEach(segment => {
             const center = new THREE.Vector3(
-                            start.x+(segment.x-start.x)/2, 
-                            start.y+(segment.y-start.y)/2, 
-                            start.z+(segment.z-start.z)/2, 
-                          )
-                          
+              start.x + (segment.x - start.x) / 2,
+              start.y + (segment.y - start.y) / 2,
+              start.z + (segment.z - start.z) / 2
+            )
+
             createBox(
               center,
               ZERO_QUATERNION,
-              Math.abs(segment.x-start.x) + 16,
-              Math.abs(segment.y-start.y) + 16,
-              Math.abs(segment.z-start.z) + 16,
+              Math.abs(segment.x - start.x) + 16,
+              Math.abs(segment.y - start.y) + 16,
+              Math.abs(segment.z - start.z) + 16,
               0,
               2
             )
