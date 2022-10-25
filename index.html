@@ -494,45 +494,35 @@
         }
 
         function createObjects() {
-          createBox(
-            new THREE.Vector3(0, -0.5, 0),
-            ZERO_QUATERNION,
-            16,
-            1,
-            75,
-            0,
-            2
-          )
+          let course = [
+            {x:0,  y:0, z:0},
+            {x:0,  y:0, z:75},
+            {x:75, y:0, z:75},
+            {x:75, y:0, z:0},
+            {x:0,  y:0, z:0},
+          ]
 
-          createBox(
-            new THREE.Vector3(75, -0.5, 0),
-            ZERO_QUATERNION,
-            16,
-            1,
-            75,
-            0,
-            2
-          )
+          let start = course.shift()
 
-          createBox(
-            new THREE.Vector3(75 / 2, -0.5, 75 / 2),
-            ZERO_QUATERNION,
-            75,
-            1,
-            16,
-            0,
-            2
-          )
+          course.forEach(segment => {
+            const center = new THREE.Vector3(
+                            start.x+(segment.x-start.x)/2, 
+                            start.y+(segment.y-start.y)/2, 
+                            start.z+(segment.z-start.z)/2, 
+                          )
+                          
+            createBox(
+              center,
+              ZERO_QUATERNION,
+              Math.abs(segment.x-start.x) + 16,
+              Math.abs(segment.y-start.y) + 16,
+              Math.abs(segment.z-start.z) + 16,
+              0,
+              2
+            )
 
-          createBox(
-            new THREE.Vector3(75 / 2, -0.5, -75 / 2),
-            ZERO_QUATERNION,
-            75,
-            1,
-            16,
-            0,
-            2
-          )
+            start = segment
+          })
 
           let quaternion = new THREE.Quaternion(0, 0, 0, 1)
           quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 18)
