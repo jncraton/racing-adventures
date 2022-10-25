@@ -417,9 +417,6 @@
           function sync(dt) {
             let speed = vehicle.getCurrentSpeedKmHour()
 
-            speedometer.innerHTML =
-              (speed < 0 ? '(R) ' : '') + Math.abs(speed).toFixed(1) + ' km/h'
-
             breakingForce = 0
             engineForce = 0
 
@@ -489,6 +486,8 @@
               camera_position.z
             )
             camera.lookAt(chassisMesh.position)
+
+            speedometer.innerHTML = `${speed.toFixed(1)} km/h ${p.x().toFixed(2)} ${p.y().toFixed(2)} ${p.z().toFixed(2)}`
           }
 
           syncList.push(sync)
