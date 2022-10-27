@@ -10,6 +10,7 @@ format:
 	npx prettier --write index.html
 
 check:
+	npx jshint --extract=always index.html
 	npx prettier --check index.html
 
 clean:
