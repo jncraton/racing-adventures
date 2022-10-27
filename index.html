@@ -207,7 +207,7 @@
           if (mass > 0) {
             body.setActivationState(DISABLE_DEACTIVATION)
             // Sync physics and graphics
-            function sync(dt) {
+            const sync = dt => {
               let ms = body.getMotionState()
               if (ms) {
                 ms.getWorldTransform(TRANSFORM_AUX)
