@@ -13,5 +13,8 @@ check:
 	npx jshint --extract=always index.html
 	npx prettier --check index.html
 
+launch:
+	firefox index.html#0090990900
+
 clean:
 	rm three.js ammo.js
