@@ -48,7 +48,6 @@
         // Graphics variables
         let container, speedometer
         let camera, scene, renderer
-        let terrainMesh, texture
         let clock = new THREE.Clock()
         let materialDynamic, materialStatic, materialInteractive
 
@@ -61,9 +60,6 @@
 
         let syncList = []
         let time = 0
-        let objectTimePeriod = 3
-        let timeNextSpawn = time + objectTimePeriod
-        let maxNumObjects = 30
 
         // Keybord actions
         let actions = {}
@@ -207,7 +203,7 @@
           if (mass > 0) {
             body.setActivationState(DISABLE_DEACTIVATION)
             // Sync physics and graphics
-            const sync = dt => {
+            const sync = () => {
               let ms = body.getMotionState()
               if (ms) {
                 ms.getWorldTransform(TRANSFORM_AUX)
@@ -400,7 +396,7 @@
           )
 
           // Sync keybord actions and physics and graphics
-          function sync(dt) {
+          function sync() {
             let speed = vehicle.getCurrentSpeedKmHour()
 
             breakingForce = 0
@@ -464,8 +460,8 @@
 
             let camera_offset = new THREE.Vector3(0, 2, -6)
             camera_offset.applyQuaternion(chassisMesh.quaternion)
-            camera_position = camera_offset.add(chassisMesh.position)
 
+            let camera_position = camera_offset.add(chassisMesh.position)
             camera.position.set(
               camera_position.x,
               camera_position.y,
