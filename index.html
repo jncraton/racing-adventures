@@ -46,7 +46,7 @@
         let ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
 
         // Graphics variables
-        let container, speedometer
+        let speedometer
         let camera, scene, renderer
         let clock = new THREE.Clock()
         let materialDynamic, materialStatic, materialInteractive
@@ -73,7 +73,6 @@
         // - Functions -
 
         function initGraphics() {
-          container = document.getElementById('container')
           speedometer = document.getElementById('speedometer')
 
           scene = new THREE.Scene()
@@ -105,9 +104,9 @@
           materialStatic = new THREE.MeshPhongMaterial({ color: 0x999999 })
           materialInteractive = new THREE.MeshPhongMaterial({ color: 0x990000 })
 
-          container.innerHTML = ''
-
-          container.appendChild(renderer.domElement)
+          document
+            .getElementById('container')
+            .replaceChildren(renderer.domElement)
 
           window.addEventListener('resize', onWindowResize, false)
           window.addEventListener('keydown', keydown)
