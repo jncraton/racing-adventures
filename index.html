@@ -447,13 +447,19 @@
         }
 
         function createObjects() {
-          let course = [
-            { x: 0, y: 0, z: 0 },
-            { x: 0, y: 0, z: 75 },
-            { x: 75, y: 0, z: 75 },
-            { x: 75, y: 0, z: 0 },
-            { x: 0, y: 0, z: 0 },
-          ]
+          let hash = location.hash.slice(1)
+
+          const chars =
+            "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
+          let course = []
+
+          for (let i = 0; i < hash.length; i += 2) {
+            course.push({
+              x: 16 * chars.indexOf(hash[i]),
+              y: 0,
+              z: 16 * chars.indexOf(hash[i + 1]),
+            })
+          }
 
           let start = course.shift()
 
