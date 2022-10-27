@@ -461,12 +461,7 @@
             let camera_offset = new THREE.Vector3(0, 2, -6)
             camera_offset.applyQuaternion(chassisMesh.quaternion)
 
-            let camera_position = camera_offset.add(chassisMesh.position)
-            camera.position.set(
-              camera_position.x,
-              camera_position.y,
-              camera_position.z
-            )
+            camera.position.copy(camera_offset.add(chassisMesh.position))
             camera.lookAt(chassisMesh.position)
 
             speedometer.innerHTML = `${speed.toFixed(1)} km/h ${p
