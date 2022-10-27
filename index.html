@@ -46,7 +46,6 @@
         let ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
 
         // Graphics variables
-        let speedometer
         let camera, scene, renderer
         let clock = new THREE.Clock()
         let materialDynamic, materialStatic, materialInteractive
@@ -73,8 +72,6 @@
         // - Functions -
 
         function initGraphics() {
-          speedometer = document.getElementById('speedometer')
-
           scene = new THREE.Scene()
 
           camera = new THREE.PerspectiveCamera(
@@ -447,9 +444,9 @@
             camera.position.copy(camera_offset.add(chassisMesh.position))
             camera.lookAt(chassisMesh.position)
 
-            speedometer.innerHTML = `${speed.toFixed(1)} km/h ${pos
-              .x()
-              .toFixed(2)} ${pos.y().toFixed(2)} ${pos.z().toFixed(2)}`
+            document.getElementById('speedometer').innerHTML = `${speed.toFixed(
+              1
+            )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos.z().toFixed(2)}`
           }
 
           syncList.push(sync)
