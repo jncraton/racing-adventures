@@ -44,16 +44,9 @@
     <script src="ammo.js"></script>
 
     <script src="three.js"></script>
-    <script src="Detector.js"></script>
 
     <script>
       Ammo().then(function (Ammo) {
-        // Detects webgl
-        if (!Detector.webgl) {
-          Detector.addGetWebGLMessage()
-          document.getElementById('container').innerHTML = ''
-        }
-
         // - Global variables -
         let DISABLE_DEACTIVATION = 4
         let TRANSFORM_AUX = new Ammo.btTransform()
