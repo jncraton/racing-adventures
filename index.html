@@ -41,7 +41,6 @@
     <script>
       Ammo().then(function (Ammo) {
         // - Global variables -
-        let TRANSFORM_AUX = new Ammo.btTransform()
         let ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
 
         // Graphics variables
@@ -196,11 +195,12 @@
             const sync = () => {
               let ms = body.getMotionState()
               if (ms) {
-                ms.getWorldTransform(TRANSFORM_AUX)
-                let p = TRANSFORM_AUX.getOrigin()
-                let q = TRANSFORM_AUX.getRotation()
-                mesh.position.set(p.x(), p.y(), p.z())
-                mesh.quaternion.set(q.x(), q.y(), q.z(), q.w())
+                let transform = new Ammo.btTransform()
+                ms.getWorldTransform(transform)
+                let pos = transform.getOrigin()
+                let rot = transform.getRotation()
+                mesh.position.set(pos.x(), pos.y(), pos.z())
+                mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
               }
             }
 
