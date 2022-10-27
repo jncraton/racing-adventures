@@ -441,22 +441,20 @@
             vehicle.setSteeringValue(vehicleSteering, FRONT_LEFT)
             vehicle.setSteeringValue(vehicleSteering, FRONT_RIGHT)
 
-            let tm, p, q, i
-            let n = vehicle.getNumWheels()
-            for (i = 0; i < n; i++) {
+            for (let i = 0; i < vehicle.getNumWheels(); i++) {
               vehicle.updateWheelTransform(i, true)
-              tm = vehicle.getWheelTransformWS(i)
-              p = tm.getOrigin()
-              q = tm.getRotation()
-              wheelMeshes[i].position.set(p.x(), p.y(), p.z())
-              wheelMeshes[i].quaternion.set(q.x(), q.y(), q.z(), q.w())
+              let wheel_transform = vehicle.getWheelTransformWS(i)
+              let pos = wheel_transform.getOrigin()
+              let rot = wheel_transform.getRotation()
+              wheelMeshes[i].position.set(pos.x(), pos.y(), pos.z())
+              wheelMeshes[i].quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
             }
 
-            tm = vehicle.getChassisWorldTransform()
-            p = tm.getOrigin()
-            q = tm.getRotation()
-            chassisMesh.position.set(p.x(), p.y(), p.z())
-            chassisMesh.quaternion.set(q.x(), q.y(), q.z(), q.w())
+            let chassis_transform = vehicle.getChassisWorldTransform()
+            let pos = chassis_transform.getOrigin()
+            let rot = chassis_transform.getRotation()
+            chassisMesh.position.set(pos.x(), pos.y(), pos.z())
+            chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
             let camera_offset = new THREE.Vector3(0, 2, -6)
             camera_offset.applyQuaternion(chassisMesh.quaternion)
@@ -464,9 +462,9 @@
             camera.position.copy(camera_offset.add(chassisMesh.position))
             camera.lookAt(chassisMesh.position)
 
-            speedometer.innerHTML = `${speed.toFixed(1)} km/h ${p
+            speedometer.innerHTML = `${speed.toFixed(1)} km/h ${pos
               .x()
-              .toFixed(2)} ${p.y().toFixed(2)} ${p.z().toFixed(2)}`
+              .toFixed(2)} ${pos.y().toFixed(2)} ${pos.z().toFixed(2)}`
           }
 
           syncList.push(sync)
