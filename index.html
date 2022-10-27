@@ -41,7 +41,6 @@
     <script>
       Ammo().then(function (Ammo) {
         // - Global variables -
-        let DISABLE_DEACTIVATION = 4
         let TRANSFORM_AUX = new Ammo.btTransform()
         let ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
 
@@ -193,7 +192,6 @@
           physicsWorld.addRigidBody(body)
 
           if (mass > 0) {
-            body.setActivationState(DISABLE_DEACTIVATION)
             // Sync physics and graphics
             const sync = () => {
               let ms = body.getMotionState()
@@ -286,7 +284,6 @@
               localInertia
             )
           )
-          body.setActivationState(DISABLE_DEACTIVATION)
           physicsWorld.addRigidBody(body)
           let chassisMesh = createChassisMesh(
             chassisWidth,
