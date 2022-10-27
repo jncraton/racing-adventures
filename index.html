@@ -104,9 +104,7 @@
           materialStatic = new THREE.MeshPhongMaterial({ color: 0x999999 })
           materialInteractive = new THREE.MeshPhongMaterial({ color: 0x990000 })
 
-          document
-            .getElementById('container')
-            .replaceChildren(renderer.domElement)
+          document.getElementById('container').replaceChildren(renderer.domElement)
 
           window.addEventListener('resize', onWindowResize, false)
           window.addEventListener('keydown', keydown)
@@ -179,9 +177,7 @@
           let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-          transform.setRotation(
-            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
-          )
+          transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
           let motionState = new Ammo.btDefaultMotionState(transform)
 
           let localInertia = new Ammo.btVector3(0, 0, 0)
@@ -223,14 +219,7 @@
           let mesh = new THREE.Mesh(t, materialInteractive)
           mesh.add(
             new THREE.Mesh(
-              new THREE.BoxGeometry(
-                width * 1.5,
-                radius * 1.75,
-                radius * 0.25,
-                1,
-                1,
-                1
-              ),
+              new THREE.BoxGeometry(width * 1.5, radius * 1.75, radius * 0.25, 1, 1, 1),
               materialInteractive
             )
           )
@@ -288,9 +277,7 @@
           let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-          transform.setRotation(
-            new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
-          )
+          transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
           let motionState = new Ammo.btDefaultMotionState(transform)
           let localInertia = new Ammo.btVector3(0, 0, 0)
           geometry.calculateLocalInertia(massVehicle, localInertia)
@@ -410,8 +397,7 @@
               else engineForce = -maxEngineForce / 2
             }
             if (actions.left) {
-              if (vehicleSteering < steeringClamp)
-                vehicleSteering += steeringIncrement
+              if (vehicleSteering < steeringClamp) vehicleSteering += steeringIncrement
             } else {
               if (actions.right) {
                 if (vehicleSteering > -steeringClamp)
@@ -506,11 +492,7 @@
           for (let j = 0; j < nw; j++)
             for (let i = 0; i < nh; i++)
               createBox(
-                new THREE.Vector3(
-                  size * j - (size * (nw - 1)) / 2,
-                  size * i,
-                  10
-                ),
+                new THREE.Vector3(size * j - (size * (nw - 1)) / 2, size * i, 10),
                 ZERO_QUATERNION,
                 size,
                 size,
