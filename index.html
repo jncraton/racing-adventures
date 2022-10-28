@@ -206,15 +206,9 @@
         }
 
         function createWheelMesh(radius, width) {
-          let t = new THREE.CylinderGeometry(radius, radius, width, 24, 1)
+          let t = new THREE.CylinderGeometry(radius, radius, width, 8, 1)
           t.rotateZ(Math.PI / 2)
           let mesh = new THREE.Mesh(t, materialInteractive)
-          mesh.add(
-            new THREE.Mesh(
-              new THREE.BoxGeometry(width * 1.5, radius * 1.75, radius * 0.25, 1, 1, 1),
-              materialInteractive
-            )
-          )
           scene.add(mesh)
           return mesh
         }
