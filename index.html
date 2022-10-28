@@ -220,7 +220,7 @@
           return mesh
         }
 
-        function createVehicle(pos, quat) {
+        function createVehicle(pos) {
           // Vehicle contants
 
           let chassisWidth = 1.8
@@ -263,7 +263,6 @@
           let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-          transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
           let motionState = new Ammo.btDefaultMotionState(transform)
           let localInertia = new Ammo.btVector3(0, 0, 0)
           geometry.calculateLocalInertia(massVehicle, localInertia)
@@ -489,7 +488,7 @@
                 10
               )
 
-          createVehicle(new THREE.Vector3(0, 2, 0), ZERO_QUATERNION)
+          createVehicle(new THREE.Vector3(0, 2, 0))
         }
 
         // - Init -
