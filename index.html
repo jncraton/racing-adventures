@@ -40,9 +40,6 @@
 
     <script>
       Ammo().then(function (Ammo) {
-        // - Global variables -
-        let ZERO_QUATERNION = new THREE.Quaternion(0, 0, 0, 1)
-
         // Graphics variables
         let camera, scene, renderer
         let clock = new THREE.Clock()
@@ -154,7 +151,7 @@
           }
         }
 
-        function createBox(pos, quat, w, l, h, mass = 0, friction = 1) {
+        function createBox(pos, w, l, h, mass = 0, friction = 1) {
           let material = mass > 0 ? materialDynamic : materialStatic
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
           let geometry = new Ammo.btBoxShape(
@@ -163,13 +160,11 @@
 
           let mesh = new THREE.Mesh(shape, material)
           mesh.position.copy(pos)
-          mesh.quaternion.copy(quat)
           scene.add(mesh)
 
           let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-          transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
           let motionState = new Ammo.btDefaultMotionState(transform)
 
           let localInertia = new Ammo.btVector3(0, 0, 0)
@@ -465,7 +460,6 @@
 
             createBox(
               center,
-              ZERO_QUATERNION,
               Math.abs(segment.x - start.x) + 16,
               16,
               Math.abs(segment.z - start.z) + 16
@@ -481,7 +475,6 @@
             for (let i = 0; i < nh; i++)
               createBox(
                 new THREE.Vector3(size * j - (size * (nw - 1)) / 2, size * i, 10),
-                ZERO_QUATERNION,
                 size,
                 size,
                 size,
