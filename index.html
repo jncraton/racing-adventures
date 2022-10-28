@@ -46,12 +46,6 @@
         let materialDynamic, materialStatic, materialInteractive
 
         // Physics variables
-        let collisionConfiguration
-        let dispatcher
-        let broadphase
-        let solver
-        let physicsWorld
-
         let syncList = []
         let time = 0
 
@@ -111,16 +105,12 @@
         }
 
         function initPhysics() {
-          // Physics configuration
-          collisionConfiguration = new Ammo.btDefaultCollisionConfiguration()
-          dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration)
-          broadphase = new Ammo.btDbvtBroadphase()
-          solver = new Ammo.btSequentialImpulseConstraintSolver()
+          let collisionConfig = new Ammo.btDefaultCollisionConfiguration()
           physicsWorld = new Ammo.btDiscreteDynamicsWorld(
-            dispatcher,
-            broadphase,
-            solver,
-            collisionConfiguration
+            new Ammo.btCollisionDispatcher(collisionConfig),
+            new Ammo.btDbvtBroadphase(),
+            new Ammo.btSequentialImpulseConstraintSolver(),
+            collisionConfig
           )
           physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0))
         }
