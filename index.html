@@ -413,7 +413,11 @@
 
           for (let i = 0; i < hash.length; i += 2) {
             createBox(
-              new THREE.Vector3(16*chars.indexOf(hash[i]), -8, 16*chars.indexOf(hash[i+1])),
+              new THREE.Vector3(
+                16 * chars.indexOf(hash[i]),
+                -8,
+                16 * chars.indexOf(hash[i + 1])
+              ),
               16,
               16,
               16
