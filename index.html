@@ -219,7 +219,7 @@
 
           let wheelRadius = 0.5
           let wheelWidth = 0.2
-          let wheelHalfTrack= 1
+          let wheelHalfTrack = 1
           let wheelAxisHeight = 0.3
 
           let friction = 1000
@@ -304,11 +304,7 @@
 
           addWheel(
             true,
-            new Ammo.btVector3(
-              wheelHalfTrack,
-              wheelAxisHeight,
-              wheelAxisFrontPosition
-            ),
+            new Ammo.btVector3(wheelHalfTrack, wheelAxisHeight, wheelAxisFrontPosition),
             wheelRadius,
             wheelWidth,
             FRONT_LEFT
@@ -326,22 +322,14 @@
           )
           addWheel(
             false,
-            new Ammo.btVector3(
-              -wheelHalfTrack,
-              wheelAxisHeight,
-              wheelAxisPositionBack
-            ),
+            new Ammo.btVector3(-wheelHalfTrack, wheelAxisHeight, wheelAxisPositionBack),
             wheelRadius,
             wheelWidth,
             BACK_LEFT
           )
           addWheel(
             false,
-            new Ammo.btVector3(
-              wheelHalfTrack,
-              wheelAxisHeight,
-              wheelAxisPositionBack
-            ),
+            new Ammo.btVector3(wheelHalfTrack, wheelAxisHeight, wheelAxisPositionBack),
             wheelRadius,
             wheelWidth,
             BACK_RIGHT
