@@ -26,11 +26,13 @@
 
       document.querySelectorAll('input').forEach(checkbox => {
         checkbox.addEventListener('input', el => {
+          let href = 'index.html#'
           document.querySelectorAll('input').forEach(checkbox => {
             if (checkbox.checked) {
-              console.log(checkbox.name)
+              href += checkbox.name
             }
           })
+          document.querySelector('a').href = href
         })
       })
     </script>
