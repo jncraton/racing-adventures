@@ -214,13 +214,13 @@
           let chassisLength = 4
           let massVehicle = 800
 
-          let wheelAxisFrontPosition = 1.7
-          let wheelAxisPositionBack = -1
-
           let wheelRadius = 0.5
           let wheelWidth = 0.2
-          let wheelHalfTrack = 1
-          let wheelAxisHeight = 0.3
+
+          let axleFrontPos = 1.7
+          let axleBackPos = -1
+          let axleHalfLength = 1
+          let axleHeight = 0.3
 
           let friction = 1000
           let suspensionStiffness = 20.0
@@ -304,32 +304,28 @@
 
           addWheel(
             true,
-            new Ammo.btVector3(wheelHalfTrack, wheelAxisHeight, wheelAxisFrontPosition),
+            new Ammo.btVector3(axleHalfLength, axleHeight, axleFrontPos),
             wheelRadius,
             wheelWidth,
             FRONT_LEFT
           )
           addWheel(
             true,
-            new Ammo.btVector3(
-              -wheelHalfTrack,
-              wheelAxisHeight,
-              wheelAxisFrontPosition
-            ),
+            new Ammo.btVector3(-axleHalfLength, axleHeight, axleFrontPos),
             wheelRadius,
             wheelWidth,
             FRONT_RIGHT
           )
           addWheel(
             false,
-            new Ammo.btVector3(-wheelHalfTrack, wheelAxisHeight, wheelAxisPositionBack),
+            new Ammo.btVector3(-axleHalfLength, axleHeight, axleBackPos),
             wheelRadius,
             wheelWidth,
             BACK_LEFT
           )
           addWheel(
             false,
-            new Ammo.btVector3(wheelHalfTrack, wheelAxisHeight, wheelAxisPositionBack),
+            new Ammo.btVector3(axleHalfLength, axleHeight, axleBackPos),
             wheelRadius,
             wheelWidth,
             BACK_RIGHT
