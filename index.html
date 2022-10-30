@@ -214,17 +214,13 @@
           let chassisLength = 4
           let massVehicle = 800
 
-          let wheelAxisPositionBack = -1
-          let wheelRadiusBack = 0.4
-          let wheelWidthBack = 0.3
-          let wheelHalfTrackBack = 1
-          let wheelAxisHeightBack = 0.3
-
           let wheelAxisFrontPosition = 1.7
-          let wheelHalfTrackFront = 1
-          let wheelAxisHeightFront = 0.3
-          let wheelRadiusFront = 0.35
-          let wheelWidthFront = 0.2
+          let wheelAxisPositionBack = -1
+
+          let wheelRadius = 0.5
+          let wheelWidth = 0.2
+          let wheelHalfTrack= 1
+          let wheelAxisHeight = 0.3
 
           let friction = 1000
           let suspensionStiffness = 20.0
@@ -309,45 +305,45 @@
           addWheel(
             true,
             new Ammo.btVector3(
-              wheelHalfTrackFront,
-              wheelAxisHeightFront,
+              wheelHalfTrack,
+              wheelAxisHeight,
               wheelAxisFrontPosition
             ),
-            wheelRadiusFront,
-            wheelWidthFront,
+            wheelRadius,
+            wheelWidth,
             FRONT_LEFT
           )
           addWheel(
             true,
             new Ammo.btVector3(
-              -wheelHalfTrackFront,
-              wheelAxisHeightFront,
+              -wheelHalfTrack,
+              wheelAxisHeight,
               wheelAxisFrontPosition
             ),
-            wheelRadiusFront,
-            wheelWidthFront,
+            wheelRadius,
+            wheelWidth,
             FRONT_RIGHT
           )
           addWheel(
             false,
             new Ammo.btVector3(
-              -wheelHalfTrackBack,
-              wheelAxisHeightBack,
+              -wheelHalfTrack,
+              wheelAxisHeight,
               wheelAxisPositionBack
             ),
-            wheelRadiusBack,
-            wheelWidthBack,
+            wheelRadius,
+            wheelWidth,
             BACK_LEFT
           )
           addWheel(
             false,
             new Ammo.btVector3(
-              wheelHalfTrackBack,
-              wheelAxisHeightBack,
+              wheelHalfTrack,
+              wheelAxisHeight,
               wheelAxisPositionBack
             ),
-            wheelRadiusBack,
-            wheelWidthBack,
+            wheelRadius,
+            wheelWidth,
             BACK_RIGHT
           )
 
