@@ -8,10 +8,12 @@ ammo.js:
 
 format:
 	npx prettier --write index.html
+	npx prettier --write editor.html
 
 check:
 	npx jshint --extract=always index.html
 	npx prettier --check index.html
+	npx prettier --check editor.html
 
 launch:
 	firefox index.html#00010203041424344443424140302010
