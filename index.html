@@ -420,22 +420,9 @@
               ),
               8,
               1,
-              8
+              8,
             )
           }
-
-          let size = 3
-          let nw = 2
-          let nh = 2
-          for (let j = 0; j < nw; j++)
-            for (let i = 0; i < nh; i++)
-              createBox(
-                new THREE.Vector3(size * j - (size * (nw - 1)) / 2, size * i, 10),
-                size,
-                size,
-                size,
-                10
-              )
 
           createVehicle(new THREE.Vector3(0, 2, 0))
         }
