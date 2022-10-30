@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title></title>
+    <style></style>
+  </head>
+
+  <body>
+    <section><a href="index.html#00">Play</a></section>
+    <main></main>
+    <script>
+      let checkboxes = ''
+      for (let x = 0; x < 64; x++) {
+        for (let y = 0; y < 64; y++) {
+          checkboxes += `<input type="checkbox" name="${x}${y}"/>`
+        }
+        checkboxes += '<br />'
+      }
+
+      document.querySelector('main').innerHTML = checkboxes
+
+      document.querySelectorAll('input').forEach(checkbox => {
+        checkbox.addEventListener('input', el => {
+          document.querySelectorAll('input').forEach(checkbox => {
+            if (checkbox.checked) {
+              console.log(checkbox.name)
+            }
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
