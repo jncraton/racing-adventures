@@ -430,13 +430,12 @@
 
             for (let x = x1; x <= x2; x += 16) {
               for (let z = z1; z <= z2; z += 16) {
-
-              createBox(
-                new THREE.Vector3(x, start.y + (segment.y - start.y) / 2, z),
-                16,
-                16,
-                16
-              )
+                createBox(
+                  new THREE.Vector3(x, start.y + (segment.y - start.y) / 2, z),
+                  16,
+                  16,
+                  16
+                )
               }
             }
 
