@@ -423,18 +423,22 @@
           let start = course.shift()
 
           course.forEach(segment => {
-            const center = new THREE.Vector3(
-              start.x + (segment.x - start.x) / 2,
-              start.y + (segment.y - start.y) / 2,
-              start.z + (segment.z - start.z) / 2
-            )
+            let x1 = Math.min(start.x, segment.x)
+            let x2 = Math.max(start.x, segment.x)
+            let z1 = Math.min(start.z, segment.z)
+            let z2 = Math.max(start.z, segment.z)
 
-            createBox(
-              center,
-              Math.abs(segment.x - start.x) + 16,
-              16,
-              Math.abs(segment.z - start.z) + 16
-            )
+            for (let x = x1; x <= x2; x += 16) {
+              for (let z = z1; z <= z2; z += 16) {
+
+              createBox(
+                new THREE.Vector3(x, start.y + (segment.y - start.y) / 2, z),
+                16,
+                16,
+                16
+              )
+              }
+            }
 
             start = segment
           })
