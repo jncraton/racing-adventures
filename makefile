@@ -14,7 +14,7 @@ check:
 	npx prettier --check index.html
 
 launch:
-	firefox index.html#000H9H9000
+	firefox index.html#00010203041424344443424140302010
 
 clean:
 	rm three.js ammo.js

@@ -410,37 +410,15 @@
 
           const chars =
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
-          let course = []
 
           for (let i = 0; i < hash.length; i += 2) {
-            course.push({
-              x: 16 * chars.indexOf(hash[i]),
-              y: -8,
-              z: 16 * chars.indexOf(hash[i + 1]),
-            })
+            createBox(
+              new THREE.Vector3(16*chars.indexOf(hash[i]), -8, 16*chars.indexOf(hash[i+1])),
+              16,
+              16,
+              16
+            )
           }
-
-          let start = course.shift()
-
-          course.forEach(segment => {
-            let x1 = Math.min(start.x, segment.x)
-            let x2 = Math.max(start.x, segment.x)
-            let z1 = Math.min(start.z, segment.z)
-            let z2 = Math.max(start.z, segment.z)
-
-            for (let x = x1; x <= x2; x += 16) {
-              for (let z = z1; z <= z2; z += 16) {
-                createBox(
-                  new THREE.Vector3(x, start.y + (segment.y - start.y) / 2, z),
-                  16,
-                  16,
-                  16
-                )
-              }
-            }
-
-            start = segment
-          })
 
           let size = 3
           let nw = 2
