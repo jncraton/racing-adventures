@@ -15,22 +15,22 @@
       const chars =
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
-      let checkboxes = ''
+      let inputs = ''
       for (let x = 0; x < 32; x++) {
         for (let y = 0; y < 32; y++) {
-          checkboxes += `<input type="checkbox" name="${chars[x]}${chars[y]}"/>`
+          inputs += `<input type="number" size=2 name="${chars[x]}${chars[y]}" value=-1 />`
         }
-        checkboxes += '<br />'
+        inputs += '<br />'
       }
 
-      document.querySelector('main').innerHTML = checkboxes
+      document.querySelector('main').innerHTML = inputs
 
-      document.querySelectorAll('input').forEach(checkbox => {
-        checkbox.addEventListener('input', el => {
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', el => {
           let href = 'index.html#'
-          document.querySelectorAll('input').forEach(checkbox => {
-            if (checkbox.checked) {
-              href += checkbox.name
+          document.querySelectorAll('input').forEach(input => {
+            if (input.value >= 0) {
+              href += input.name[0] + chars.indexOf(input.value) + input.name[1]
             }
           })
           document.querySelector('a').href = href

@@ -410,12 +410,12 @@
           const chars =
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
-          for (let i = 0; i < hash.length; i += 2) {
+          for (let i = 0; i < hash.length; i += 3) {
             createBox(
               new THREE.Vector3(
                 8 * chars.indexOf(hash[i]),
-                -1,
-                8 * chars.indexOf(hash[i + 1])
+                -1 + 0.25 * chars.indexOf(hash[i + 1]),
+                8 * chars.indexOf(hash[i + 2])
               ),
               8,
               1,
