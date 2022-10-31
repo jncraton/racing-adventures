@@ -74,7 +74,7 @@
           camera.position.z = -35.11
           camera.lookAt(new THREE.Vector3(0.33, -0.4, 0.85))
 
-          renderer = new THREE.WebGLRenderer({ antialias: true })
+          renderer = new THREE.WebGLRenderer({antialias: true})
           renderer.setClearColor(0xbfd1e5)
           renderer.setPixelRatio(window.devicePixelRatio)
           renderer.setSize(window.innerWidth, window.innerHeight)
@@ -86,9 +86,9 @@
           dirLight.position.set(10, 10, 5)
           scene.add(dirLight)
 
-          materialDynamic = new THREE.MeshPhongMaterial({ color: 0xfca400 })
-          materialStatic = new THREE.MeshPhongMaterial({ color: 0x999999 })
-          materialInteractive = new THREE.MeshPhongMaterial({ color: 0x990000 })
+          materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
+          materialStatic = new THREE.MeshPhongMaterial({color: 0x999999})
+          materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
           document.getElementById('container').replaceChildren(renderer.domElement)
 
