@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title></title>
-    <style></style>
+    <style>
+    span {
+      border:1px solid gray;
+      display:inline-block;
+      margin:2px;
+      padding:3px;
+      text-align:right;
+    }
+    label, select {
+      display:block;
+    }
+    </style>
   </head>
 
   <body>
@@ -16,13 +27,11 @@
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
       let inputs = ''
-      for (let z = 15; z >= 0; z--) {
+      for (let z = 8; z >= 0; z--) {
         for (let x = 8; x >= 0; x--) {
-          inputs += `
-          <span id=${chars[x]}${chars[z]}>
-          <input type="number" size=2 value=0 min=0 max=15 />
+          inputs += `<span id=${chars[x]}${chars[z]}>
           <select>
-            <option value="">None</option>
+            <option value="">Air</option>
             <option value="0">Flat N</option>
             <option value="1">Flat E</option>
             <option value="2">Flat S</option>
@@ -31,7 +40,8 @@
             <option value="5">Ramp E</option>
             <option value="6">Ramp S</option>
             <option value="7">Ramp W</option>
-          </select></span>`
+          </select>
+          <label>y=<input type="number" size=2 value=0 min=0 max=15 /></label></span>`
         }
         inputs += '<br />'
       }
