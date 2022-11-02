@@ -30,7 +30,7 @@
           let href = 'index.html#'
           document.querySelectorAll('input').forEach(input => {
             if (input.value >= 0) {
-              href += input.name[0] + chars.indexOf(input.value) + input.name[1]
+              href += input.name[0] + chars[input.value] + input.name[1]
             }
           })
           document.querySelector('a').href = href
