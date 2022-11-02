@@ -16,8 +16,8 @@
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
       let inputs = ''
-      for (let z = 0; z < 16; z++) {
-        for (let x = 0; x < 8; x++) {
+      for (let z = 15; z >= 0; z--) {
+        for (let x = 8; x >= 0; x--) {
           inputs += `
           <span id=${chars[x]}${chars[z]}>
           <input type="number" size=2 value=0 min=0 max=15 />
