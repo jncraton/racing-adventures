@@ -6,16 +6,17 @@
 
     <title></title>
     <style>
-    span {
-      border:1px solid gray;
-      display:inline-block;
-      margin:2px;
-      padding:3px;
-      text-align:right;
-    }
-    label, select {
-      display:block;
-    }
+      span {
+        border: 1px solid gray;
+        display: inline-block;
+        margin: 2px;
+        padding: 3px;
+        text-align: right;
+      }
+      label,
+      select {
+        display: block;
+      }
     </style>
   </head>
 
@@ -24,38 +25,38 @@
     <main></main>
     <script>
       let hash = location.hash.slice(1)
-      
+
       const chars =
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
       let blocks = {}
 
       for (let i = 0; i < hash.length; i += 4) {
-        blocks[`${hash[i+1]}${hash[i+3]}`] = [hash[i], hash[i+2]]
+        blocks[`${hash[i + 1]}${hash[i + 3]}`] = [hash[i], hash[i + 2]]
       }
 
       let inputs = ''
       for (let z = 8; z >= 0; z--) {
         for (let x = 8; x >= 0; x--) {
-          let block_type = ""
+          let block_type = ''
           let y = 0
-          
+
           if (blocks[chars[x] + chars[z]]) {
             block_type = blocks[chars[x] + chars[z]][0]
             y = blocks[chars[x] + chars[z]][1]
-          } 
-          
+          }
+
           inputs += `<span id=${chars[x]}${chars[z]}>
           <select>
             <option value="">Air</option>
-            <option value="0" ${block_type==='0' ? 'selected' : ''}>Flat N</option>
-            <option value="1" ${block_type==='1' ? 'selected' : ''}>Flat E</option>
-            <option value="2" ${block_type==='2' ? 'selected' : ''}>Flat S</option>
-            <option value="3" ${block_type==='3' ? 'selected' : ''}>Flat W</option>
-            <option value="4" ${block_type==='4' ? 'selected' : ''}>Ramp N</option>
-            <option value="5" ${block_type==='5' ? 'selected' : ''}>Ramp E</option>
-            <option value="6" ${block_type==='6' ? 'selected' : ''}>Ramp S</option>
-            <option value="7" ${block_type==='7' ? 'selected' : ''}>Ramp W</option>
+            <option value="0" ${block_type === '0' ? 'selected' : ''}>Flat N</option>
+            <option value="1" ${block_type === '1' ? 'selected' : ''}>Flat E</option>
+            <option value="2" ${block_type === '2' ? 'selected' : ''}>Flat S</option>
+            <option value="3" ${block_type === '3' ? 'selected' : ''}>Flat W</option>
+            <option value="4" ${block_type === '4' ? 'selected' : ''}>Ramp N</option>
+            <option value="5" ${block_type === '5' ? 'selected' : ''}>Ramp E</option>
+            <option value="6" ${block_type === '6' ? 'selected' : ''}>Ramp S</option>
+            <option value="7" ${block_type === '7' ? 'selected' : ''}>Ramp W</option>
           </select>
           <label>y=<input type="number" size=2 value=${y} min=0 max=15 /></label></span>`
         }
