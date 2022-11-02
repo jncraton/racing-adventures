@@ -29,8 +29,9 @@
         input.addEventListener('input', el => {
           let href = 'index.html#'
           document.querySelectorAll('input').forEach(input => {
+            let block_type = '0'
             if (input.value >= 0) {
-              href += input.name[0] + chars[input.value] + input.name[1]
+              href += block_type + input.name[0] + chars[input.value] + input.name[1]
             }
           })
           document.querySelector('a').href = href
