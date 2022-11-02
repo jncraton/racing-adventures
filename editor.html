@@ -16,22 +16,36 @@
         "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
       let inputs = ''
-      for (let x = 0; x < 32; x++) {
-        for (let y = 0; y < 32; y++) {
-          inputs += `<input type="number" size=2 name="${chars[x]}${chars[y]}" value=-1 min=-1 max=15 />`
+      for (let z = 0; z < 16; z++) {
+        for (let x = 0; x < 8; x++) {
+          inputs += `
+          <span id=${chars[x]}${chars[z]}>
+          <input type="number" size=2 value=0 min=0 max=15 />
+          <select>
+            <option value="">None</option>
+            <option value="0">Flat N</option>
+            <option value="1">Flat E</option>
+            <option value="2">Flat S</option>
+            <option value="3">Flat W</option>
+            <option value="4">Ramp N</option>
+            <option value="5">Ramp E</option>
+            <option value="6">Ramp S</option>
+            <option value="7">Ramp W</option>
+          </select></span>`
         }
         inputs += '<br />'
       }
 
       document.querySelector('main').innerHTML = inputs
 
-      document.querySelectorAll('input').forEach(input => {
+      document.querySelectorAll('input,select').forEach(input => {
         input.addEventListener('input', el => {
           let href = 'index.html#'
-          document.querySelectorAll('input').forEach(input => {
-            let block_type = '0'
-            if (input.value >= 0) {
-              href += block_type + input.name[0] + chars[input.value] + input.name[1]
+          document.querySelectorAll('span').forEach(block => {
+            let select = block.querySelector('select')
+            if (select.value != '') {
+              let input = block.querySelector('input')
+              href += select.value + block.id[0] + chars[input.value] + block.id[1]
             }
           })
           document.querySelector('a').href = href
