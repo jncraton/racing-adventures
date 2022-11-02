@@ -141,7 +141,7 @@
           }
         }
 
-        function createBox(pos, w, l, h, mass = 0, friction = 1) {
+        function createBox(pos, w, l, h, mass = 0, friction = 1, rot = new THREE.Quaternion(0, 0, 0, 1)) {
           let material = mass > 0 ? materialDynamic : materialStatic
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
           let geometry = new Ammo.btBoxShape(
@@ -150,11 +150,13 @@
 
           let mesh = new THREE.Mesh(shape, material)
           mesh.position.copy(pos)
+          mesh.quaternion.copy(rot)
           scene.add(mesh)
 
           let transform = new Ammo.btTransform()
           transform.setIdentity()
           transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+          transform.setRotation(new Ammo.btQuaternion(rot.x, rot.y, rot.z, rot.w))
           let motionState = new Ammo.btDefaultMotionState(transform)
 
           let localInertia = new Ammo.btVector3(0, 0, 0)
@@ -412,16 +414,34 @@
 
           for (let i = 0; i < hash.length; i += 4) {
             let block_type = hash[i]
-            createBox(
-              new THREE.Vector3(
-                8 * chars.indexOf(hash[i+1]),
-                -1 + 0.25 * chars.indexOf(hash[i + 2]),
-                8 * chars.indexOf(hash[i + 3])
-              ),
-              8,
-              1,
-              8
-            )
+            if (block_type == 0) {
+              createBox(
+                new THREE.Vector3(
+                  8 * chars.indexOf(hash[i+1]),
+                  -1 + 0.25 * chars.indexOf(hash[i + 2]),
+                  8 * chars.indexOf(hash[i + 3])
+                ),
+                8,
+                1,
+                8
+              )
+            } else if (block_type == 1) {
+              let rot = new THREE.Quaternion(0, 0, 0, 1)
+              rot.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), -0.12435 )
+              createBox(
+                new THREE.Vector3(
+                  8  * chars.indexOf(hash[i+1]),
+                  -1 + .5 + 0.25 * chars.indexOf(hash[i + 2]),
+                  8 * chars.indexOf(hash[i + 3])
+                ),
+                8,
+                1,
+                8.18,
+                0,
+                1,
+                rot
+              )
+            }
           }
 
           createVehicle(new THREE.Vector3(0, 2, 0))
