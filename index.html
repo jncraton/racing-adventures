@@ -141,7 +141,15 @@
           }
         }
 
-        function createBox(pos, w, l, h, mass = 0, friction = 1, rot = new THREE.Quaternion(0, 0, 0, 1)) {
+        function createBox(
+          pos,
+          w,
+          l,
+          h,
+          mass = 0,
+          friction = 1,
+          rot = new THREE.Quaternion(0, 0, 0, 1)
+        ) {
           let material = mass > 0 ? materialDynamic : materialStatic
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
           let geometry = new Ammo.btBoxShape(
@@ -418,7 +426,7 @@
             if (block_type == 0) {
               createBox(
                 new THREE.Vector3(
-                  8 * chars.indexOf(hash[i+1]),
+                  8 * chars.indexOf(hash[i + 1]),
                   -1 + 0.25 * chars.indexOf(hash[i + 2]),
                   8 * chars.indexOf(hash[i + 3])
                 ),
@@ -428,14 +436,17 @@
               )
             } else if (block_type == 1) {
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
-              ramp.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -0.12435 )
+              ramp.setFromAxisAngle(new THREE.Vector3(0, 0, 1), -0.12435)
               let rot = new THREE.Quaternion(0, 0, 0, 1)
-              rot.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), block_dir * Math.PI/2 )
+              rot.setFromAxisAngle(
+                new THREE.Vector3(0, 1, 0),
+                (block_dir * Math.PI) / 2
+              )
               rot.multiply(ramp)
               createBox(
                 new THREE.Vector3(
-                  8  * chars.indexOf(hash[i+1]),
-                  -1 + .5 + 0.25 * chars.indexOf(hash[i + 2]),
+                  8 * chars.indexOf(hash[i + 1]),
+                  -1 + 0.5 + 0.25 * chars.indexOf(hash[i + 2]),
                   8 * chars.indexOf(hash[i + 3])
                 ),
                 8.18,
