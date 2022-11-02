@@ -18,7 +18,7 @@
       let inputs = ''
       for (let x = 0; x < 32; x++) {
         for (let y = 0; y < 32; y++) {
-          inputs += `<input type="number" size=2 name="${chars[x]}${chars[y]}" value=-1 />`
+          inputs += `<input type="number" size=2 name="${chars[x]}${chars[y]}" value=-1 min=-1 max=15 />`
         }
         inputs += '<br />'
       }
