@@ -413,7 +413,8 @@
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
           for (let i = 0; i < hash.length; i += 4) {
-            let block_type = hash[i]
+            let block_type = Math.floor(hash[i] / 4)
+            let block_dir = hash[i] % 4
             if (block_type == 0) {
               createBox(
                 new THREE.Vector3(
@@ -426,17 +427,20 @@
                 8
               )
             } else if (block_type == 1) {
+              let ramp = new THREE.Quaternion(0, 0, 0, 1)
+              ramp.setFromAxisAngle( new THREE.Vector3( 0, 0, 1 ), -0.12435 )
               let rot = new THREE.Quaternion(0, 0, 0, 1)
-              rot.setFromAxisAngle( new THREE.Vector3( 1, 0, 0 ), -0.12435 )
+              rot.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), block_dir * Math.PI/2 )
+              rot.multiply(ramp)
               createBox(
                 new THREE.Vector3(
                   8  * chars.indexOf(hash[i+1]),
                   -1 + .5 + 0.25 * chars.indexOf(hash[i + 2]),
                   8 * chars.indexOf(hash[i + 3])
                 ),
-                8,
-                1,
                 8.18,
+                1,
+                8,
                 0,
                 1,
                 rot
