@@ -416,6 +416,7 @@
 
         function createObjects() {
           const block_size = 12
+          let block_height = block_size / 8
 
           let hash = location.hash.slice(1)
 
@@ -429,11 +430,11 @@
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
-                  -block_size / 8 + (block_size / 8) * chars.indexOf(hash[i + 2]),
+                  -block_height + block_height * chars.indexOf(hash[i + 2]),
                   block_size * chars.indexOf(hash[i + 3])
                 ),
                 block_size,
-                block_size / 8,
+                block_height,
                 block_size
               )
             } else if (block_type == 1) {
@@ -448,11 +449,11 @@
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
-                  -block_size / 16 + (block_size / 8) * chars.indexOf(hash[i + 2]),
+                  -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
                   block_size * chars.indexOf(hash[i + 3])
                 ),
                 block_size,
-                block_size / 8,
+                block_height,
                 block_size * 1.023,
                 0,
                 1,
