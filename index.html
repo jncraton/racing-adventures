@@ -415,6 +415,8 @@
         }
 
         function createObjects() {
+          const block_size = 12
+
           let hash = location.hash.slice(1)
 
           const chars =
@@ -426,13 +428,13 @@
             if (block_type == 0) {
               createBox(
                 new THREE.Vector3(
-                  8 * chars.indexOf(hash[i + 1]),
-                  -1 + chars.indexOf(hash[i + 2]),
-                  8 * chars.indexOf(hash[i + 3])
+                  block_size * chars.indexOf(hash[i + 1]),
+                  -block_size / 8 + (block_size / 8) * chars.indexOf(hash[i + 2]),
+                  block_size * chars.indexOf(hash[i + 3])
                 ),
-                8,
-                1,
-                8
+                block_size,
+                block_size / 8,
+                block_size
               )
             } else if (block_type == 1) {
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
@@ -445,13 +447,13 @@
               rot.multiply(ramp)
               createBox(
                 new THREE.Vector3(
-                  8 * chars.indexOf(hash[i + 1]),
-                  -1 + 0.5 + chars.indexOf(hash[i + 2]),
-                  8 * chars.indexOf(hash[i + 3])
+                  block_size * chars.indexOf(hash[i + 1]),
+                  -block_size / 16 + (block_size / 8) * chars.indexOf(hash[i + 2]),
+                  block_size * chars.indexOf(hash[i + 3])
                 ),
-                8,
-                1,
-                8.18,
+                block_size,
+                block_size / 8,
+                block_size * 1.023,
                 0,
                 1,
                 rot
