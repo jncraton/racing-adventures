@@ -18,3 +18,15 @@ Block Types
 - 0: Road   
 - 1: 7.125 degree (1:8 pitch) Road ramp
 
+Ideas
+-----
+
+### Path Representation
+
+- Represent block connections as a graph
+- Represent path via block order
+
+### Storage Improvements
+
+- Infer block direction from surrounding nodes
+- Infer block position from surrounding nodes
