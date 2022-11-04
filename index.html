@@ -173,9 +173,9 @@
           // create a simple square shape. We duplicate the top left and bottom right
           // vertices because each vertex needs to appear once per triangle.
           const vertices = new Float32Array( [
-           -w/2,  0,  h/2,
-           w/2, 0, h/2,
-           w/2,0,-h/2,
+           -w/2,  l/2,  h/2,
+           w/2, l/2, h/2,
+           w/2,l/2,-h/2,
           ] );
 
           // itemSize = 3 because there are 3 values (components) per vertex
