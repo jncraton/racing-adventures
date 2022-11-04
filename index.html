@@ -154,18 +154,7 @@
           }
         }
 
-        function createBox(
-          pos,
-          w,
-          l,
-          h,
-          mass = 0,
-          friction = 1,
-          rot = new THREE.Quaternion(0, 0, 0, 1)
-        ) {
-          let material = mass > 0 ? materialDynamic : materialRoad
-          //let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
-
+        function createCorner() {
           const geo = new THREE.BufferGeometry();
           // create a simple square shape. We duplicate the top left and bottom right
           // vertices because each vertex needs to appear once per triangle.
@@ -178,10 +167,66 @@
           // itemSize = 3 because there are 3 values (components) per vertex
           geo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
           let mesh = new THREE.Mesh( geo, new THREE.MeshBasicMaterial( { color: 0xff0000 } ) );
-          
+          mesh.position.copy(pos)
+          mesh.quaternion.copy(rot)
+          scene.add(mesh)
+
+          let transform = new Ammo.btTransform()
+          transform.setIdentity()
+          transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+          transform.setRotation(new Ammo.btQuaternion(rot.x, rot.y, rot.z, rot.w))
+          let motionState = new Ammo.btDefaultMotionState(transform)
+
+          let localInertia = new Ammo.btVector3(0, 0, 0)
+          geometry.calculateLocalInertia(mass, localInertia)
+
+          let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            geometry,
+            localInertia
+          )
+          let body = new Ammo.btRigidBody(rbInfo)
+
+          body.setFriction(friction)
+
+          physicsWorld.addRigidBody(body)
+
+          if (mass > 0) {
+            // Sync physics and graphics
+            const sync = () => {
+              let ms = body.getMotionState()
+              if (ms) {
+                let transform = new Ammo.btTransform()
+                ms.getWorldTransform(transform)
+                let pos = transform.getOrigin()
+                let rot = transform.getRotation()
+                mesh.position.set(pos.x(), pos.y(), pos.z())
+                mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+              }
+            }
+
+            syncList.push(sync)
+          }
+        }
+
+        function createBox(
+          pos,
+          w,
+          l,
+          h,
+          mass = 0,
+          friction = 1,
+          rot = new THREE.Quaternion(0, 0, 0, 1)
+        ) {
+          let material = mass > 0 ? materialDynamic : materialRoad
+          let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
           )
+
+          let mesh = new THREE.Mesh(shape, material)
 
           mesh.position.copy(pos)
           mesh.quaternion.copy(rot)
@@ -473,6 +518,25 @@
               )
               rot.multiply(ramp)
               createBox(
+                new THREE.Vector3(
+                  block_size * chars.indexOf(hash[i + 1]),
+                  -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
+                  block_size * chars.indexOf(hash[i + 3])
+                ),
+                block_size,
+                block_height,
+                block_size * 1.023,
+                0,
+                1,
+                rot
+              )
+            } else if (block_type == 2) {
+              let rot = new THREE.Quaternion(0, 0, 0, 1)
+              rot.setFromAxisAngle(
+                new THREE.Vector3(0, 1, 0),
+                (-block_dir * Math.PI) / 2
+              )
+              createCorner(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
                   -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
