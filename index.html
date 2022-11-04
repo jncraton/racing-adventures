@@ -163,7 +163,9 @@
           rot = new THREE.Quaternion(0, 0, 0, 1)
 ) {
 
-          let material = mass > 0 ? materialDynamic : materialRoad
+          console.log(pos, w, l, h)
+
+          let material = materialRoad
 
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
@@ -205,23 +207,6 @@
           body.setFriction(friction)
 
           physicsWorld.addRigidBody(body)
-
-          if (mass > 0) {
-            // Sync physics and graphics
-            const sync = () => {
-              let ms = body.getMotionState()
-              if (ms) {
-                let transform = new Ammo.btTransform()
-                ms.getWorldTransform(transform)
-                let pos = transform.getOrigin()
-                let rot = transform.getRotation()
-                mesh.position.set(pos.x(), pos.y(), pos.z())
-                mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
-              }
-            }
-
-            syncList.push(sync)
-          }
         }
 
         function createBox(
