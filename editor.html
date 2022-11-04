@@ -49,14 +49,30 @@
           inputs += `<span id=${chars[x]}${chars[z]}>
           <select>
             <option value="">Air</option>
-            <option value="0" ${block_type === '0' ? 'selected' : ''}>Flat N&#x2191;</option>
-            <option value="1" ${block_type === '1' ? 'selected' : ''}>Flat E&#x2192;</option>
-            <option value="2" ${block_type === '2' ? 'selected' : ''}>Flat S&#x2193;</option>
-            <option value="3" ${block_type === '3' ? 'selected' : ''}>Flat W&#x2190;</option>
-            <option value="4" ${block_type === '4' ? 'selected' : ''}>Ramp N&#x2191;</option>
-            <option value="5" ${block_type === '5' ? 'selected' : ''}>Ramp E&#x2192;</option>
-            <option value="6" ${block_type === '6' ? 'selected' : ''}>Ramp S&#x2193;</option>
-            <option value="7" ${block_type === '7' ? 'selected' : ''}>Ramp W&#x2190;</option>
+            <option value="0" ${
+              block_type === '0' ? 'selected' : ''
+            }>Flat N&#x2191;</option>
+            <option value="1" ${
+              block_type === '1' ? 'selected' : ''
+            }>Flat E&#x2192;</option>
+            <option value="2" ${
+              block_type === '2' ? 'selected' : ''
+            }>Flat S&#x2193;</option>
+            <option value="3" ${
+              block_type === '3' ? 'selected' : ''
+            }>Flat W&#x2190;</option>
+            <option value="4" ${
+              block_type === '4' ? 'selected' : ''
+            }>Ramp N&#x2191;</option>
+            <option value="5" ${
+              block_type === '5' ? 'selected' : ''
+            }>Ramp E&#x2192;</option>
+            <option value="6" ${
+              block_type === '6' ? 'selected' : ''
+            }>Ramp S&#x2193;</option>
+            <option value="7" ${
+              block_type === '7' ? 'selected' : ''
+            }>Ramp W&#x2190;</option>
           </select>
           <label>y=<input type="number" size=2 value=${y} min=0 max=15 /></label></span>`
         }
