@@ -154,7 +154,21 @@
           }
         }
 
-        function createCorner() {
+        function createCorner(pos,
+          w,
+          l,
+          h,
+          mass = 0,
+          friction = 1,
+          rot = new THREE.Quaternion(0, 0, 0, 1)
+) {
+
+          let material = mass > 0 ? materialDynamic : materialRoad
+
+          let geometry = new Ammo.btBoxShape(
+            new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
+          )
+
           const geo = new THREE.BufferGeometry();
           // create a simple square shape. We duplicate the top left and bottom right
           // vertices because each vertex needs to appear once per triangle.
