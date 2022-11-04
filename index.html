@@ -154,45 +154,43 @@
           }
         }
 
-        function createCorner(pos,
+        function createCorner(
+          pos,
           w,
           l,
           h,
           mass = 0,
           friction = 1,
           rot = new THREE.Quaternion(0, 0, 0, 1)
-) {
-
+        ) {
           let material = materialRoad
 
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
           )
 
-          const geo = new THREE.BufferGeometry();
+          const geo = new THREE.BufferGeometry()
           // create a simple square shape. We duplicate the top left and bottom right
           // vertices because each vertex needs to appear once per triangle.
-          const vertices = new Float32Array( [
-           -w/2,  l/2,  h/2,
-           w/2, l/2, h/2,
-           w/2,l/2,-h/2,
-          ] );
-          const uvs = new Float32Array( [
-           0, 0,
-           0, 1,
-           1, 0,
-          ] );
-          const normals = new Float32Array( [
-           1, 1, 1,
-           1, 1, 1,
-           1, 1, 1,
-          ] );
-          
-          geo.setIndex( [[1,2,3]] );
-          geo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-          geo.setAttribute( 'uvs', new THREE.BufferAttribute( uvs, 2 ) );
-          geo.setAttribute( 'normals', new THREE.BufferAttribute( normals, 2 ) );
-          let mesh = new THREE.Mesh( geo, material );
+          const vertices = new Float32Array([
+            -w / 2,
+            l / 2,
+            h / 2,
+            w / 2,
+            l / 2,
+            h / 2,
+            w / 2,
+            l / 2,
+            -h / 2,
+          ])
+          const uvs = new Float32Array([0, 0, 0, 1, 1, 0])
+          const normals = new Float32Array([1, 1, 1, 1, 1, 1, 1, 1, 1])
+
+          geo.setIndex([[1, 2, 3]])
+          geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
+          geo.setAttribute('uvs', new THREE.BufferAttribute(uvs, 2))
+          geo.setAttribute('normals', new THREE.BufferAttribute(normals, 2))
+          let mesh = new THREE.Mesh(geo, material)
           mesh.position.copy(pos)
           mesh.quaternion.copy(rot)
           scene.add(mesh)

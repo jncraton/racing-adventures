@@ -73,12 +73,8 @@
             <option value="7" ${
               block_type === '7' ? 'selected' : ''
             }>Ramp W&#x2190;</option>
-            <option value="8" ${
-              block_type === '8' ? 'selected' : ''
-            }>Corner N</option>
-            <option value="9" ${
-              block_type === '9' ? 'selected' : ''
-            }>Corner E</option>
+            <option value="8" ${block_type === '8' ? 'selected' : ''}>Corner N</option>
+            <option value="9" ${block_type === '9' ? 'selected' : ''}>Corner E</option>
             <option value="10" ${
               block_type === '10' ? 'selected' : ''
             }>Corner S</option>
@@ -100,7 +96,8 @@
             let select = block.querySelector('select')
             if (select.value != '') {
               let input = block.querySelector('input')
-              href += chars[select.value] + block.id[0] + chars[input.value] + block.id[1]
+              href +=
+                chars[select.value] + block.id[0] + chars[input.value] + block.id[1]
             }
           })
           document.querySelector('a').href = href
