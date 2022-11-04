@@ -86,8 +86,13 @@
           dirLight.position.set(10, 10, 5)
           scene.add(dirLight)
 
+          const loader = new THREE.TextureLoader()
+
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
-          materialStatic = new THREE.MeshPhongMaterial({color: 0x999999})
+          materialStatic = new THREE.MeshPhongMaterial({
+            color: 0x999999,
+            map: loader.load('textures/road.png'),
+          })
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
           document.getElementById('container').replaceChildren(renderer.domElement)
