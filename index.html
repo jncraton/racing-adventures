@@ -509,8 +509,8 @@
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
           for (let i = 0; i < hash.length; i += 4) {
-            let block_type = Math.floor(hash[i] / 4)
-            let block_dir = hash[i] % 4
+            let block_type = Math.floor(chars.indexOf(hash[i]) / 4)
+            let block_dir = chars.indexOf(hash[i]) % 4
             if (block_type == 0) {
               createBox(
                 new THREE.Vector3(
