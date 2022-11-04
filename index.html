@@ -183,14 +183,20 @@
             l / 2,
             -h / 2,
           ])
-          const uvs = new Float32Array([0, 0, 0, 1, 1, 0])
-          const normals = new Float32Array([1, 1, 1, 1, 1, 1, 1, 1, 1])
+          const uv = new Float32Array([
+          1, 1,
+          0, 1,
+          0, 0,
+          ])
+          const normals = new Float32Array([0, 1, 0, 0, 1, 0, 0, 1, 0])
 
-          geo.setIndex([[1, 2, 3]])
+          geo.setIndex([0, 1, 2])
           geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
-          geo.setAttribute('uvs', new THREE.BufferAttribute(uvs, 2))
-          geo.setAttribute('normals', new THREE.BufferAttribute(normals, 2))
-          let mesh = new THREE.Mesh(geo, material)
+          geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2))
+          geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3))
+          console.log(geo)
+          
+          let mesh = new THREE.Mesh(geo, materialRoad)
           mesh.position.copy(pos)
           mesh.quaternion.copy(rot)
           scene.add(mesh)
@@ -228,6 +234,7 @@
         ) {
           let material = mass > 0 ? materialDynamic : materialRoad
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+          console.log('box', shape)
 
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
