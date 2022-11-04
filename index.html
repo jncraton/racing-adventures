@@ -42,7 +42,7 @@
         // Graphics variables
         let camera, scene, renderer
         let clock = new THREE.Clock()
-        let materialDynamic, materialStatic, materialInteractive
+        let materialDynamic, materialRoad, materialInteractive
 
         // Physics variables
         let physicsWorld
@@ -89,7 +89,7 @@
           const loader = new THREE.TextureLoader()
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
-          materialStatic = new THREE.MeshPhongMaterial({
+          materialRoad = new THREE.MeshPhongMaterial({
             color: 0x999999,
             map: loader.load('textures/road.png'),
           })
@@ -155,7 +155,7 @@
           friction = 1,
           rot = new THREE.Quaternion(0, 0, 0, 1)
         ) {
-          let material = mass > 0 ? materialDynamic : materialStatic
+          let material = mass > 0 ? materialDynamic : materialRoad
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
