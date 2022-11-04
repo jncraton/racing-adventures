@@ -89,10 +89,18 @@
           const loader = new THREE.TextureLoader()
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
-          materialRoad = new THREE.MeshPhongMaterial({
-            color: 0x999999,
-            map: loader.load('textures/road.png'),
-          })
+          materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
+          materialRoad = [
+            materialRoadUntextured,
+            materialRoadUntextured,
+            new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: loader.load('textures/road.png'),
+            }),
+            materialRoadUntextured,
+            materialRoadUntextured,
+            materialRoadUntextured,
+          ]
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
           document.getElementById('container').replaceChildren(renderer.domElement)
