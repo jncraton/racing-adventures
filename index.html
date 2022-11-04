@@ -163,8 +163,6 @@
           rot = new THREE.Quaternion(0, 0, 0, 1)
 ) {
 
-          console.log(pos, w, l, h)
-
           let material = materialRoad
 
           let geometry = new Ammo.btBoxShape(
@@ -538,7 +536,7 @@
               createCorner(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
-                  -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
+                  -block_height + block_height * chars.indexOf(hash[i + 2]),
                   block_size * chars.indexOf(hash[i + 3])
                 ),
                 block_size,
