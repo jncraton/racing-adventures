@@ -192,19 +192,15 @@
             l / 2,
             -h / 2,
           ])
-          const uv = new Float32Array([
-          1, 1,
-          0, 1,
-          0, 0,
-          ])
+          const uv = new Float32Array([1, 1, 0, 1, 0, 0])
           const normals = new Float32Array([0, 1, 0, 0, 1, 0, 0, 1, 0])
 
           geo.setIndex([0, 1, 2])
           geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
           geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2))
           geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3))
-          geo.addGroup(0,3,2)
-          
+          geo.addGroup(0, 3, 2)
+
           let mesh = new THREE.Mesh(geo, materialRoadCorner)
           mesh.position.copy(pos)
           mesh.quaternion.copy(rot)
