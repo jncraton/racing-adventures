@@ -194,7 +194,7 @@
           geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
           geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2))
           geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3))
-          geo.addGroup(0, 3, 0)
+          geo.addGroup(0,3,2)
           console.log(geo)
           
           let mesh = new THREE.Mesh(geo, materialRoad)
