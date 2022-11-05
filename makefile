@@ -10,7 +10,7 @@ format:
 	npx prettier --write index.html editor.html
 
 check:
-	npx jshint --extract=always index.html
+	npx jshint --extract=always index.html editor.html
 	npx prettier --check index.html editor.html
 
 launch:
