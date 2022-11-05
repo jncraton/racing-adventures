@@ -42,7 +42,7 @@
         // Graphics variables
         let camera, scene, renderer
         let clock = new THREE.Clock()
-        let materialDynamic, materialRoad, materialInteractive
+        let materialDynamic, materialRoad, materialRoadCorner, materialInteractive
 
         // Physics variables
         let physicsWorld
@@ -96,6 +96,17 @@
             new THREE.MeshPhongMaterial({
               color: 0x999999,
               map: loader.load('textures/road.png'),
+            }),
+            materialRoadUntextured,
+            materialRoadUntextured,
+            materialRoadUntextured,
+          ]
+          materialRoadCorner = [
+            materialRoadUntextured,
+            materialRoadUntextured,
+            new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: loader.load('textures/road-corner.png'),
             }),
             materialRoadUntextured,
             materialRoadUntextured,
@@ -163,8 +174,6 @@
           friction = 1,
           rot = new THREE.Quaternion(0, 0, 0, 1)
         ) {
-          let material = materialRoad
-
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
           )
@@ -197,7 +206,7 @@
           geo.addGroup(0,3,2)
           console.log(geo)
           
-          let mesh = new THREE.Mesh(geo, materialRoad)
+          let mesh = new THREE.Mesh(geo, materialRoadCorner)
           mesh.position.copy(pos)
           mesh.quaternion.copy(rot)
           scene.add(mesh)
