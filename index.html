@@ -157,67 +157,6 @@
           }
         }
 
-        function createCorner(
-          pos,
-          w,
-          h,
-          l,
-          mass = 0,
-          friction = 1,
-          rot = new THREE.Quaternion(0, 0, 0, 1)
-        ) {
-          let geometry = new Ammo.btBoxShape(
-            new Ammo.btVector3(w * 0.5, h * 0.5, l * 0.5)
-          )
-
-          const geo = new THREE.BufferGeometry()
-          const vertices = new Float32Array([
-            -w / 2,
-            h / 2,
-            l / 2,
-            w / 2,
-            h / 2,
-            l / 2,
-            -w / 2,
-            h / 2,
-            -l / 2,
-          ])
-          const uv = new Float32Array([0, 0, 1, 0, 0, 1])
-          const normals = new Float32Array([0, 1, 0, 0, 1, 0, 0, 1, 0])
-
-          geo.setIndex([0, 1, 2])
-          geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
-          geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2))
-          geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3))
-          geo.addGroup(0, 3, 2)
-
-          let mesh = new THREE.Mesh(geo, materialRoadCorner)
-          mesh.position.copy(pos)
-          mesh.quaternion.copy(rot)
-          scene.add(mesh)
-
-          let transform = new Ammo.btTransform()
-          transform.setIdentity()
-          transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-          transform.setRotation(new Ammo.btQuaternion(rot.x, rot.y, rot.z, rot.w))
-          let motionState = new Ammo.btDefaultMotionState(transform)
-
-          let localInertia = new Ammo.btVector3(0, 0, 0)
-          geometry.calculateLocalInertia(mass, localInertia)
-
-          let rbInfo = new Ammo.btRigidBodyConstructionInfo(
-            mass,
-            motionState,
-            geometry,
-            localInertia
-          )
-          let body = new Ammo.btRigidBody(rbInfo)
-
-          body.setFriction(friction)
-
-          physicsWorld.addRigidBody(body)
-        }
-
         function createBox(
           pos,
           w,
@@ -225,9 +164,9 @@
           h,
           mass = 0,
           friction = 1,
-          rot = new THREE.Quaternion(0, 0, 0, 1)
+          rot = new THREE.Quaternion(0, 0, 0, 1),
+          material = materialDynamic
         ) {
-          let material = mass > 0 ? materialDynamic : materialRoad
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
 
           let geometry = new Ammo.btBoxShape(
@@ -519,7 +458,8 @@
                 block_size,
                 0,
                 0,
-                rot
+                rot,
+                materialRoad
               )
             } else if (block_type == 1) {
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
@@ -536,10 +476,11 @@
                 block_size * 1.023,
                 0,
                 1,
-                rot
+                rot,
+                materialRoad
               )
             } else if (block_type == 2) {
-              createCorner(
+              createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
                   -block_height + block_height * chars.indexOf(hash[i + 2]),
@@ -550,7 +491,8 @@
                 block_size * 1.023,
                 0,
                 1,
-                rot
+                rot,
+                materialRoadCorner
               )
             }
           }
