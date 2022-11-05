@@ -204,7 +204,6 @@
           geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2))
           geo.setAttribute('normal', new THREE.BufferAttribute(normals, 3))
           geo.addGroup(0,3,2)
-          console.log(geo)
           
           let mesh = new THREE.Mesh(geo, materialRoadCorner)
           mesh.position.copy(pos)
@@ -244,7 +243,6 @@
         ) {
           let material = mass > 0 ? materialDynamic : materialRoad
           let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
-          console.log('box', shape)
 
           let geometry = new Ammo.btBoxShape(
             new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
