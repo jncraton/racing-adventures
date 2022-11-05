@@ -101,7 +101,7 @@
       document.querySelector('main').innerHTML = inputs
 
       document.querySelectorAll('input,select').forEach(input => {
-        input.addEventListener('input', el => {
+        input.addEventListener('input', () => {
           let href = 'index.html#'
           document.querySelectorAll('span').forEach(block => {
             let select = block.querySelector('select')
