@@ -192,7 +192,7 @@
             l / 2,
             -h / 2,
           ])
-          const uv = new Float32Array([0,0,1, 0, 0, 1])
+          const uv = new Float32Array([0, 0, 1, 0, 0, 1])
           const normals = new Float32Array([0, 1, 0, 0, 1, 0, 0, 1, 0])
 
           geo.setIndex([0, 1, 2])
@@ -515,6 +515,8 @@
           for (let i = 0; i < hash.length; i += 4) {
             let block_type = Math.floor(chars.indexOf(hash[i]) / 4)
             let block_dir = chars.indexOf(hash[i]) % 4
+            let rot = new THREE.Quaternion(0, 0, 0, 1)
+            rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-block_dir * Math.PI) / 2)
             if (block_type == 0) {
               createBox(
                 new THREE.Vector3(
@@ -524,16 +526,14 @@
                 ),
                 block_size,
                 block_height,
-                block_size
+                block_size,
+                0,
+                0,
+                rot
               )
             } else if (block_type == 1) {
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
               ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
-              let rot = new THREE.Quaternion(0, 0, 0, 1)
-              rot.setFromAxisAngle(
-                new THREE.Vector3(0, 1, 0),
-                (-block_dir * Math.PI) / 2
-              )
               rot.multiply(ramp)
               createBox(
                 new THREE.Vector3(
@@ -549,11 +549,6 @@
                 rot
               )
             } else if (block_type == 2) {
-              let rot = new THREE.Quaternion(0, 0, 0, 1)
-              rot.setFromAxisAngle(
-                new THREE.Vector3(0, 1, 0),
-                (-block_dir * Math.PI) / 2
-              )
               createCorner(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
