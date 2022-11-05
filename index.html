@@ -164,27 +164,27 @@
         function createCorner(
           pos,
           w,
-          l,
           h,
+          l,
           mass = 0,
           friction = 1,
           rot = new THREE.Quaternion(0, 0, 0, 1)
         ) {
           let geometry = new Ammo.btBoxShape(
-            new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
+            new Ammo.btVector3(w * 0.5, h * 0.5, l * 0.5)
           )
 
           const geo = new THREE.BufferGeometry()
           const vertices = new Float32Array([
             -w / 2,
-            l / 2,
             h / 2,
+            l / 2,
             w / 2,
-            l / 2,
             h / 2,
-            -w / 2,
             l / 2,
-            -h / 2,
+            -w / 2,
+            h / 2,
+            -l / 2,
           ])
           const uv = new Float32Array([0, 0, 1, 0, 0, 1])
           const normals = new Float32Array([0, 1, 0, 0, 1, 0, 0, 1, 0])
