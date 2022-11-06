@@ -42,7 +42,11 @@
         // Graphics variables
         let camera, scene, renderer
         let clock = new THREE.Clock()
-        let materialDynamic, materialRoad, materialRoadCorner, materialInteractive
+        let materialDynamic,
+          materialRoad,
+          materialRoadCorner,
+          materialInteractive,
+          materialWheel
         const texturePath = 'textures/city/'
 
         // Physics variables
@@ -90,14 +94,15 @@
           loader.setPath(texturePath)
 
           const loadTexture = path => {
-            texture = loader.load(path)
+            const texture = loader.load(path)
             texture.minFilter = THREE.NearestFilter
             texture.magFilter = THREE.NearestFilter
             return texture
           }
 
-          roadTexture = loadTexture('road.png')
-          roadCornerTexture = loadTexture('road-corner.png')
+          const roadTexture = loadTexture('road.png')
+          const roadCornerTexture = loadTexture('road-corner.png')
+          const wheelTexture = loadTexture('wheel.png')
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
@@ -123,6 +128,22 @@
             materialRoadUntextured,
             materialRoadUntextured,
           ]
+
+          materialWheel = [
+            new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: wheelTexture,
+            }),
+            new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: wheelTexture,
+            }),
+            new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: wheelTexture,
+            }),
+          ]
+
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
           document.getElementById('container').replaceChildren(renderer.domElement)
@@ -240,7 +261,7 @@
         function createWheelMesh(radius, width) {
           let t = new THREE.CylinderGeometry(radius, radius, width, 8, 1)
           t.rotateZ(Math.PI / 2)
-          let mesh = new THREE.Mesh(t, materialInteractive)
+          let mesh = new THREE.Mesh(t, materialWheel)
           scene.add(mesh)
           return mesh
         }
