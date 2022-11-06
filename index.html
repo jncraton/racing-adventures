@@ -89,12 +89,15 @@
           const loader = new THREE.TextureLoader()
           loader.setPath(texturePath)
 
-          const roadTexture = loader.load('road.png')
-          roadTexture.minFilter = THREE.NearestFilter
-          roadTexture.magFilter = THREE.NearestFilter
-          const roadCornerTexture = loader.load('road-corner.png')
-          roadCornerTexture.minFilter = THREE.NearestFilter
-          roadCornerTexture.magFilter = THREE.NearestFilter
+          const loadTexture = path => {
+            texture = loader.load(path)
+            texture.minFilter = THREE.NearestFilter
+            texture.magFilter = THREE.NearestFilter
+            return texture
+          }
+
+          roadTexture = loadTexture('road.png')
+          roadCornerTexture = loadTexture('road-corner.png')
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
