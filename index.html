@@ -46,7 +46,8 @@
           materialRoad,
           materialRoadCorner,
           materialInteractive,
-          materialWheel
+          materialWheel,
+          materialWall
         const texturePath = 'textures/city/'
 
         // Physics variables
@@ -106,6 +107,7 @@
           const roadMaterial = loadMaterial('road.png')
           const roadCornerMaterial = loadMaterial('road-corner.png')
           const wheelMaterial = loadMaterial('wheel.png')
+          const wallMaterial = loadMaterial('wall.png')
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
@@ -124,6 +126,14 @@
             materialRoadUntextured,
             materialRoadUntextured,
             materialRoadUntextured,
+          ]
+          materialWall = [
+            wallMaterial,
+            wallMaterial,
+            wallMaterial,
+            wallMaterial,
+            wallMaterial,
+            wallMaterial,
           ]
 
           materialWheel = [wheelMaterial, wheelMaterial, wheelMaterial]
@@ -518,6 +528,23 @@
                 rot,
                 materialRoadCorner
               )
+            } else if (block_type == 3) {
+              for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
+                createBox(
+                  new THREE.Vector3(
+                    block_size * chars.indexOf(hash[i + 1]),
+                    -block_height + block_size * y,
+                    block_size * chars.indexOf(hash[i + 3])
+                  ),
+                  block_size,
+                  block_size,
+                  block_size,
+                  0,
+                  1,
+                  rot,
+                  materialWall
+                )
+              }
             }
           }
 
