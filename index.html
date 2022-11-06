@@ -93,26 +93,26 @@
           const loader = new THREE.TextureLoader()
           loader.setPath(texturePath)
 
-          const loadTexture = path => {
+          const loadMaterial = path => {
             const texture = loader.load(path)
             texture.minFilter = THREE.NearestFilter
             texture.magFilter = THREE.NearestFilter
-            return texture
+            return new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: texture,
+            })
           }
 
-          const roadTexture = loadTexture('road.png')
-          const roadCornerTexture = loadTexture('road-corner.png')
-          const wheelTexture = loadTexture('wheel.png')
+          const roadMaterial = loadMaterial('road.png')
+          const roadCornerMaterial = loadMaterial('road-corner.png')
+          const wheelMaterial = loadMaterial('wheel.png')
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
           materialRoad = [
             materialRoadUntextured,
             materialRoadUntextured,
-            new THREE.MeshPhongMaterial({
-              color: 0x999999,
-              map: roadTexture,
-            }),
+            roadMaterial,
             materialRoadUntextured,
             materialRoadUntextured,
             materialRoadUntextured,
@@ -120,29 +120,13 @@
           materialRoadCorner = [
             materialRoadUntextured,
             materialRoadUntextured,
-            new THREE.MeshPhongMaterial({
-              color: 0x999999,
-              map: roadCornerTexture,
-            }),
+            roadCornerMaterial,
             materialRoadUntextured,
             materialRoadUntextured,
             materialRoadUntextured,
           ]
 
-          materialWheel = [
-            new THREE.MeshPhongMaterial({
-              color: 0x999999,
-              map: wheelTexture,
-            }),
-            new THREE.MeshPhongMaterial({
-              color: 0x999999,
-              map: wheelTexture,
-            }),
-            new THREE.MeshPhongMaterial({
-              color: 0x999999,
-              map: wheelTexture,
-            }),
-          ]
+          materialWheel = [wheelMaterial, wheelMaterial, wheelMaterial]
 
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
