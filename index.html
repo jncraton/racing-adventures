@@ -486,11 +486,14 @@
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_?/:@.~!$&'()*+,="
 
           for (let i = 0; i < hash.length; i += 4) {
-            let block_type = Math.floor(chars.indexOf(hash[i]) / 4)
-            let block_dir = chars.indexOf(hash[i]) % 4
+            let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
+            let blockStyle = chars.indexOf(hash[i]) % 4
             let rot = new THREE.Quaternion(0, 0, 0, 1)
-            rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-block_dir * Math.PI) / 2)
-            if (block_type == 0) {
+            rot.setFromAxisAngle(
+              new THREE.Vector3(0, 1, 0),
+              (-blockStyle * Math.PI) / 2
+            )
+            if (blockType == 0) {
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
@@ -505,7 +508,7 @@
                 rot,
                 materialRoad
               )
-            } else if (block_type == 1) {
+            } else if (blockType == 1) {
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
               ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
               rot.multiply(ramp)
@@ -523,7 +526,7 @@
                 rot,
                 materialRoad
               )
-            } else if (block_type == 2) {
+            } else if (blockType == 2) {
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
@@ -538,7 +541,7 @@
                 rot,
                 materialRoadCorner
               )
-            } else if (block_type == 3) {
+            } else if (blockType == 3) {
               for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
                 createBox(
                   new THREE.Vector3(
@@ -552,7 +555,7 @@
                   0,
                   1,
                   rot,
-                  materialWall[block_dir]
+                  materialWall[blockStyle]
                 )
               }
             }
