@@ -393,7 +393,7 @@
           )
 
           // Sync keybord actions and physics and graphics
-          function sync() {
+          function sync(dt) {
             let speed = vehicle.getCurrentSpeedKmHour()
 
             breakingForce = 0
@@ -460,7 +460,7 @@
 
             document.getElementById('speedometer').innerHTML = `${speed.toFixed(
               1
-            )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos.z().toFixed(2)}`
+            )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos.z().toFixed(2)} ${Math.floor(1/dt)}`
           }
 
           syncList.push(sync)
