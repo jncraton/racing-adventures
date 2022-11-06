@@ -79,6 +79,13 @@
           scene.add(new THREE.AmbientLight(0xcccccc))
           scene.add(new THREE.DirectionalLight(0xffffff, 1))
 
+          scene.background = new THREE.CubeTextureLoader()
+            .setPath(texturePath)
+            .load(
+              ['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'],
+              t => (t.magFilter = THREE.NearestFilter)
+            )
+
           const loader = new THREE.TextureLoader()
           loader.setPath(texturePath)
 
