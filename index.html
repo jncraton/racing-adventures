@@ -113,6 +113,7 @@
 
           for (let i = 0; i < 4; i++) {
             materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
+            materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
           }
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
