@@ -43,6 +43,7 @@
         let camera, scene, renderer
         let clock = new THREE.Clock()
         let materialDynamic, materialRoad, materialRoadCorner, materialInteractive
+        const texturePath = 'textures/city/'
 
         // Physics variables
         let physicsWorld
@@ -79,11 +80,12 @@
           scene.add(new THREE.DirectionalLight(0xffffff, 1))
 
           const loader = new THREE.TextureLoader()
+          loader.setPath(texturePath)
 
-          const roadTexture = loader.load('textures/road.png')
+          const roadTexture = loader.load('road.png')
           roadTexture.minFilter = THREE.NearestFilter
           roadTexture.magFilter = THREE.NearestFilter
-          const roadCornerTexture = loader.load('textures/road-corner.png')
+          const roadCornerTexture = loader.load('road-corner.png')
           roadCornerTexture.minFilter = THREE.NearestFilter
           roadCornerTexture.magFilter = THREE.NearestFilter
 
