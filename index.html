@@ -48,6 +48,8 @@
           materialRoadCorner,
           materialInteractive,
           materialWheel,
+          materialCarBase,
+          materialCarTop,
           materialWall = []
         const texturePath = 'textures/city/'
 
@@ -105,6 +107,7 @@
             return new THREE.MeshPhongMaterial({
               color: 0x999999,
               map: texture,
+              transparent: true,
             })
           }
 
@@ -116,6 +119,17 @@
             materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
             materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
           }
+
+          materialCarBase = [
+            loadMaterial('car-left.png'),
+            loadMaterial('car-right.png'),
+            loadMaterial('car-hood.png'),
+            loadMaterial('car-hood.png'),
+            loadMaterial('car-front.png'),
+            loadMaterial('car-back.png'),
+          ]
+
+          materialCarTop = new Array(6).fill(loadMaterial('car-top.png'))
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
@@ -269,12 +283,17 @@
           return mesh
         }
 
-        function createChassisMesh(w, l, h) {
+        function createChassisMesh(w, h, l) {
           let chassis = new THREE.Object3D()
 
-          chassis.add(
-            new THREE.Mesh(new THREE.BoxGeometry(w, l, h, 1, 1, 1), materialInteractive)
+          chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase))
+
+          let top = new THREE.Mesh(
+            new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
+            materialCarTop
           )
+          top.position.set(0, h, -l / 8)
+          chassis.add(top)
 
           scene.add(chassis)
           return chassis
@@ -283,18 +302,18 @@
         function createVehicle(pos) {
           // Vehicle contants
 
-          let chassisWidth = 1.8
-          let chassisHeight = 0.6
-          let chassisLength = 4
+          let chassisWidth = 2.0
+          let chassisHeight = 1.0
+          let chassisLength = 4.0
           let massVehicle = 800
 
           let wheelRadius = 0.5
           let wheelWidth = 0.2
 
-          let axleFrontPos = 1.7
-          let axleBackPos = -1
-          let axleHalfLength = 1
-          let axleHeight = 0.3
+          let axleFrontPos = 1.2
+          let axleBackPos = -1.0
+          let axleHalfLength = 1.0
+          let axleHeight = 0.1
 
           let friction = 1000
           let suspensionStiffness = 20.0
