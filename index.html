@@ -270,10 +270,14 @@
         }
 
         function createChassisMesh(w, l, h) {
-          let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
-          let mesh = new THREE.Mesh(shape, materialInteractive)
-          scene.add(mesh)
-          return mesh
+          let chassis = new THREE.Object3D()
+
+          chassis.add(
+            new THREE.Mesh(new THREE.BoxGeometry(w, l, h, 1, 1, 1), materialInteractive)
+          )
+
+          scene.add(chassis)
+          return chassis
         }
 
         function createVehicle(pos) {
