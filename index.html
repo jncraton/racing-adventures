@@ -484,7 +484,7 @@
             chassisMesh.position.set(pos.x(), pos.y(), pos.z())
             chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
-            let camera_offset = new THREE.Vector3(0, 2, -6)
+            let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
             camera_offset.applyQuaternion(chassisMesh.quaternion)
 
             camera.position.copy(camera_offset.add(chassisMesh.position))
