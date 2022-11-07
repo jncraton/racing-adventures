@@ -37,12 +37,7 @@
     <script src="three.js"></script>
 
     <script>
-      const blockTypes = {
-        ROAD_STRAIGHT: 0,
-        ROAD_RAMP: 1,
-        ROAD_CORNER: 2,
-        WALL: 3,
-      }
+      const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall']
 
       Ammo().then(function (Ammo) {
         // Graphics variables
@@ -499,7 +494,7 @@
               new THREE.Vector3(0, 1, 0),
               (-blockStyle * Math.PI) / 2
             )
-            if (blockType == blockTypes.ROAD_STRAIGHT) {
+            if (blockType == blockNames.indexOf('Road Straight')) {
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
@@ -514,7 +509,7 @@
                 rot,
                 materialRoad
               )
-            } else if (blockType == blockTypes.ROAD_RAMP) {
+            } else if (blockType == blockNames.indexOf('Road Ramp')) {
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
               ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
               rot.multiply(ramp)
@@ -532,7 +527,7 @@
                 rot,
                 materialRoad
               )
-            } else if (blockType == blockTypes.ROAD_CORNER) {
+            } else if (blockType == blockNames.indexOf('Road Corner')) {
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
@@ -547,7 +542,7 @@
                 rot,
                 materialRoadCorner
               )
-            } else if (blockType == blockTypes.WALL) {
+            } else if (blockType == blockNames.indexOf('Wall')) {
               for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
                 createBox(
                   new THREE.Vector3(
