@@ -511,7 +511,8 @@
 
           let hash = location.hash.slice(1)
 
-          const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+          const chars =
+            '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
 
           for (let i = 0; i < hash.length; i += 4) {
             let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
