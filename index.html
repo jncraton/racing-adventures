@@ -53,6 +53,9 @@
           materialWall = []
         const texturePath = 'textures/city/'
 
+        // Player data
+        if (!localStorage.money) localStorage.money = 0
+
         // Physics variables
         let physicsWorld
         let syncList = []
@@ -499,11 +502,16 @@
               camera.position.copy(camera_offset.add(chassisMesh.position))
               camera.lookAt(chassisMesh.position)
 
+              if (pos.y() > -1)
+                localStorage.money = parseFloat(localStorage.money) + dt * speed
+
               document.getElementById('speedometer').innerHTML = `${speed.toFixed(
                 1
               )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos
                 .z()
-                .toFixed(2)} ${Math.floor(1 / dt)}`
+                .toFixed(2)} ${Math.floor(1 / dt)} \$${parseFloat(
+                localStorage.money
+              ).toFixed(2)}`
             }
           }
 
