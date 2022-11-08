@@ -299,7 +299,7 @@
           return chassis
         }
 
-        function createVehicle(pos) {
+        function createVehicle(pos, player = true) {
           // Vehicle contants
 
           let chassisWidth = 2.0
@@ -431,28 +431,31 @@
             breakingForce = 0
             engineForce = 0
 
-            if (actions.acceleration) {
-              if (speed < -1) breakingForce = maxBreakingForce
-              else engineForce = maxEngineForce
-            }
-            if (actions.braking) {
-              if (speed > 1) breakingForce = maxBreakingForce
-              else engineForce = -maxEngineForce / 2
-            }
-            if (actions.left) {
-              if (vehicleSteering < steeringClamp) vehicleSteering += steeringIncrement
-            } else {
-              if (actions.right) {
-                if (vehicleSteering > -steeringClamp)
-                  vehicleSteering -= steeringIncrement
-              } else {
-                if (vehicleSteering < -steeringIncrement)
+            if (player) {
+              if (actions.acceleration) {
+                if (speed < -1) breakingForce = maxBreakingForce
+                else engineForce = maxEngineForce
+              }
+              if (actions.braking) {
+                if (speed > 1) breakingForce = maxBreakingForce
+                else engineForce = -maxEngineForce / 2
+              }
+              if (actions.left) {
+                if (vehicleSteering < steeringClamp)
                   vehicleSteering += steeringIncrement
-                else {
-                  if (vehicleSteering > steeringIncrement)
+              } else {
+                if (actions.right) {
+                  if (vehicleSteering > -steeringClamp)
                     vehicleSteering -= steeringIncrement
+                } else {
+                  if (vehicleSteering < -steeringIncrement)
+                    vehicleSteering += steeringIncrement
                   else {
-                    vehicleSteering = 0
+                    if (vehicleSteering > steeringIncrement)
+                      vehicleSteering -= steeringIncrement
+                    else {
+                      vehicleSteering = 0
+                    }
                   }
                 }
               }
@@ -484,17 +487,19 @@
             chassisMesh.position.set(pos.x(), pos.y(), pos.z())
             chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
-            let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
-            camera_offset.applyQuaternion(chassisMesh.quaternion)
+            if (player) {
+              let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
+              camera_offset.applyQuaternion(chassisMesh.quaternion)
 
-            camera.position.copy(camera_offset.add(chassisMesh.position))
-            camera.lookAt(chassisMesh.position)
+              camera.position.copy(camera_offset.add(chassisMesh.position))
+              camera.lookAt(chassisMesh.position)
 
-            document.getElementById('speedometer').innerHTML = `${speed.toFixed(
-              1
-            )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos
-              .z()
-              .toFixed(2)} ${Math.floor(1 / dt)}`
+              document.getElementById('speedometer').innerHTML = `${speed.toFixed(
+                1
+              )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos
+                .z()
+                .toFixed(2)} ${Math.floor(1 / dt)}`
+            }
           }
 
           syncList.push(sync)
@@ -586,6 +591,7 @@
           }
 
           createVehicle(new THREE.Vector3(block_size + -block_size / 4, 2, block_size))
+          createVehicle(new THREE.Vector3(-block_size / 4, 2, 2 * block_size), false)
         }
 
         // - Init -
