@@ -591,7 +591,16 @@
           }
 
           createVehicle(new THREE.Vector3(block_size + -block_size / 4, 2, block_size))
-          createVehicle(new THREE.Vector3(-block_size / 4, 2, 2 * block_size), false)
+          for (let i = 0; i < 5; i++) {
+            createVehicle(
+              new THREE.Vector3(
+                -block_size / 4,
+                2,
+                2 * block_size + 0.5 * block_size * i
+              ),
+              false
+            )
+          }
         }
 
         // - Init -
