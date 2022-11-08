@@ -183,7 +183,7 @@
           requestAnimationFrame(tick)
           let dt = clock.getDelta()
           for (let i = 0; i < syncList.length; i++) syncList[i](dt)
-          physicsWorld.stepSimulation(dt, 10)
+          physicsWorld.stepSimulation(dt, 0)
           renderer.render(scene, camera)
           time += dt
         }
