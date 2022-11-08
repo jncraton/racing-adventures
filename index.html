@@ -364,6 +364,7 @@
           let rayCaster = new Ammo.btDefaultVehicleRaycaster(physicsWorld)
           let vehicle = new Ammo.btRaycastVehicle(tuning, body, rayCaster)
           vehicle.setCoordinateSystem(0, 1, 2)
+          vehicle.body = body
           physicsWorld.addAction(vehicle)
 
           // Wheels
@@ -459,6 +460,10 @@
                   }
                 }
               }
+            }
+
+            if (engineForce) {
+              vehicle.body.activate()
             }
 
             vehicle.applyEngineForce(engineForce, BACK_LEFT)
