@@ -124,7 +124,6 @@
 
           loader.setPath(`textures/vehicles/car/${localStorage.vehicleTexture}/`)
 
-          const wheelMaterial = loadMaterial('wheel.png')
           materialCarBase = [
             loadMaterial('left.png'),
             loadMaterial('right.png'),
@@ -155,7 +154,11 @@
             materialRoadUntextured,
           ]
 
-          materialWheel = [wheelMaterial, wheelMaterial, wheelMaterial]
+          materialWheel = [
+            loadMaterial('tire.png'),
+            loadMaterial('hubcap.png'),
+            loadMaterial('hubcap.png'),
+          ]
 
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
