@@ -94,7 +94,7 @@
           scene.add(new THREE.DirectionalLight(0xffffff, 1))
 
           scene.background = new THREE.CubeTextureLoader()
-            .setPath('/textures/city')
+            .setPath('/textures/city/')
             .load(
               ['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'],
               t => (t.magFilter = THREE.NearestFilter)
