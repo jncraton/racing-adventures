@@ -51,10 +51,10 @@
           materialCarBase,
           materialCarTop,
           materialWall = []
-        const texturePath = 'textures/city/'
 
         // Player data
         if (!localStorage.money) localStorage.money = 0
+        if (!localStorage.vehicleTexture) localStorage.vehicleTexture = 0
 
         // Physics variables
         let physicsWorld
@@ -94,14 +94,14 @@
           scene.add(new THREE.DirectionalLight(0xffffff, 1))
 
           scene.background = new THREE.CubeTextureLoader()
-            .setPath(texturePath)
+            .setPath('/textures/city')
             .load(
               ['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'],
               t => (t.magFilter = THREE.NearestFilter)
             )
 
           const loader = new THREE.TextureLoader()
-          loader.setPath(texturePath)
+          loader.setPath('textures/city/')
 
           const loadMaterial = path => {
             const texture = loader.load(path)
@@ -116,23 +116,25 @@
 
           const roadMaterial = loadMaterial('road.png')
           const roadCornerMaterial = loadMaterial('road-corner.png')
-          const wheelMaterial = loadMaterial('wheel.png')
 
           for (let i = 0; i < 4; i++) {
             materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
             materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
           }
 
+          loader.setPath('textures/vehicles/car/0/')
+
+          const wheelMaterial = loadMaterial('wheel.png')
           materialCarBase = [
-            loadMaterial('car-left.png'),
-            loadMaterial('car-right.png'),
-            loadMaterial('car-hood.png'),
-            loadMaterial('car-hood.png'),
-            loadMaterial('car-front.png'),
-            loadMaterial('car-back.png'),
+            loadMaterial('left.png'),
+            loadMaterial('right.png'),
+            loadMaterial('hood.png'),
+            loadMaterial('hood.png'),
+            loadMaterial('front.png'),
+            loadMaterial('back.png'),
           ]
 
-          materialCarTop = new Array(6).fill(loadMaterial('car-top.png'))
+          materialCarTop = new Array(6).fill(loadMaterial('top.png'))
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
