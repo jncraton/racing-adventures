@@ -5,13 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Racing Adventures - Store</title>
-    <style></style>
+    <style>
+      img {
+        display: block;
+        height: 64px;
+        border: 1px #ccc;
+      }
+    </style>
   </head>
 
   <body>
     <h1>Store</h1>
-    <input type="number" name="vehicle" />
+    <main></main>
     <script>
+      const init = () => {
+        let html = ''
+        for (let i = 0; i <= 6; i++) {
+          html += `<label><input type="radio" name="vehicle" value=${i}>Car ${i} <img src="/textures/vehicles/car/${i}/left.png"></input></label>`
+        }
+        document.querySelector('main').innerHTML = html
+      }
+
+      init()
+
       document.querySelector('input[name=vehicle]').addEventListener('input', e => {
         localStorage.vehicleTexture = e.target.value
       })
