@@ -190,6 +190,10 @@
         function tick() {
           requestAnimationFrame(tick)
           let dt = clock.getDelta()
+          if (dt > 0.2) {
+            // Pause while tab is in background
+            return
+          }
           for (let i = 0; i < syncList.length; i++) syncList[i](dt)
           physicsWorld.stepSimulation(dt, 0)
           renderer.render(scene, camera)
