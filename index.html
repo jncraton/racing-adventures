@@ -54,7 +54,7 @@
 
         // Player data
         if (!localStorage.money) localStorage.money = 0
-        if (!localStorage.vehicleTexture) localStorage.vehicleTexture = '0'
+        if (!localStorage.vehicle) localStorage.vehicle = '0'
 
         // Physics variables
         let physicsWorld
@@ -122,7 +122,7 @@
             materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
           }
 
-          loader.setPath(`textures/vehicles/car/${localStorage.vehicleTexture}/`)
+          loader.setPath(`textures/vehicles/car/${localStorage.vehicle}/`)
 
           materialCarBase = [
             loadMaterial('left.png'),
