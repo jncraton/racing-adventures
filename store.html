@@ -85,7 +85,7 @@
           vehicle.querySelector('img').src = `textures/vehicles/car/${i}/left.png`
           if (!localStorage['isVehicleOwned' + i]) {
             vehicle.querySelector('label').classList = 'locked'
-            vehicle.querySelector('span').textContent += `- \$${i * 10000}`
+            vehicle.querySelector('span').textContent += ` - \$${i * 10000}`
           }
           document.querySelector('section').appendChild(vehicle)
           vehicle.addEventListener('input', update)
