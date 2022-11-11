@@ -18,15 +18,19 @@
     <h1>Store</h1>
     <main></main>
     <script>
-      const init = () => {
+      localStorage.isVehicleOwned0 = true
+
+      const update = () => {
         let html = ''
         for (let i = 0; i <= 6; i++) {
-          html += `<label><input type="radio" name="vehicle" value=${i}>Car ${i} <img src="/textures/vehicles/car/${i}/left.png"></input></label>`
+          html += `<label><input type="radio" name="vehicle" value=${i} ${
+            localStorage['isVehicleOwned' + i] ? '' : 'disabled'
+          }>Car ${i} <img src="/textures/vehicles/car/${i}/left.png"></input></label>`
         }
         document.querySelector('main').innerHTML = html
       }
 
-      init()
+      update()
 
       document.querySelector('input[name=vehicle]').addEventListener('input', e => {
         localStorage.vehicleTexture = e.target.value
