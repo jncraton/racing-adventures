@@ -42,11 +42,15 @@
 
         let html = `<div>\$${parseFloat(localStorage.money).toFixed(2)}</div>`
         for (let i = 0; i <= 6; i++) {
-          html += `<label><input type="radio" name="vehicle" value=${i} ${
-            localStorage.vehicle == i ? 'checked' : ''
-          }>Car ${i} ${
-            localStorage['isVehicleOwned' + i] ? 'Owned' : '$' + i * 10000
-          }<img src="/textures/vehicles/car/${i}/left.png"></input></label>`
+          html += `
+            <label>
+              <input type="radio" name="vehicle" value=${i}
+                  ${localStorage.vehicle == i ? 'checked' : ''}>
+                Car ${i}
+                ${localStorage['isVehicleOwned' + i] ? 'Owned' : '$' + i * 10000}
+                <img src="/textures/vehicles/car/${i}/left.png">
+              </input>
+            </label>`
         }
         document.querySelector('main').innerHTML = html
 
