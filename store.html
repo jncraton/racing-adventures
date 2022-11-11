@@ -7,17 +7,27 @@
     <title>Racing Adventures - Store</title>
     <style>
       img {
-        display: block;
-        height: 64px;
+        display: inline-block;
+        width: 100%;
         image-rendering: crisp-edges;
+      }
+      section {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      label {
+        width: 240px;
+        padding: 16px;
       }
     </style>
   </head>
 
   <body>
-    <h1>Store</h1>
-    <p id="money"></p>
-    <main></main>
+    <main>
+      <h1>Store</h1>
+      <p id="money"></p>
+      <section></section>
+    </main>
     <script>
       localStorage.isVehicleOwned0 = true
 
@@ -56,7 +66,7 @@
               </input>
             </label>`
         }
-        document.querySelector('main').innerHTML = html
+        document.querySelector('section').innerHTML = html
 
         document.querySelectorAll('input[name=vehicle]').forEach(el => {
           el.addEventListener('input', update)
