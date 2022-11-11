@@ -36,6 +36,13 @@
     <h1>Store</h1>
     <p id="money"></p>
     <section></section>
+    <template id="vehicleTemplate">
+      <label>
+        <span>Vehicle 0</span>
+        <img src="/textures/vehicles/car/${i}/left.png" />
+        <input type="radio" name="vehicle" value="0" />
+      </label>
+    </template>
     <script>
       localStorage.isVehicleOwned0 = true
 
@@ -62,19 +69,25 @@
         document.querySelector('#money').textContent =
           '$' + parseFloat(localStorage.money).toFixed(2)
 
-        let html = ''
+        document.querySelector('section').textContent = ''
         for (let i = 0; i <= 6; i++) {
-          html += `
-            <label ${localStorage['isVehicleOwned' + i] ? '' : 'class=locked'}>
-              <input type="radio" name="vehicle" value=${i}
-                  ${localStorage.vehicle == i ? 'checked' : ''}>
-                Vehicle ${i}
-                ${localStorage['isVehicleOwned' + i] ? '' : '- $' + i * 10000}
-                <img src="/textures/vehicles/car/${i}/left.png">
-              </input>
-            </label>`
+          let vehicle = document
+            .querySelector('#vehicleTemplate')
+            .content.cloneNode(true)
+
+          vehicle.querySelector('input').value = i
+          if (localStorage.vehicle == i) {
+            vehicle.querySelector('input').checked = true
+          }
+          vehicle.querySelector('span').textContent = `Vehicle ${i}`
+          vehicle.querySelector('img').src = `textures/vehicles/car/${i}/left.png`
+          if (!localStorage['isVehicleOwned' + i]) {
+            vehicle.querySelector('label').classList = 'locked'
+            vehicle.querySelector('span').textContent += `- \$${i * 10000}`
+          }
+          document.querySelector('section').appendChild(vehicle)
+          vehicle.addEventListener('input', update)
         }
-        document.querySelector('section').innerHTML = html
 
         document.querySelectorAll('input[name=vehicle]').forEach(el => {
           el.addEventListener('input', update)
