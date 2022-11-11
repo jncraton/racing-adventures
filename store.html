@@ -44,6 +44,8 @@
       </label>
     </template>
     <script>
+      if (!localStorage.money) localStorage.money = 0
+      if (!localStorage.vehicle) localStorage.vehicle = '0'
       localStorage.isVehicleOwned0 = true
 
       const update = e => {
