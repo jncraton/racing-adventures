@@ -16,6 +16,7 @@
 
   <body>
     <h1>Store</h1>
+    <p id="money"></p>
     <main></main>
     <script>
       localStorage.isVehicleOwned0 = true
@@ -40,7 +41,10 @@
           if (!localStorage.vehicle) localStorage.vehicle = '0'
         }
 
-        let html = `<div>\$${parseFloat(localStorage.money).toFixed(2)}</div>`
+        document.querySelector('#money').textContent =
+          '$' + parseFloat(localStorage.money).toFixed(2)
+
+        let html = ''
         for (let i = 0; i <= 6; i++) {
           html += `
             <label>
