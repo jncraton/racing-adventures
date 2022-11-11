@@ -20,21 +20,42 @@
     <script>
       localStorage.isVehicleOwned0 = true
 
-      const update = () => {
-        let html = ''
+      const update = e => {
+        if (e) {
+          // Something is selected
+          const vehicle = e.target.value
+          if (!localStorage[`isVehicleOwned${vehicle}`]) {
+            // Attempt purchase
+            const money = parseFloat(localStorage.money)
+            const price = e.target.value * 10000
+            if (money > price) {
+              localStorage.money = money - price
+              localStorage[`isVehicleOwned${vehicle}`] = true
+            }
+          }
+          if (localStorage[`isVehicleOwned${vehicle}`]) {
+            localStorage.vehicle = vehicle
+          }
+        } else {
+          if (!localStorage.vehicle) localStorage.vehicle = '0'
+        }
+
+        let html = `<div>\$${parseFloat(localStorage.money).toFixed(2)}</div>`
         for (let i = 0; i <= 6; i++) {
           html += `<label><input type="radio" name="vehicle" value=${i} ${
-            localStorage['isVehicleOwned' + i] ? '' : 'disabled'
-          }>Car ${i} <img src="/textures/vehicles/car/${i}/left.png"></input></label>`
+            localStorage.vehicle == i ? 'checked' : ''
+          }>Car ${i} ${
+            localStorage['isVehicleOwned' + i] ? 'Owned' : '$' + i * 10000
+          }<img src="/textures/vehicles/car/${i}/left.png"></input></label>`
         }
         document.querySelector('main').innerHTML = html
+
+        document.querySelectorAll('input[name=vehicle]').forEach(el => {
+          el.addEventListener('input', update)
+        })
       }
 
       update()
-
-      document.querySelector('input[name=vehicle]').addEventListener('input', e => {
-        localStorage.vehicleTexture = e.target.value
-      })
     </script>
   </body>
 </html>
