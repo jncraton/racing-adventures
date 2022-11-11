@@ -63,8 +63,8 @@
             <label ${localStorage['isVehicleOwned' + i] ? '' : 'class=locked'}>
               <input type="radio" name="vehicle" value=${i}
                   ${localStorage.vehicle == i ? 'checked' : ''}>
-                Car ${i}
-                ${localStorage['isVehicleOwned' + i] ? '' : '$' + i * 10000}
+                Vehicle ${i}
+                ${localStorage['isVehicleOwned' + i] ? '' : '- $' + i * 10000}
                 <img src="/textures/vehicles/car/${i}/left.png">
               </input>
             </label>`
