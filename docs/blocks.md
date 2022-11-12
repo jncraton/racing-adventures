@@ -19,7 +19,7 @@ Block Types
 - 1: 7.125 degree (1:8 pitch) Road ramp
 - 2: Road Corner
 - 3: Wall
-- 4: Dirt (Plain or with three styles)
+- 4: Ground with 0, 1, 2, or 3 trees
 
 Block Styles
 ------------
