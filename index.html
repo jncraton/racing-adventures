@@ -600,36 +600,40 @@
                 material = materialRoadCorner
               } else if (blockType == blockNames.indexOf('Ground')) {
                 material = materialGround
-                // Trunk
-                createBox(
-                  new THREE.Vector3(
-                    block_size * chars.indexOf(hash[i + 1]),
-                    block_height * chars.indexOf(hash[i + 2]),
-                    block_size * chars.indexOf(hash[i + 3])
-                  ),
-                  block_size/32,
-                  block_height*2,
-                  block_size/32,
-                  1000,
-                  1,
-                  rot,
-                  materialTreeTrunk
-                )
-                // Canopy
-                createBox(
-                  new THREE.Vector3(
-                    block_size * chars.indexOf(hash[i + 1]),
-                    block_height*2 + block_height * chars.indexOf(hash[i + 2]),
-                    block_size * chars.indexOf(hash[i + 3])
-                  ),
-                  block_size/4,
-                  block_height*2,
-                  block_size/4,
-                  100,
-                  1,
-                  rot,
-                  materialTreeTop
-                )
+                const x_off = [0, -0.4 * block_size, 0.3 * block_size]
+                const y_off = [0, 0.2 * block_size, -0.35 * block_size]
+                for (let j = 0; j < blockStyle; j++) {
+                  // Trunk
+                  createBox(
+                    new THREE.Vector3(
+                      block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+                      block_height * chars.indexOf(hash[i + 2]),
+                      block_size * chars.indexOf(hash[i + 3]) + y_off[j]
+                    ),
+                    block_size / 32,
+                    block_height * 2,
+                    block_size / 32,
+                    1000,
+                    1,
+                    rot,
+                    materialTreeTrunk
+                  )
+                  // Canopy
+                  createBox(
+                    new THREE.Vector3(
+                      block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+                      block_height * 2 + block_height * chars.indexOf(hash[i + 2]),
+                      block_size * chars.indexOf(hash[i + 3]) + y_off[j]
+                    ),
+                    block_size / 4,
+                    block_height * 2,
+                    block_size / 4,
+                    100,
+                    1,
+                    rot,
+                    materialTreeTop
+                  )
+                }
               }
 
               createBox(
