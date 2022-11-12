@@ -37,13 +37,14 @@
     <script src="three.js"></script>
 
     <script>
-      const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall']
+      const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Dirt']
 
       Ammo().then(function (Ammo) {
         // Graphics variables
         let camera, scene, renderer
         let clock = new THREE.Clock()
         let materialDynamic,
+          materialDirt,
           materialRoad,
           materialRoadCorner,
           materialInteractive,
@@ -114,6 +115,7 @@
             })
           }
 
+          materialDirt = new Array(6).fill(loadMaterial('dirt.png'))
           const roadMaterial = loadMaterial('road.png')
           const roadCornerMaterial = loadMaterial('road-corner.png')
 
@@ -592,6 +594,8 @@
                 material = materialRoad
               } else if (blockType == blockNames.indexOf('Road Corner')) {
                 material = materialRoadCorner
+              } else if (blockType == blockNames.indexOf('Dirt')) {
+                material = materialDirt
               }
 
               createBox(
