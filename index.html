@@ -571,6 +571,7 @@
           for (let i = 0; i < hash.length; i += 4) {
             let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
             let blockStyle = chars.indexOf(hash[i]) % 4
+            let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
             let rot = new THREE.Quaternion(0, 0, 0, 1)
             rot.setFromAxisAngle(
               new THREE.Vector3(0, 1, 0),
@@ -595,23 +596,6 @@
                 rot,
                 materialRoad
               )
-            } else if (blockType == blockNames.indexOf('Wall')) {
-              for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
-                createBox(
-                  new THREE.Vector3(
-                    block_size * chars.indexOf(hash[i + 1]),
-                    -block_height / 2 + block_size / 8 + (block_size / 4) * y,
-                    block_size * chars.indexOf(hash[i + 3])
-                  ),
-                  block_size,
-                  block_size / 4,
-                  block_size,
-                  0,
-                  1,
-                  rot,
-                  materialWall[blockStyle]
-                )
-              }
             } else {
               let material
 
@@ -655,12 +639,31 @@
                     materialTreeTop
                   )
                 }
+              } else if (blockType == blockNames.indexOf('Wall')) {
+                material = materialGround
+                base_height = -block_height
+                for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
+                  createBox(
+                    new THREE.Vector3(
+                      block_size * chars.indexOf(hash[i + 1]),
+                      -block_height / 2 + block_size / 8 + (block_size / 4) * y,
+                      block_size * chars.indexOf(hash[i + 3])
+                    ),
+                    block_size,
+                    block_size / 4,
+                    block_size,
+                    0,
+                    1,
+                    rot,
+                    materialWall[blockStyle]
+                  )
+                }
               }
 
               createBox(
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
-                  -block_height + block_height * chars.indexOf(hash[i + 2]),
+                  base_height,
                   block_size * chars.indexOf(hash[i + 3])
                 ),
                 block_size,
