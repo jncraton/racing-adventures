@@ -103,6 +103,14 @@
               t => (t.magFilter = THREE.NearestFilter)
             )
 
+          const water = new THREE.Mesh(
+            new THREE.PlaneGeometry(10000, 10000),
+            new THREE.MeshBasicMaterial({color: 0x5555cc, side: THREE.DoubleSide})
+          )
+          water.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2)
+          water.position.setY(-2)
+          scene.add(water)
+
           const loader = new THREE.TextureLoader()
           loader.setPath('textures/city/')
 
