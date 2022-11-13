@@ -41,7 +41,7 @@
 
       Ammo().then(function (Ammo) {
         // Graphics variables
-        let camera, scene, renderer
+        let camera, scene, renderer, spotLight
         let clock = new THREE.Clock()
         let materialDynamic,
           materialGround,
@@ -95,6 +95,10 @@
 
           scene.add(new THREE.AmbientLight(0xffffff, 1.3))
           scene.add(new THREE.DirectionalLight(0xffffff, 1))
+
+          spotLight = new THREE.SpotLight(0xf7e51b)
+          spotLight.angle = 0.4
+          scene.add(spotLight)
 
           scene.background = new THREE.CubeTextureLoader()
             .setPath('/textures/city/')
@@ -524,6 +528,14 @@
 
               camera.position.copy(camera_offset.add(chassisMesh.position))
               camera.lookAt(chassisMesh.position)
+
+              let target_offset = new THREE.Vector3(0, 0, 3)
+              target_offset.applyQuaternion(chassisMesh.quaternion)
+
+              spotLight.position.copy(chassisMesh.position)
+              spotLight.target = new THREE.Object3D()
+              spotLight.target.position.copy(target_offset.add(chassisMesh.position))
+              spotLight.target.updateMatrixWorld()
 
               if (pos.y() > -1)
                 localStorage.money = parseFloat(localStorage.money) + dt * speed
