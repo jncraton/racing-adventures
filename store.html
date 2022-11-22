@@ -49,26 +49,24 @@
     <script>
       if (!localStorage.money) localStorage.money = 0
       if (!localStorage.vehicle) localStorage.vehicle = '0'
-      localStorage.isVehicleOwned0 = true
+      localStorage.isOwned_vehicle0 = true
 
       const update = e => {
         if (e) {
-          // Something is selected
-          const vehicle = e.target.value
-          if (!localStorage[`isVehicleOwned${vehicle}`]) {
+          const value = e.target.value
+          const key = `isOwned_${e.target.name}${e.target.value}`
+          if (!localStorage[key]) {
             // Attempt purchase
             const money = parseFloat(localStorage.money)
             const price = e.target.value * 10000
             if (money >= price) {
               localStorage.money = money - price
-              localStorage[`isVehicleOwned${vehicle}`] = true
+              localStorage[key] = true
             }
           }
-          if (localStorage[`isVehicleOwned${vehicle}`]) {
-            localStorage.vehicle = vehicle
+          if (localStorage[key]) {
+            localStorage[e.target.name] = e.target.value
           }
-        } else {
-          if (!localStorage.vehicle) localStorage.vehicle = '0'
         }
 
         document.querySelector('#money').textContent =
@@ -84,7 +82,7 @@
           vehicle.querySelector('input').checked = localStorage.vehicle == i
           vehicle.querySelector('span').textContent = `Vehicle ${i}`
           vehicle.querySelector('img').src = `textures/vehicles/car/${i}/left.png`
-          if (!localStorage['isVehicleOwned' + i]) {
+          if (!localStorage['isOwned_vehicle' + i]) {
             vehicle.querySelector('label').classList = 'locked'
             vehicle.querySelector('span').textContent += ` - \$${i * 10000}`
           }
