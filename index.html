@@ -38,6 +38,7 @@
 
     <section id="vehiclePicker"></section>
     <section id="coursePicker"></section>
+    <section id="timePicker"></section>
 
     <section>
       <a id="play" href="play.html">Play</a>
@@ -55,6 +56,8 @@
       if (!localStorage.money) localStorage.money = 0
       if (!localStorage.vehicle) localStorage.vehicle = '0'
       if (!localStorage.course) localStorage.course = '0'
+      if (!localStorage.time) localStorage.time = 'Day'
+      localStorage.isOwned_time0 = true
       localStorage.isOwned_vehicle0 = true
       localStorage.isOwned_course0 = true
 
@@ -64,7 +67,7 @@
           if (!localStorage[isOwned]) {
             // Attempt purchase
             const money = parseFloat(localStorage.money)
-            const price = e.target.value * 10000
+            const price = e.target.dataset.price
             if (money >= price) {
               localStorage.money = money - price
               localStorage[isOwned] = true
@@ -78,19 +81,20 @@
         document.querySelector('#money').textContent =
           '$' + parseFloat(localStorage.money).toFixed(2)
 
-        const createSection = (name, get_img) => {
+        const createSection = (name, values, get_img) => {
           const section = document.querySelector(`#${name}Picker`)
           section.textContent = ''
 
-          for (let i = 0; i <= 8; i++) {
+          for (let i = 0; i < values.length; i++) {
             let el = document.querySelector(`#itemTemplate`).content.cloneNode(true)
 
-            el.querySelector('input').value = i
+            el.querySelector('input').value = values[i]
             el.querySelector('input').name = name
-            el.querySelector('input').checked = localStorage[name] == i
-            el.querySelector('span').textContent = `${name} ${i}`
+            el.querySelector('input').checked = localStorage[name] == values[i]
+            el.querySelector('input').dataset.price = i * 10000
+            el.querySelector('span').textContent = `${name} ${values[i]}`
             el.querySelector('img').src = get_img ? get_img(i) : ''
-            if (!localStorage[`isOwned_${name}${i}`]) {
+            if (!localStorage[`isOwned_${name}${values[i]}`]) {
               el.querySelector('label').classList = 'locked'
               el.querySelector('span').textContent += ` - \$${i * 10000}`
             }
@@ -101,8 +105,13 @@
           }
         }
 
-        createSection('vehicle', i => `textures/vehicles/car/${i}/left.png`)
-        createSection('course')
+        createSection(
+          'vehicle',
+          [0, 1, 2, 3, 4, 5, 6],
+          i => `textures/vehicles/car/${i}/left.png`
+        )
+        createSection('course', [0, 1])
+        createSection('time', ['Day', 'Night'])
       }
 
       update()

@@ -51,7 +51,6 @@
         'c668c538c42893083208a108c67795073407b307c2478107a007c866c776c6562506c456c376c236c1460006c8759745c6252505c4157315a215c13560059844b744c6340504i404c3542214i10400142843i743c6436503c463c3332213j10340032842c752c6426512c422c34242029102b0020841c771c6616521c3318201b101c031884037407630b530c210c130c020',
       ]
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
-      let timeOfDay = 'night'
 
       Ammo().then(function (Ammo) {
         // Graphics variables
@@ -107,7 +106,7 @@
           renderer.setPixelRatio(window.devicePixelRatio)
           renderer.setSize(window.innerWidth, window.innerHeight)
 
-          let lightLevel = timeOfDay == 'day' ? 1.0 : 0.2
+          let lightLevel = localStorage.time == 'Day' ? 1.0 : 0.2
 
           scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
           const sun = new THREE.DirectionalLight(0xffffff, lightLevel)
@@ -122,7 +121,7 @@
           scene.background = new THREE.CubeTextureLoader()
             .setPath('/textures/city/')
             .load(
-              new Array(6).fill(`${timeOfDay}.png`),
+              new Array(6).fill(`${localStorage.time.toLowerCase()}.png`),
               t => (t.magFilter = THREE.NearestFilter)
             )
 
