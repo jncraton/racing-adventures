@@ -36,7 +36,7 @@
     <h1>Store</h1>
     <p id="money"></p>
 
-    <section id="vehicles"></section>
+    <section id="vehiclePicker"></section>
 
     <template id="vehicleTemplate">
       <label>
@@ -71,25 +71,29 @@
         document.querySelector('#money').textContent =
           '$' + parseFloat(localStorage.money).toFixed(2)
 
-        document.querySelector('#vehicles').textContent = ''
-        for (let i = 0; i <= 8; i++) {
-          let vehicle = document
-            .querySelector('#vehicleTemplate')
-            .content.cloneNode(true)
+        const createSection = (name, get_img) => {
+          const section = document.querySelector(`#${name}Picker`)
+          section.textContent = ''
 
-          vehicle.querySelector('input').value = i
-          vehicle.querySelector('input').checked = localStorage.vehicle == i
-          vehicle.querySelector('span').textContent = `Vehicle ${i}`
-          vehicle.querySelector('img').src = `textures/vehicles/car/${i}/left.png`
-          if (!localStorage['isOwned_vehicle' + i]) {
-            vehicle.querySelector('label').classList = 'locked'
-            vehicle.querySelector('span').textContent += ` - \$${i * 10000}`
+          for (let i = 0; i <= 8; i++) {
+            let el = document.querySelector(`#${name}Template`).content.cloneNode(true)
+
+            el.querySelector('input').value = i
+            el.querySelector('input').checked = localStorage[name] == i
+            el.querySelector('span').textContent = `${name} ${i}`
+            el.querySelector('img').src = get_img(i)
+            if (!localStorage[`isOwned_${name}${i}`]) {
+              el.querySelector('label').classList = 'locked'
+              el.querySelector('span').textContent += ` - \$${i * 10000}`
+            }
+            section.appendChild(el)
+            section
+              .querySelector('label:last-child input')
+              .addEventListener('input', update)
           }
-          document.querySelector('section').appendChild(vehicle)
-          document
-            .querySelector('section label:last-child input')
-            .addEventListener('input', update)
         }
+
+        createSection('vehicle', i => `textures/vehicles/car/${i}/left.png`)
       }
 
       update()
