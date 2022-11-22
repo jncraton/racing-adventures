@@ -59,7 +59,7 @@
             // Attempt purchase
             const money = parseFloat(localStorage.money)
             const price = e.target.value * 10000
-            if (money > price) {
+            if (money >= price) {
               localStorage.money = money - price
               localStorage[`isVehicleOwned${vehicle}`] = true
             }
