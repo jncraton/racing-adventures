@@ -558,7 +558,7 @@
               spotLight.target.updateMatrixWorld()
 
               if (pos.y() > -1)
-                localStorage.money = parseFloat(localStorage.money) + dt * speed
+                localStorage.money = parseFloat(localStorage.money) + dt * Math.abs(speed)
               else {
                 localStorage.money = parseFloat(localStorage.money) - 100
                 pos.setY(1000)
