@@ -92,7 +92,9 @@
             el.querySelector('input').name = name
             el.querySelector('input').checked = localStorage[name] == values[i]
             el.querySelector('input').dataset.price = i * 10000
-            el.querySelector('span').textContent = `${name} ${values[i]}`
+            el.querySelector(
+              'span'
+            ).textContent = `${name[0].toUpperCase()}${name.substring(1)}: ${values[i]}`
             el.querySelector('img').src = get_img ? get_img(i) : ''
             if (!localStorage[`isOwned_${name}${values[i]}`]) {
               el.querySelector('label').classList = 'locked'
