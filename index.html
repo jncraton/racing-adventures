@@ -29,7 +29,7 @@
         background-color: #990000;
         position: absolute;
         bottom: 0px;
-        right:0px;
+        right: 0px;
         padding: 5px;
       }
       a {
@@ -46,6 +46,10 @@
     <script src="three.js"></script>
 
     <script>
+      const courses = [
+        'c325c235c125c005c43493043204a104c034c4232303g2030103c023c4322302c2020102c032c42183011201b101c021c330c220c130',
+        'c668c538c42893083208a108c67795073407b307c2478107a007c866c776c6562506c456c376c236c1460006c8759745c6252505c4157315a215c13560059844b744c6340504i404c3542214i10400142843i743c6436503c463c3332213j10340032842c752c6426512c422c34242029102b0020841c771c6616521c3318201b101c031884037407630b530c210c130c020',
+      ]
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
 
       Ammo().then(function (Ammo) {
@@ -573,6 +577,10 @@
           let block_height = block_size / 8
 
           let hash = location.hash.slice(1)
+
+          if (!hash) {
+            hash = courses[parseInt(localStorage.course)]
+          }
 
           const chars =
             '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'

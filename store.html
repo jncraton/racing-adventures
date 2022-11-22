@@ -37,12 +37,13 @@
     <p id="money"></p>
 
     <section id="vehiclePicker"></section>
+    <section id="coursePicker"></section>
 
     <section>
-      <a id="play" href="index.html#c325c235c125c005c43493043204a104c034c4232303g2030103c023c4322302c2020102c032c42183011201b101c021c330c220c130">Play</a>
+      <a id="play" href="index.html">Play</a>
     </section>
 
-    <template id="vehicleTemplate">
+    <template id="itemTemplate">
       <label>
         <span>Vehicle 0</span>
         <img src="/textures/vehicles/car/${i}/left.png" />
@@ -53,7 +54,9 @@
     <script>
       if (!localStorage.money) localStorage.money = 0
       if (!localStorage.vehicle) localStorage.vehicle = '0'
+      if (!localStorage.course) localStorage.course = '0'
       localStorage.isOwned_vehicle0 = true
+      localStorage.isOwned_course0 = true
 
       const update = e => {
         if (e) {
@@ -80,12 +83,13 @@
           section.textContent = ''
 
           for (let i = 0; i <= 8; i++) {
-            let el = document.querySelector(`#${name}Template`).content.cloneNode(true)
+            let el = document.querySelector(`#itemTemplate`).content.cloneNode(true)
 
             el.querySelector('input').value = i
+            el.querySelector('input').name = name
             el.querySelector('input').checked = localStorage[name] == i
             el.querySelector('span').textContent = `${name} ${i}`
-            el.querySelector('img').src = get_img(i)
+            el.querySelector('img').src = get_img ? get_img(i) : ''
             if (!localStorage[`isOwned_${name}${i}`]) {
               el.querySelector('label').classList = 'locked'
               el.querySelector('span').textContent += ` - \$${i * 10000}`
@@ -98,6 +102,7 @@
         }
 
         createSection('vehicle', i => `textures/vehicles/car/${i}/left.png`)
+        createSection('course')
       }
 
       update()
