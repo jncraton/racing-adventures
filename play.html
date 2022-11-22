@@ -106,11 +106,13 @@
           renderer.setPixelRatio(window.devicePixelRatio)
           renderer.setSize(window.innerWidth, window.innerHeight)
 
-          scene.add(new THREE.AmbientLight(0xffffff, 1.3))
-          scene.add(new THREE.DirectionalLight(0xffffff, 1))
+          scene.add(new THREE.AmbientLight(0xffffff, 1.0))
+          const sun = new THREE.DirectionalLight(0xffffff, 1.0)
+          sun.position.set(1000, 1000, 1000)
+          scene.add(sun)
 
           spotLight = new THREE.SpotLight(0xf7e51b)
-          spotLight.angle = Math.PI/4
+          spotLight.angle = Math.PI / 4
           spotLight.distance = 100.0
           scene.add(spotLight)
 
