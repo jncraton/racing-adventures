@@ -81,9 +81,7 @@
             .content.cloneNode(true)
 
           vehicle.querySelector('input').value = i
-          if (localStorage.vehicle == i) {
-            vehicle.querySelector('input').checked = true
-          }
+          vehicle.querySelector('input').checked = localStorage.vehicle == i
           vehicle.querySelector('span').textContent = `Vehicle ${i}`
           vehicle.querySelector('img').src = `textures/vehicles/car/${i}/left.png`
           if (!localStorage['isVehicleOwned' + i]) {
