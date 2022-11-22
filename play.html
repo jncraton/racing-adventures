@@ -557,9 +557,14 @@
               spotLight.target.position.copy(target_offset.add(chassisMesh.position))
               spotLight.target.updateMatrixWorld()
 
-              if (pos.y() > -1)
-                localStorage.money = parseFloat(localStorage.money) + dt * Math.abs(speed)
-              else {
+              if (pos.y() > -1) {
+                let wage = 5
+                if (localStorage.time == 'Night') {
+                  wage += 10
+                }
+                const earnings = dt * Math.abs(speed) * wage
+                localStorage.money = parseFloat(localStorage.money) + earnings
+              } else {
                 localStorage.money = parseFloat(localStorage.money) - 100
                 pos.setY(1000)
                 location.reload()
