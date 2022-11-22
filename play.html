@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Racing Adventures</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <style>
+      body {
+        color: #61443e;
+        font-family: Monospace;
+        font-size: 13px;
+        text-align: center;
+
+        background-color: #bfd1e5;
+        margin: 0px;
+        overflow: hidden;
+      }
+      #speedometer {
+        color: #ffffff;
+        background-color: #990000;
+        position: absolute;
+        bottom: 0px;
+        padding: 5px;
+      }
+      #store {
+        color: #ffffff;
+        background-color: #990000;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        padding: 5px;
+      }
+      a {
+        color: #a06851;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"><br /><br /><br /><br /><br />Loading...</div>
+    <div id="speedometer">0.0 km/h</div>
+    <div id="store"><a href="index.html">Store</a></div>
+
+    <script src="ammo.js"></script>
+    <script src="three.js"></script>
+
+    <script>
+      const courses = [
+        'c325c235c125c005c43493043204a104c034c4232303g2030103c023c4322302c2020102c032c42183011201b101c021c330c220c130',
+        'c668c538c42893083208a108c67795073407b307c2478107a007c866c776c6562506c456c376c236c1460006c8759745c6252505c4157315a215c13560059844b744c6340504i404c3542214i10400142843i743c6436503c463c3332213j10340032842c752c6426512c422c34242029102b0020841c771c6616521c3318201b101c031884037407630b530c210c130c020',
+      ]
+      const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
+
+      Ammo().then(function (Ammo) {
+        // Graphics variables
+        let camera, scene, renderer, spotLight
+        let clock = new THREE.Clock()
+        let materialDynamic,
+          materialGround,
+          materialTreeTrunk,
+          materialTreeTop,
+          materialRoad,
+          materialRoadCorner,
+          materialInteractive,
+          materialWheel,
+          materialCarBase,
+          materialCarTop,
+          materialWall = []
+
+        // Player data
+        if (!localStorage.money) localStorage.money = 0
+        if (!localStorage.vehicle) localStorage.vehicle = '0'
+
+        // Physics variables
+        let physicsWorld
+        let syncList = []
+        let time = 0
+
+        // Debug options
+        let showWireframe = false
+
+        // Keybord actions
+        let actions = {}
+        let keysActions = {
+          KeyW: 'acceleration',
+          KeyS: 'braking',
+          KeyA: 'left',
+          KeyD: 'right',
+        }
+
+        // - Functions -
+
+        function initGraphics() {
+          scene = new THREE.Scene()
+
+          camera = new THREE.PerspectiveCamera(
+            60,
+            window.innerWidth / window.innerHeight,
+            0.2,
+            2000
+          )
+
+          renderer = new THREE.WebGLRenderer({antialias: true})
+          renderer.setClearColor(0xa7cbfa)
+          renderer.setPixelRatio(window.devicePixelRatio)
+          renderer.setSize(window.innerWidth, window.innerHeight)
+
+          scene.add(new THREE.AmbientLight(0xffffff, 1.3))
+          scene.add(new THREE.DirectionalLight(0xffffff, 1))
+
+          spotLight = new THREE.SpotLight(0xf7e51b)
+          spotLight.angle = 0.4
+          spotLight.distance = 25.0
+          scene.add(spotLight)
+
+          scene.background = new THREE.CubeTextureLoader()
+            .setPath('/textures/city/')
+            .load(
+              ['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'],
+              t => (t.magFilter = THREE.NearestFilter)
+            )
+
+          const water = new THREE.Mesh(
+            new THREE.PlaneGeometry(10000, 10000),
+            new THREE.MeshBasicMaterial({color: 0x5555cc, side: THREE.DoubleSide})
+          )
+          water.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2)
+          water.position.setY(-2)
+          scene.add(water)
+
+          const loader = new THREE.TextureLoader()
+          loader.setPath('textures/city/')
+
+          const loadMaterial = path => {
+            const texture = loader.load(path)
+            texture.minFilter = THREE.NearestFilter
+            texture.magFilter = THREE.NearestFilter
+            return new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              map: texture,
+              transparent: true,
+            })
+          }
+
+          materialGround = new Array(6).fill(loadMaterial('ground.png'))
+          materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
+          materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
+          const roadMaterial = loadMaterial('road.png')
+          const roadCornerMaterial = loadMaterial('road-corner.png')
+
+          for (let i = 0; i < 4; i++) {
+            materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
+            materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
+          }
+
+          loader.setPath(`textures/vehicles/car/${localStorage.vehicle}/`)
+
+          materialCarBase = [
+            loadMaterial('left.png'),
+            loadMaterial('right.png'),
+            loadMaterial('hood.png'),
+            loadMaterial('hood.png'),
+            loadMaterial('front.png'),
+            loadMaterial('back.png'),
+          ]
+
+          materialCarTop = new Array(6).fill(loadMaterial('top.png'))
+
+          materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
+          const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
+          materialRoad = [
+            materialRoadUntextured,
+            materialRoadUntextured,
+            roadMaterial,
+            materialRoadUntextured,
+            materialRoadUntextured,
+            materialRoadUntextured,
+          ]
+          materialRoadCorner = [
+            materialRoadUntextured,
+            materialRoadUntextured,
+            roadCornerMaterial,
+            materialRoadUntextured,
+            materialRoadUntextured,
+            materialRoadUntextured,
+          ]
+
+          materialWheel = [
+            loadMaterial('tire.png'),
+            loadMaterial('hubcap.png'),
+            loadMaterial('hubcap.png'),
+          ]
+
+          materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
+
+          document.getElementById('container').replaceChildren(renderer.domElement)
+
+          window.addEventListener('resize', onWindowResize, false)
+          window.addEventListener('keydown', keydown)
+          window.addEventListener('keyup', keyup)
+        }
+
+        function onWindowResize() {
+          camera.aspect = window.innerWidth / window.innerHeight
+          camera.updateProjectionMatrix()
+
+          renderer.setSize(window.innerWidth, window.innerHeight)
+        }
+
+        function initPhysics() {
+          let collisionConfig = new Ammo.btDefaultCollisionConfiguration()
+          physicsWorld = new Ammo.btDiscreteDynamicsWorld(
+            new Ammo.btCollisionDispatcher(collisionConfig),
+            new Ammo.btDbvtBroadphase(),
+            new Ammo.btSequentialImpulseConstraintSolver(),
+            collisionConfig
+          )
+          physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0))
+        }
+
+        function tick() {
+          requestAnimationFrame(tick)
+          let dt = clock.getDelta()
+          if (dt > 0.2) {
+            // Pause while tab is in background
+            return
+          }
+          for (let i = 0; i < syncList.length; i++) syncList[i](dt)
+          physicsWorld.stepSimulation(dt, 0)
+          renderer.render(scene, camera)
+          time += dt
+        }
+
+        function keyup(e) {
+          if (keysActions[e.code]) {
+            actions[keysActions[e.code]] = false
+            e.preventDefault()
+            e.stopPropagation()
+            return false
+          }
+        }
+        function keydown(e) {
+          if (keysActions[e.code]) {
+            actions[keysActions[e.code]] = true
+            e.preventDefault()
+            e.stopPropagation()
+            return false
+          }
+        }
+
+        function createBox(
+          pos,
+          w,
+          l,
+          h,
+          mass = 0,
+          friction = 1,
+          rot = new THREE.Quaternion(0, 0, 0, 1),
+          material = materialDynamic
+        ) {
+          let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+
+          let geometry = new Ammo.btBoxShape(
+            new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
+          )
+
+          let mesh = new THREE.Mesh(shape, material)
+
+          mesh.position.copy(pos)
+          mesh.quaternion.copy(rot)
+          scene.add(mesh)
+
+          if (showWireframe) {
+            const geo = new THREE.WireframeGeometry(mesh.geometry)
+            const mat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5})
+            const wireframe = new THREE.LineSegments(geo, mat)
+            wireframe.position.copy(pos)
+            wireframe.quaternion.copy(rot)
+            scene.add(wireframe)
+          }
+
+          let transform = new Ammo.btTransform()
+          transform.setIdentity()
+          transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+          transform.setRotation(new Ammo.btQuaternion(rot.x, rot.y, rot.z, rot.w))
+          let motionState = new Ammo.btDefaultMotionState(transform)
+
+          let localInertia = new Ammo.btVector3(0, 0, 0)
+          geometry.calculateLocalInertia(mass, localInertia)
+
+          let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+            mass,
+            motionState,
+            geometry,
+            localInertia
+          )
+          let body = new Ammo.btRigidBody(rbInfo)
+
+          body.setFriction(friction)
+
+          physicsWorld.addRigidBody(body)
+
+          if (mass > 0) {
+            // Sync physics and graphics
+            const sync = () => {
+              let ms = body.getMotionState()
+              if (ms) {
+                let transform = new Ammo.btTransform()
+                ms.getWorldTransform(transform)
+                let pos = transform.getOrigin()
+                let rot = transform.getRotation()
+                mesh.position.set(pos.x(), pos.y(), pos.z())
+                mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+              }
+            }
+
+            syncList.push(sync)
+          }
+        }
+
+        function createWheelMesh(radius, width) {
+          let t = new THREE.CylinderGeometry(radius, radius, width, 8, 1)
+          t.rotateZ(Math.PI / 2)
+          let mesh = new THREE.Mesh(t, materialWheel)
+          scene.add(mesh)
+          return mesh
+        }
+
+        function createChassisMesh(w, h, l) {
+          let chassis = new THREE.Object3D()
+
+          chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase))
+
+          let top = new THREE.Mesh(
+            new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
+            materialCarTop
+          )
+          top.position.set(0, h, -l / 8)
+          chassis.add(top)
+
+          scene.add(chassis)
+          return chassis
+        }
+
+        function createVehicle(pos, player = true) {
+          // Vehicle contants
+
+          let chassisWidth = 2.0
+          let chassisHeight = 1.0
+          let chassisLength = 4.0
+          let massVehicle = 800
+
+          let wheelRadius = 0.5
+          let wheelWidth = 0.2
+
+          let axleFrontPos = 1.2
+          let axleBackPos = -1.0
+          let axleHalfLength = 1.0
+          let axleHeight = 0.1
+
+          let friction = 1000
+          let suspensionStiffness = 20.0
+          let suspensionDamping = 2.3
+          let suspensionCompression = 4.4
+          let suspensionRestLength = 0.6
+          let rollInfluence = 0.1
+
+          let steeringIncrement = 0.04
+          let steeringClamp = 0.5
+          let maxEngineForce = 2000
+          let maxBreakingForce = 100
+
+          // Chassis
+          let geometry = new Ammo.btBoxShape(
+            new Ammo.btVector3(
+              chassisWidth * 0.5,
+              chassisHeight * 0.5,
+              chassisLength * 0.5
+            )
+          )
+          let transform = new Ammo.btTransform()
+          transform.setIdentity()
+          transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+          let motionState = new Ammo.btDefaultMotionState(transform)
+          let localInertia = new Ammo.btVector3(0, 0, 0)
+          geometry.calculateLocalInertia(massVehicle, localInertia)
+          let body = new Ammo.btRigidBody(
+            new Ammo.btRigidBodyConstructionInfo(
+              massVehicle,
+              motionState,
+              geometry,
+              localInertia
+            )
+          )
+          physicsWorld.addRigidBody(body)
+          let chassisMesh = createChassisMesh(
+            chassisWidth,
+            chassisHeight,
+            chassisLength
+          )
+
+          // Raycast Vehicle
+          let engineForce = 0
+          let vehicleSteering = 0
+          let breakingForce = 0
+          let tuning = new Ammo.btVehicleTuning()
+          let rayCaster = new Ammo.btDefaultVehicleRaycaster(physicsWorld)
+          let vehicle = new Ammo.btRaycastVehicle(tuning, body, rayCaster)
+          vehicle.setCoordinateSystem(0, 1, 2)
+          vehicle.body = body
+          physicsWorld.addAction(vehicle)
+
+          // Wheels
+          let FRONT_LEFT = 0
+          let FRONT_RIGHT = 1
+          let BACK_LEFT = 2
+          let BACK_RIGHT = 3
+          let wheelMeshes = []
+          let wheelDirectionCS0 = new Ammo.btVector3(0, -1, 0)
+          let wheelAxleCS = new Ammo.btVector3(-1, 0, 0)
+
+          function addWheel(isFront, pos, radius, width, index) {
+            let wheelInfo = vehicle.addWheel(
+              pos,
+              wheelDirectionCS0,
+              wheelAxleCS,
+              suspensionRestLength,
+              radius,
+              tuning,
+              isFront
+            )
+
+            wheelInfo.set_m_suspensionStiffness(suspensionStiffness)
+            wheelInfo.set_m_wheelsDampingRelaxation(suspensionDamping)
+            wheelInfo.set_m_wheelsDampingCompression(suspensionCompression)
+            wheelInfo.set_m_frictionSlip(friction)
+            wheelInfo.set_m_rollInfluence(rollInfluence)
+
+            wheelMeshes[index] = createWheelMesh(radius, width)
+          }
+
+          addWheel(
+            true,
+            new Ammo.btVector3(axleHalfLength, axleHeight, axleFrontPos),
+            wheelRadius,
+            wheelWidth,
+            FRONT_LEFT
+          )
+          addWheel(
+            true,
+            new Ammo.btVector3(-axleHalfLength, axleHeight, axleFrontPos),
+            wheelRadius,
+            wheelWidth,
+            FRONT_RIGHT
+          )
+          addWheel(
+            false,
+            new Ammo.btVector3(-axleHalfLength, axleHeight, axleBackPos),
+            wheelRadius,
+            wheelWidth,
+            BACK_LEFT
+          )
+          addWheel(
+            false,
+            new Ammo.btVector3(axleHalfLength, axleHeight, axleBackPos),
+            wheelRadius,
+            wheelWidth,
+            BACK_RIGHT
+          )
+
+          // Sync keybord actions and physics and graphics
+          function sync(dt) {
+            let speed = vehicle.getCurrentSpeedKmHour()
+
+            breakingForce = 0
+            engineForce = 0
+
+            if (player) {
+              if (actions.acceleration) {
+                if (speed < -1) breakingForce = maxBreakingForce
+                else engineForce = maxEngineForce
+              }
+              if (actions.braking) {
+                if (speed > 1) breakingForce = maxBreakingForce
+                else engineForce = -maxEngineForce / 2
+              }
+              if (actions.left) {
+                if (vehicleSteering < steeringClamp)
+                  vehicleSteering += steeringIncrement
+              } else {
+                if (actions.right) {
+                  if (vehicleSteering > -steeringClamp)
+                    vehicleSteering -= steeringIncrement
+                } else {
+                  if (vehicleSteering < -steeringIncrement)
+                    vehicleSteering += steeringIncrement
+                  else {
+                    if (vehicleSteering > steeringIncrement)
+                      vehicleSteering -= steeringIncrement
+                    else {
+                      vehicleSteering = 0
+                    }
+                  }
+                }
+              }
+            }
+
+            if (engineForce) {
+              vehicle.body.activate()
+            }
+
+            vehicle.applyEngineForce(engineForce, BACK_LEFT)
+            vehicle.applyEngineForce(engineForce, BACK_RIGHT)
+
+            vehicle.setBrake(breakingForce / 2, FRONT_LEFT)
+            vehicle.setBrake(breakingForce / 2, FRONT_RIGHT)
+            vehicle.setBrake(breakingForce, BACK_LEFT)
+            vehicle.setBrake(breakingForce, BACK_RIGHT)
+
+            vehicle.setSteeringValue(vehicleSteering, FRONT_LEFT)
+            vehicle.setSteeringValue(vehicleSteering, FRONT_RIGHT)
+
+            for (let i = 0; i < vehicle.getNumWheels(); i++) {
+              vehicle.updateWheelTransform(i, true)
+              let wheel_transform = vehicle.getWheelTransformWS(i)
+              let pos = wheel_transform.getOrigin()
+              let rot = wheel_transform.getRotation()
+              wheelMeshes[i].position.set(pos.x(), pos.y(), pos.z())
+              wheelMeshes[i].quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+            }
+
+            let chassis_transform = vehicle.getChassisWorldTransform()
+            let pos = chassis_transform.getOrigin()
+            let rot = chassis_transform.getRotation()
+            chassisMesh.position.set(pos.x(), pos.y(), pos.z())
+            chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+
+            if (player) {
+              let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
+              camera_offset.applyQuaternion(chassisMesh.quaternion)
+
+              camera.position.copy(camera_offset.add(chassisMesh.position))
+              camera.lookAt(chassisMesh.position)
+
+              let target_offset = new THREE.Vector3(0, 0, 3)
+              target_offset.applyQuaternion(chassisMesh.quaternion)
+
+              spotLight.position.copy(chassisMesh.position)
+              spotLight.target = new THREE.Object3D()
+              spotLight.target.position.copy(target_offset.add(chassisMesh.position))
+              spotLight.target.updateMatrixWorld()
+
+              if (pos.y() > -1)
+                localStorage.money = parseFloat(localStorage.money) + dt * speed
+              else {
+                localStorage.money = parseFloat(localStorage.money) - 100
+                pos.setY(1000)
+                location.reload()
+              }
+
+              document.getElementById('speedometer').innerHTML = `${speed.toFixed(
+                1
+              )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos
+                .z()
+                .toFixed(2)} ${Math.floor(1 / dt)} \$${parseFloat(
+                localStorage.money
+              ).toFixed(2)}`
+            }
+          }
+
+          syncList.push(sync)
+        }
+
+        function createObjects() {
+          const block_size = 16
+          let block_height = block_size / 8
+
+          let hash = location.hash.slice(1)
+
+          if (!hash) {
+            hash = courses[parseInt(localStorage.course)]
+          }
+
+          const chars =
+            '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+
+          for (let i = 0; i < hash.length; i += 4) {
+            let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
+            let blockStyle = chars.indexOf(hash[i]) % 4
+            let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
+            let rot = new THREE.Quaternion(0, 0, 0, 1)
+            rot.setFromAxisAngle(
+              new THREE.Vector3(0, 1, 0),
+              (-blockStyle * Math.PI) / 2
+            )
+
+            if (blockType == blockNames.indexOf('Road Ramp')) {
+              let ramp = new THREE.Quaternion(0, 0, 0, 1)
+              ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
+              rot.multiply(ramp)
+              createBox(
+                new THREE.Vector3(
+                  block_size * chars.indexOf(hash[i + 1]),
+                  -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
+                  block_size * chars.indexOf(hash[i + 3])
+                ),
+                block_size,
+                block_height,
+                block_size * 1.023,
+                0,
+                1,
+                rot,
+                materialRoad
+              )
+            } else {
+              let material
+
+              if (blockType == blockNames.indexOf('Road Straight')) {
+                material = materialRoad
+              } else if (blockType == blockNames.indexOf('Road Corner')) {
+                material = materialRoadCorner
+              } else if (blockType == blockNames.indexOf('Ground')) {
+                material = materialGround
+                const x_off = [0, -0.3 * block_size, 0.2 * block_size]
+                const y_off = [0, 0.2 * block_size, -0.25 * block_size]
+                for (let j = 0; j < blockStyle; j++) {
+                  // Trunk
+                  createBox(
+                    new THREE.Vector3(
+                      block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+                      block_height * chars.indexOf(hash[i + 2]),
+                      block_size * chars.indexOf(hash[i + 3]) + y_off[j]
+                    ),
+                    block_size / 16,
+                    block_height * (2 + j),
+                    block_size / 16,
+                    1000,
+                    1,
+                    rot,
+                    materialTreeTrunk
+                  )
+                  // Canopy
+                  createBox(
+                    new THREE.Vector3(
+                      block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+                      block_height * (2 + j + chars.indexOf(hash[i + 2])),
+                      block_size * chars.indexOf(hash[i + 3]) + y_off[j]
+                    ),
+                    block_size / 4,
+                    block_height * 2,
+                    block_size / 4,
+                    100,
+                    1,
+                    rot,
+                    materialTreeTop
+                  )
+                }
+              } else if (blockType == blockNames.indexOf('Wall')) {
+                material = materialGround
+                base_height = -block_height
+                for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
+                  createBox(
+                    new THREE.Vector3(
+                      block_size * chars.indexOf(hash[i + 1]),
+                      -block_height / 2 + block_size / 8 + (block_size / 4) * y,
+                      block_size * chars.indexOf(hash[i + 3])
+                    ),
+                    block_size,
+                    block_size / 4,
+                    block_size,
+                    0,
+                    1,
+                    rot,
+                    materialWall[blockStyle]
+                  )
+                }
+              }
+
+              createBox(
+                new THREE.Vector3(
+                  block_size * chars.indexOf(hash[i + 1]),
+                  base_height,
+                  block_size * chars.indexOf(hash[i + 3])
+                ),
+                block_size,
+                block_height,
+                block_size,
+                0,
+                1,
+                rot,
+                material
+              )
+            }
+          }
+
+          createVehicle(new THREE.Vector3(block_size + -block_size / 4, 2, block_size))
+          for (let i = 0; i < 5; i++) {
+            createVehicle(
+              new THREE.Vector3(
+                -block_size / 4,
+                2,
+                2 * block_size + 0.5 * block_size * i
+              ),
+              false
+            )
+          }
+        }
+
+        // - Init -
+        initGraphics()
+        initPhysics()
+        createObjects()
+        tick()
+      })
+    </script>
+  </body>
+</html>
