@@ -35,7 +35,9 @@
   <body>
     <h1>Store</h1>
     <p id="money"></p>
-    <section></section>
+
+    <section id="vehicles"></section>
+
     <template id="vehicleTemplate">
       <label>
         <span>Vehicle 0</span>
@@ -43,6 +45,7 @@
         <input type="radio" name="vehicle" value="0" />
       </label>
     </template>
+
     <script>
       if (!localStorage.money) localStorage.money = 0
       if (!localStorage.vehicle) localStorage.vehicle = '0'
@@ -71,7 +74,7 @@
         document.querySelector('#money').textContent =
           '$' + parseFloat(localStorage.money).toFixed(2)
 
-        document.querySelector('section').textContent = ''
+        document.querySelector('#vehicles').textContent = ''
         for (let i = 0; i <= 8; i++) {
           let vehicle = document
             .querySelector('#vehicleTemplate')
