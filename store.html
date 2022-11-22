@@ -86,12 +86,10 @@
             vehicle.querySelector('span').textContent += ` - \$${i * 10000}`
           }
           document.querySelector('section').appendChild(vehicle)
-          vehicle.addEventListener('input', update)
+          document
+            .querySelector('section label:last-child input')
+            .addEventListener('input', update)
         }
-
-        document.querySelectorAll('input[name=vehicle]').forEach(el => {
-          el.addEventListener('input', update)
-        })
       }
 
       update()
