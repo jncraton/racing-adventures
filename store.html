@@ -53,17 +53,17 @@
 
       const update = e => {
         if (e) {
-          const key = `isOwned_${e.target.name}${e.target.value}`
-          if (!localStorage[key]) {
+          const isOwned = `isOwned_${e.target.name}${e.target.value}`
+          if (!localStorage[isOwned]) {
             // Attempt purchase
             const money = parseFloat(localStorage.money)
             const price = e.target.value * 10000
             if (money >= price) {
               localStorage.money = money - price
-              localStorage[key] = true
+              localStorage[isOwned] = true
             }
           }
-          if (localStorage[key]) {
+          if (localStorage[isOwned]) {
             localStorage[e.target.name] = e.target.value
           }
         }
