@@ -119,7 +119,7 @@
           scene.background = new THREE.CubeTextureLoader()
             .setPath('/textures/city/')
             .load(
-              ['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'],
+              new Array(6).fill('day.png'),
               t => (t.magFilter = THREE.NearestFilter)
             )
 
