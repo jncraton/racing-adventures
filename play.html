@@ -119,7 +119,7 @@
           scene.add(spotLight)
 
           scene.background = new THREE.CubeTextureLoader()
-            .setPath('/textures/city/')
+            .setPath(`/textures/themes/${localStorage.theme.toLowerCase()}/`)
             .load(
               new Array(6).fill(`${localStorage.time.toLowerCase()}.png`),
               t => (t.magFilter = THREE.NearestFilter)
@@ -134,7 +134,7 @@
           scene.add(water)
 
           const loader = new THREE.TextureLoader()
-          loader.setPath('textures/city/')
+          loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
           const loadMaterial = path => {
             const texture = loader.load(path)
