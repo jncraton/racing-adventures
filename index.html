@@ -37,6 +37,7 @@
     <p id="money"></p>
 
     <section id="vehiclePicker"></section>
+    <section id="enginePicker"></section>
     <section id="coursePicker"></section>
     <section id="timePicker"></section>
 
@@ -55,9 +56,11 @@
     <script>
       if (!localStorage.money) localStorage.money = 0
       if (!localStorage.vehicle) localStorage.vehicle = '0'
+      if (!localStorage.engine) localStorage.engine = '150HP'
       if (!localStorage.course) localStorage.course = '0'
       if (!localStorage.time) localStorage.time = 'Day'
       localStorage.isOwned_timeDay = true
+      localStorage.isOwned_engine150HP = true
       localStorage.isOwned_vehicle0 = true
       localStorage.isOwned_course0 = true
 
@@ -112,6 +115,7 @@
           [0, 1, 2, 3, 4, 5, 6],
           i => `textures/vehicles/car/${i}/left.png`
         )
+        createSection('engine', ['150HP', '250HP', '400HP', '700HP', '1000HP'])
         createSection('course', [0, 1])
         createSection('time', ['Day', 'Night'])
       }
