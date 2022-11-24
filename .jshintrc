@@ -6,6 +6,7 @@
   "esversion": 6,
   "globals": {
     "THREE": true,
-    "Ammo": true
+    "Ammo": true,
+    "crypto": true
   }
 }

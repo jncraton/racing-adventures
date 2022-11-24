@@ -72,10 +72,13 @@
         if (!localStorage.money) localStorage.money = 0
         if (!localStorage.vehicle) localStorage.vehicle = '0'
 
+        if (!localStorage.me) localStorage.me = crypto.randomUUID()
+
         // Physics variables
         let physicsWorld
         let syncList = []
         let time = 0
+        let actors = {}
 
         // Debug options
         let showWireframe = false
@@ -581,6 +584,7 @@
           }
 
           syncList.push(sync)
+          return vehicle
         }
 
         function createObjects() {
@@ -705,7 +709,9 @@
             }
           }
 
-          createVehicle(new THREE.Vector3(block_size + -block_size / 4, 2, block_size))
+          actors[localStorage.me] = createVehicle(
+            new THREE.Vector3(block_size + -block_size / 4, 2, block_size)
+          )
           for (let i = 0; i < 5; i++) {
             createVehicle(
               new THREE.Vector3(
@@ -718,11 +724,51 @@
           }
         }
 
+        function networkUpdate() {
+          let vehicle = actors[localStorage.me]
+
+          let chassis_transform = vehicle.getChassisWorldTransform()
+          let pos = chassis_transform.getOrigin()
+
+          const data = new FormData()
+          data.append('x', pos.x())
+          data.append('y', pos.y())
+          data.append('z', pos.z())
+          fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(
+            response => {
+              response.json().then(newActors => {
+                Object.entries(newActors).forEach(actor => {
+                  if (actor[0] == localStorage.me) {
+                    return
+                  }
+                  if (!actors[actor[0]]) {
+                    actors[actor[0]] = createVehicle(
+                      new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
+                      false
+                    )
+                  } else {
+                    let wt = actors[actor[0]].body.getWorldTransform()
+                    let pos = wt.getOrigin()
+                    pos.setX(actor[1].x)
+                    pos.setY(actor[1].y)
+                    pos.setZ(actor[1].z)
+                    wt.setOrigin(pos)
+                  }
+                })
+
+                setTimeout(networkUpdate, 0)
+              })
+            }
+          )
+        }
+
         // - Init -
         initGraphics()
         initPhysics()
         createObjects()
         tick()
+
+        networkUpdate()
       })
     </script>
   </body>
