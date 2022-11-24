@@ -1,4 +1,5 @@
 from flask import Flask, request, send_file
+import json
 
 app = Flask(__name__, static_folder="/")
 
@@ -12,7 +13,7 @@ def get_index():
 
 @app.route("/update/<string:player>", methods=["POST"])
 def update(player):
-    players[player] = request.form
+    players[player] = json.loads(request.data)
     return players
 
 

@@ -732,17 +732,18 @@
           let rot = chassis_transform.getRotation()
           let vel = vehicle.getRigidBody().getLinearVelocity()
 
-          const data = new FormData()
-          data.append('x', pos.x().toFixed(2))
-          data.append('y', pos.y().toFixed(2))
-          data.append('z', pos.z().toFixed(2))
-          data.append('vx', vel.x().toFixed(2))
-          data.append('vy', vel.y().toFixed(2))
-          data.append('vz', vel.z().toFixed(2))
-          data.append('rw', rot.w().toFixed(2))
-          data.append('rx', rot.x().toFixed(2))
-          data.append('ry', rot.y().toFixed(2))
-          data.append('rz', rot.z().toFixed(2))
+          const data = JSON.stringify({
+            x: pos.x().toFixed(2),
+            y: pos.y().toFixed(2),
+            z: pos.z().toFixed(2),
+            vx: vel.x().toFixed(2),
+            vy: vel.y().toFixed(2),
+            vz: vel.z().toFixed(2),
+            rw: rot.w().toFixed(2),
+            rx: rot.x().toFixed(2),
+            ry: rot.y().toFixed(2),
+            rz: rot.z().toFixed(2),
+          })
           fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(
             response => {
               response.json().then(newActors => {
