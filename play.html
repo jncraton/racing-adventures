@@ -765,7 +765,10 @@
             }
           )
         }
-        setInterval(networkUpdate, 32)
+
+        if (localStorage.netplay) {
+          setInterval(networkUpdate, 32)
+        }
 
         // - Init -
         initGraphics()
