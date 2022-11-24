@@ -749,9 +749,7 @@
                   } else {
                     let wt = actors[actor[0]].body.getWorldTransform()
                     let pos = wt.getOrigin()
-                    pos.setX(actor[1].x)
-                    pos.setY(actor[1].y)
-                    pos.setZ(actor[1].z)
+                    pos.setValue(actor[1].x, actor[1].y, actor[1].z)
                     wt.setOrigin(pos)
                   }
                 })
