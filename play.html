@@ -72,7 +72,7 @@
         if (!localStorage.money) localStorage.money = 0
         if (!localStorage.vehicle) localStorage.vehicle = '0'
 
-        if (!localStorage.me) localStorage.me = crypto.randomUUID()
+        if (!localStorage.me) localStorage.me = Math.floor(Math.random() * 10000)
 
         // Physics variables
         let physicsWorld
