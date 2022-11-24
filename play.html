@@ -761,20 +761,17 @@
                     wt.setRotation(rot)
                   }
                 })
-
-                setTimeout(networkUpdate, 0)
               })
             }
           )
         }
+        setInterval(networkUpdate, 32)
 
         // - Init -
         initGraphics()
         initPhysics()
         createObjects()
         tick()
-
-        networkUpdate()
       })
     </script>
   </body>
