@@ -772,12 +772,9 @@
                   }
                 })
               })
+              networkUpdate()
             }
           )
-        }
-
-        if (localStorage.netplay) {
-          setInterval(networkUpdate, 32)
         }
 
         // - Init -
@@ -785,6 +782,10 @@
         initPhysics()
         createObjects()
         tick()
+
+        if (localStorage.netplay) {
+          networkUpdate()
+        }
       })
     </script>
   </body>
