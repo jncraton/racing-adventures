@@ -733,16 +733,16 @@
           let vel = vehicle.getRigidBody().getLinearVelocity()
 
           const data = new FormData()
-          data.append('x', pos.x())
-          data.append('y', pos.y())
-          data.append('z', pos.z())
-          data.append('vx', vel.x())
-          data.append('vy', vel.y())
-          data.append('vz', vel.z())
-          data.append('rw', rot.w())
-          data.append('rx', rot.x())
-          data.append('ry', rot.y())
-          data.append('rz', rot.z())
+          data.append('x', pos.x().toFixed(2))
+          data.append('y', pos.y().toFixed(2))
+          data.append('z', pos.z().toFixed(2))
+          data.append('vx', vel.x().toFixed(2))
+          data.append('vy', vel.y().toFixed(2))
+          data.append('vz', vel.z().toFixed(2))
+          data.append('rw', rot.w().toFixed(2))
+          data.append('rx', rot.x().toFixed(2))
+          data.append('ry', rot.y().toFixed(2))
+          data.append('rz', rot.z().toFixed(2))
           fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(
             response => {
               response.json().then(newActors => {
