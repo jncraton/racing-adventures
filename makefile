@@ -18,4 +18,4 @@ launch:
 	python3 -m http.server
 
 clean:
-	rm three.js ammo.js
+	rm -f three.js ammo.js
