@@ -21,7 +21,7 @@
   </head>
 
   <body>
-    <section><a href="index.html#00" target="_newtab">Play</a></section>
+    <section><a href="play.html#00" target="_newtab">Play</a></section>
     <main></main>
     <script>
       let hash = location.hash.slice(1)
@@ -109,7 +109,7 @@
 
       document.querySelectorAll('input,select').forEach(input => {
         input.addEventListener('input', () => {
-          let href = 'index.html#'
+          let href = 'play.html#'
           document.querySelectorAll('span').forEach(block => {
             let select = block.querySelector('select')
             if (select.value != '') {
