@@ -53,6 +53,8 @@
       ]
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
 
+      let routeHistory = []
+
       Ammo().then(function (Ammo) {
         // Graphics variables
         let camera, scene, renderer, spotLight
@@ -68,6 +70,13 @@
           materialCarBase,
           materialCarTop,
           materialWall = []
+
+        // Position History
+        let playerPos
+
+        setInterval(() => {
+          routeHistory.push(playerPos)
+        }, 1000)
 
         // Player data
         if (!localStorage.money) localStorage.money = 0
@@ -545,6 +554,7 @@
             chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
             if (player) {
+              playerPos = [pos.x(), pos.y(), pos.z()]
               let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
               camera_offset.applyQuaternion(chassisMesh.quaternion)
 
