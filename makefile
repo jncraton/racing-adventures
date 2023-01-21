@@ -4,7 +4,7 @@ three.js:
 	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/build/three.js
 
 ammo.js:
-	wget https://raw.githubusercontent.com/kripken/ammo.js/085626a8becc2a3177fc9d746d85cef9f09e800f/builds/ammo.js
+	wget https://raw.githubusercontent.com/kripken/ammo.js/6ec2ce66f2fbd06fae2c0013274cffdacccc3343/builds/ammo.js
 
 format:
 	npx prettier --write index.html editor.html play.html
