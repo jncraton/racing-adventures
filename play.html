@@ -439,7 +439,10 @@
           let wheelDirectionCS0 = new Ammo.btVector3(0, -1, 0)
           let wheelAxleCS = new Ammo.btVector3(-1, 0, 0)
 
-          function addWheel(isFront, pos, index) {
+          function addWheel(index, x, z) {
+            let isFront = index < 2
+            let pos = new Ammo.btVector3(x, axleHeight, z)
+
             let wheelInfo = vehicle.addWheel(
               pos,
               wheelDirectionCS0,
@@ -459,26 +462,10 @@
             wheelMeshes[index] = createWheelMesh(wheelRadius, wheelWidth)
           }
 
-          addWheel(
-            true,
-            new Ammo.btVector3(axleHalfLength, axleHeight, axleFrontPos),
-            FRONT_LEFT
-          )
-          addWheel(
-            true,
-            new Ammo.btVector3(-axleHalfLength, axleHeight, axleFrontPos),
-            FRONT_RIGHT
-          )
-          addWheel(
-            false,
-            new Ammo.btVector3(-axleHalfLength, axleHeight, axleBackPos),
-            BACK_LEFT
-          )
-          addWheel(
-            false,
-            new Ammo.btVector3(axleHalfLength, axleHeight, axleBackPos),
-            BACK_RIGHT
-          )
+          addWheel(FRONT_LEFT, axleHalfLength, axleFrontPos)
+          addWheel(FRONT_RIGHT, -axleHalfLength, axleFrontPos)
+          addWheel(BACK_LEFT, -axleHalfLength, axleBackPos)
+          addWheel(BACK_RIGHT, axleHalfLength, axleBackPos)
 
           // Sync keybord actions and physics and graphics
           function sync(dt) {
