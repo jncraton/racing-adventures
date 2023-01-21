@@ -217,8 +217,8 @@
           document.getElementById('container').replaceChildren(renderer.domElement)
 
           window.addEventListener('resize', onWindowResize, false)
-          window.addEventListener('keydown', keydown)
-          window.addEventListener('keyup', keyup)
+          window.addEventListener('keydown', keychange)
+          window.addEventListener('keyup', keychange)
         }
 
         function onWindowResize() {
@@ -248,17 +248,9 @@
           requestAnimationFrame(() => requestAnimationFrame(tick))
         }
 
-        function keyup(e) {
+        function keychange(e) {
           if (keysActions[e.code]) {
-            actions[keysActions[e.code]] = false
-            e.preventDefault()
-            e.stopPropagation()
-            return false
-          }
-        }
-        function keydown(e) {
-          if (keysActions[e.code]) {
-            actions[keysActions[e.code]] = true
+            actions[keysActions[e.code]] = e.type == 'keydown'
             e.preventDefault()
             e.stopPropagation()
             return false
