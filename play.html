@@ -245,7 +245,7 @@
           for (let i = 0; i < syncList.length; i++) syncList[i](dt)
           physicsWorld.stepSimulation(dt, 0)
           renderer.render(scene, camera)
-          requestAnimationFrame(tick)
+          requestAnimationFrame(() => requestAnimationFrame(tick))
         }
 
         function keyup(e) {
