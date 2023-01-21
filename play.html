@@ -76,10 +76,11 @@
           materialWall = []
 
         // Position History
-        let playerPos
-
         setInterval(() => {
-          routeHistory.push(playerPos)
+          let vehicle = actors[localStorage.me]
+          let pos = vehicle.getChassisWorldTransform().getOrigin()
+
+          routeHistory.push([pos.x(), pos.y(), pos.z()])
         }, 1000)
 
         // Player data
@@ -556,7 +557,6 @@
             chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
             if (player) {
-              playerPos = [pos.x(), pos.y(), pos.z()]
               let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
               camera_offset.applyQuaternion(chassisMesh.quaternion)
 
