@@ -365,7 +365,6 @@
 
         function createVehicle(pos, player = true) {
           // Vehicle contants
-
           let chassisWidth = 2.0
           let chassisHeight = 1.0
           let chassisLength = 4.0
@@ -440,13 +439,13 @@
           let wheelDirectionCS0 = new Ammo.btVector3(0, -1, 0)
           let wheelAxleCS = new Ammo.btVector3(-1, 0, 0)
 
-          function addWheel(isFront, pos, radius, width, index) {
+          function addWheel(isFront, pos, index) {
             let wheelInfo = vehicle.addWheel(
               pos,
               wheelDirectionCS0,
               wheelAxleCS,
               suspensionRestLength,
-              radius,
+              wheelRadius,
               tuning,
               isFront
             )
@@ -457,35 +456,27 @@
             wheelInfo.set_m_frictionSlip(friction)
             wheelInfo.set_m_rollInfluence(rollInfluence)
 
-            wheelMeshes[index] = createWheelMesh(radius, width)
+            wheelMeshes[index] = createWheelMesh(wheelRadius, wheelWidth)
           }
 
           addWheel(
             true,
             new Ammo.btVector3(axleHalfLength, axleHeight, axleFrontPos),
-            wheelRadius,
-            wheelWidth,
             FRONT_LEFT
           )
           addWheel(
             true,
             new Ammo.btVector3(-axleHalfLength, axleHeight, axleFrontPos),
-            wheelRadius,
-            wheelWidth,
             FRONT_RIGHT
           )
           addWheel(
             false,
             new Ammo.btVector3(-axleHalfLength, axleHeight, axleBackPos),
-            wheelRadius,
-            wheelWidth,
             BACK_LEFT
           )
           addWheel(
             false,
             new Ammo.btVector3(axleHalfLength, axleHeight, axleBackPos),
-            wheelRadius,
-            wheelWidth,
             BACK_RIGHT
           )
 
