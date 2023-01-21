@@ -436,21 +436,17 @@
           let BACK_LEFT = 2
           let BACK_RIGHT = 3
           let wheelMeshes = []
-          let wheelDirectionCS0 = new Ammo.btVector3(0, -1, 0)
-          let wheelAxleCS = new Ammo.btVector3(-1, 0, 0)
 
           function addWheel(index, x, z) {
             let isFront = index < 2
-            let pos = new Ammo.btVector3(x, axleHeight, z)
-
             let wheelInfo = vehicle.addWheel(
-              pos,
-              wheelDirectionCS0,
-              wheelAxleCS,
+              new Ammo.btVector3(x, axleHeight, z),
+              new Ammo.btVector3(0, -1, 0),
+              new Ammo.btVector3(-1, 0, 0),
               suspensionRestLength,
               wheelRadius,
               tuning,
-              isFront
+              index < 2
             )
 
             wheelInfo.set_m_suspensionStiffness(suspensionStiffness)
