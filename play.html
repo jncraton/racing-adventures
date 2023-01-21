@@ -245,7 +245,6 @@
             let wt = actors.ghost.getChassisWorldTransform()
             let pos = wt.getOrigin()
             let hist = routeHistory[routeHistory.length - histBack]
-            console.log(pos.x(), hist.pos.x, hist.pos.y, hist.pos.z)
             pos.setValue(hist.pos.x, hist.pos.y+.3, hist.pos.z)
             wt.setOrigin(pos)
             let rot = wt.getRotation()
