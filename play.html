@@ -240,16 +240,12 @@
         }
 
         function tick() {
-          requestAnimationFrame(tick)
-          let dt = clock.getDelta()
-          if (dt > 0.2) {
-            // Pause while tab is in background
-            return
-          }
+          let dt = Math.min(clock.getDelta(), 0.05)
+          time += dt
           for (let i = 0; i < syncList.length; i++) syncList[i](dt)
           physicsWorld.stepSimulation(dt, 0)
           renderer.render(scene, camera)
-          time += dt
+          requestAnimationFrame(tick)
         }
 
         function keyup(e) {
