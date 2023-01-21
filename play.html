@@ -234,9 +234,29 @@
         function tick() {
           let dt = Math.min(clock.getDelta(), 0.05)
           time += dt
+
+          const histBack = 150
+          if (routeHistory.length > histBack) {
+            if (!actors.ghost) {
+              actors.ghost = createVehicle(
+                new THREE.Vector3(16, 2, 16), false
+              )
+            }
+            let wt = actors.ghost.getChassisWorldTransform()
+            let pos = wt.getOrigin()
+            let hist = routeHistory[routeHistory.length - histBack]
+            console.log(pos.x(), hist.pos.x, hist.pos.y, hist.pos.z)
+            pos.setValue(hist.pos.x, hist.pos.y+.3, hist.pos.z)
+            wt.setOrigin(pos)
+            let rot = wt.getRotation()
+            rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
+            wt.setRotation(rot)
+          }
+          
           for (let i = 0; i < syncList.length; i++) syncList[i](dt)
           physicsWorld.stepSimulation(dt, 0)
           renderer.render(scene, camera)
+          
           requestAnimationFrame(() => requestAnimationFrame(tick))
         }
 
