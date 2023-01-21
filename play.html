@@ -75,14 +75,6 @@
           materialCarTop,
           materialWall = []
 
-        // Position History
-        setInterval(() => {
-          let vehicle = actors[localStorage.me]
-          let pos = vehicle.getChassisWorldTransform().getOrigin()
-
-          routeHistory.push([pos.x(), pos.y(), pos.z()])
-        }, 1000)
-
         // Player data
         if (!localStorage.money) localStorage.money = 0
         if (!localStorage.vehicle) localStorage.vehicle = '0'
@@ -524,6 +516,21 @@
 
               camera.position.copy(camera_offset.add(chassisMesh.position))
               camera.lookAt(chassisMesh.position)
+
+              routeHistory.push({
+                "time": time,
+                "pos": {
+                  "x": pos.x(),
+                  "y": pos.y(),
+                  "z": pos.z(),
+                },
+                "rot": {
+                  "x": rot.x(),
+                  "y": rot.y(), 
+                  "z": rot.z(), 
+                  "w": rot.w(),
+                },
+              })
 
               if (useHeadlights) {
                 let position_offset = new THREE.Vector3(0, 0.5, 2)
