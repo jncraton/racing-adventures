@@ -122,7 +122,7 @@
           sun.position.set(1000, 1000, 1000)
           scene.add(sun)
 
-          if (localStorage.headlights) {
+          if (localStorage.headlights != 'Off') {
             spotLight = new THREE.SpotLight(0xf7e51b)
             spotLight.angle = Math.PI / 4
             spotLight.distance = 100.0
@@ -567,7 +567,7 @@
                 },
               })
 
-              if (localStorage.headlights) {
+              if (localStorage.headlights != 'Off') {
                 let position_offset = new THREE.Vector3(0, 0.5, 2)
                 position_offset.applyQuaternion(chassisMesh.quaternion)
                 spotLight.position.copy(position_offset.add(chassisMesh.position))
