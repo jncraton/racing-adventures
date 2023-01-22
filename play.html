@@ -238,7 +238,7 @@
           time += dt
 
           for (let i = 1; i <= numGhosts; i++) {
-            if (routeHistory.length > ghostSpacing * i) {
+            if (routeHistory.length >= ghostSpacing * i) {
               if (!actors['ghost' + i]) {
                 actors['ghost' + i] = createVehicle(new THREE.Vector3(16, 2, 16), false)
               }
@@ -251,6 +251,10 @@
               rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
               wt.setRotation(rot)
             }
+          }
+
+          while (routeHistory.length > numGhosts * ghostSpacing) {
+            routeHistory.shift()
           }
 
           for (let i = 0; i < syncList.length; i++) syncList[i](dt)
