@@ -241,7 +241,7 @@
           for (let i = 1; i <= numGhosts; i++) {
             if (routeHistory.length >= ghostSpacing * i) {
               if (!actors['ghost' + i]) {
-                actors['ghost' + i] = createVehicle(new THREE.Vector3(16, 2, 16), false)
+                actors['ghost' + i] = createVehicle(new THREE.Vector3(), false)
               }
               let wt = actors['ghost' + i].getChassisWorldTransform()
               let pos = wt.getOrigin()
