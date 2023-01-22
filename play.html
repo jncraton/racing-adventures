@@ -54,6 +54,7 @@
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
       const ghostSpacing = 450
       const numGhosts = 8
+      let sillyGhosts = 0
 
       let routeHistory = []
 
@@ -245,11 +246,13 @@
               let wt = actors['ghost' + i].getChassisWorldTransform()
               let pos = wt.getOrigin()
               let hist = routeHistory[routeHistory.length - ghostSpacing * i]
-              pos.setValue(hist.pos.x, hist.pos.y + 0.3, hist.pos.z)
+              pos.setValue(hist.pos.x, hist.pos.y + 0.3 + sillyGhosts, hist.pos.z)
               wt.setOrigin(pos)
-              let rot = wt.getRotation()
-              rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
-              wt.setRotation(rot)
+              if (!sillyGhosts) {
+                let rot = wt.getRotation()
+                rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
+                wt.setRotation(rot)
+              }
             }
           }
 
