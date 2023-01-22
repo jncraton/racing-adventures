@@ -52,6 +52,8 @@
         'c878c778c658c558c458c358c248c148c048c857c767c657c557c457j367j267j167c047c866c766c636c566946633663266a166c046c855c76546a5c5656465c365c2454155c045c864c7644694c5646474c364c2344144c034c853c76386937583b483c363c2334133c033c652c562c462c362c2224122c022c2210121c021c000',
       ]
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
+      const ghostSpacing = 150
+      const numGhosts = 6
 
       let routeHistory = []
 
@@ -235,15 +237,14 @@
           let dt = Math.min(clock.getDelta(), 0.05)
           time += dt
 
-          const histBack = 150
-          for (let i = 1; i < 7; i++) {
-            if (routeHistory.length > histBack * i) {
+          for (let i = 1; i <= numGhosts; i++) {
+            if (routeHistory.length > ghostSpacing * i) {
               if (!actors['ghost' + i]) {
                 actors['ghost' + i] = createVehicle(new THREE.Vector3(16, 2, 16), false)
               }
               let wt = actors['ghost' + i].getChassisWorldTransform()
               let pos = wt.getOrigin()
-              let hist = routeHistory[routeHistory.length - histBack * i]
+              let hist = routeHistory[routeHistory.length - ghostSpacing * i]
               pos.setValue(hist.pos.x, hist.pos.y + 0.3, hist.pos.z)
               wt.setOrigin(pos)
               let rot = wt.getRotation()
