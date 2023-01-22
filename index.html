@@ -56,6 +56,8 @@
     <hr />
     <section id="themePicker"></section>
     <hr />
+    <section id="earthquakePicker"></section>
+    <hr />
 
     <section>
       <a id="play" href="play.html">Race!</a>
@@ -77,9 +79,11 @@
       if (!localStorage.ghosts) localStorage.ghosts = '0'
       if (!localStorage.time) localStorage.time = 'Day'
       if (!localStorage.headlights) localStorage.headlights = 'Off'
+      if (!localStorage.earthquake) localStorage.earthquake = 'Off'
       if (!localStorage.theme) localStorage.theme = 'City'
       localStorage.isOwned_timeDay = true
       localStorage.isOwned_headlightsOff = true
+      localStorage.isOwned_earthquakeOff = true
       localStorage.isOwned_engine150HP = true
       localStorage.isOwned_vehicle0 = true
       localStorage.isOwned_course0 = true
@@ -141,6 +145,7 @@
         createSection('course', [0, 1, 2, 3])
         createSection('time', ['Day', 'Night'])
         createSection('headlights', ['Off', 'On'])
+        createSection('earthquake', ['Off', 'On'])
         createSection('ghosts', ['0', '1', '2', '4', '8', '16'])
         createSection('theme', ['City', 'Forest'])
       }
