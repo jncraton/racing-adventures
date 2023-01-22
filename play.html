@@ -56,6 +56,8 @@
       const numGhosts = 8
       let sillyGhosts = 0
 
+      const numVehicleSkins = 7
+
       let routeHistory = []
 
       // Debug options
@@ -73,9 +75,9 @@
           materialRoad,
           materialRoadCorner,
           materialInteractive,
-          materialWheel,
-          materialCarBase,
-          materialCarTop,
+          materialWheel = [],
+          materialCarBase = [],
+          materialCarTop = [],
           materialWall = []
 
         // Player data
@@ -169,18 +171,23 @@
             materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
           }
 
-          loader.setPath(`textures/vehicles/car/${localStorage.vehicle}/`)
-
-          materialCarBase = [
-            loadMaterial('left.png'),
-            loadMaterial('right.png'),
-            loadMaterial('hood.png'),
-            loadMaterial('hood.png'),
-            loadMaterial('front.png'),
-            loadMaterial('back.png'),
-          ]
-
-          materialCarTop = new Array(6).fill(loadMaterial('top.png'))
+          for (let i = 0; i < numVehicleSkins; i++) {
+            loader.setPath(`textures/vehicles/car/${i}/`)
+            materialCarBase.push([
+              loadMaterial('left.png'),
+              loadMaterial('right.png'),
+              loadMaterial('hood.png'),
+              loadMaterial('hood.png'),
+              loadMaterial('front.png'),
+              loadMaterial('back.png'),
+            ])
+            materialCarTop.push(new Array(6).fill(loadMaterial('top.png')))
+            materialWheel.push([
+              loadMaterial('tire.png'),
+              loadMaterial('hubcap.png'),
+              loadMaterial('hubcap.png'),
+            ])
+          }
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
           const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
@@ -199,12 +206,6 @@
             materialRoadUntextured,
             materialRoadUntextured,
             materialRoadUntextured,
-          ]
-
-          materialWheel = [
-            loadMaterial('tire.png'),
-            loadMaterial('hubcap.png'),
-            loadMaterial('hubcap.png'),
           ]
 
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
@@ -241,7 +242,11 @@
           for (let i = 1; i <= numGhosts; i++) {
             if (routeHistory.length >= ghostSpacing * i) {
               if (!actors['ghost' + i]) {
-                actors['ghost' + i] = createVehicle(new THREE.Vector3(), false)
+                actors['ghost' + i] = createVehicle(
+                  new THREE.Vector3(),
+                  false,
+                  i % numVehicleSkins
+                )
               }
               let wt = actors['ghost' + i].getChassisWorldTransform()
               let pos = wt.getOrigin()
@@ -346,22 +351,24 @@
           }
         }
 
-        function createWheelMesh(radius, width) {
+        function createWheelMesh(radius, width, skin) {
           let t = new THREE.CylinderGeometry(radius, radius, width, 8, 1)
           t.rotateZ(Math.PI / 2)
-          let mesh = new THREE.Mesh(t, materialWheel)
+          let mesh = new THREE.Mesh(t, materialWheel[skin])
           scene.add(mesh)
           return mesh
         }
 
-        function createChassisMesh(w, h, l) {
+        function createChassisMesh(w, h, l, skin = 0) {
           let chassis = new THREE.Object3D()
 
-          chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase))
+          chassis.add(
+            new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase[skin])
+          )
 
           let top = new THREE.Mesh(
             new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
-            materialCarTop
+            materialCarTop[skin]
           )
           top.position.set(0, h, -l / 8)
           chassis.add(top)
@@ -370,7 +377,7 @@
           return chassis
         }
 
-        function createVehicle(pos, player = true) {
+        function createVehicle(pos, player = true, skin = 0) {
           // Vehicle contants
           let chassisWidth = 2.0
           let chassisHeight = 1.0
@@ -423,7 +430,8 @@
           let chassisMesh = createChassisMesh(
             chassisWidth,
             chassisHeight,
-            chassisLength
+            chassisLength,
+            skin
           )
 
           // Raycast Vehicle
@@ -462,7 +470,7 @@
             wheelInfo.set_m_frictionSlip(friction)
             wheelInfo.set_m_rollInfluence(rollInfluence)
 
-            wheelMeshes[index] = createWheelMesh(wheelRadius, wheelWidth)
+            wheelMeshes[index] = createWheelMesh(wheelRadius, wheelWidth, skin)
           }
 
           addWheel(FRONT_LEFT, axleHalfLength, axleFrontPos)
@@ -720,7 +728,9 @@
           }
 
           actors[localStorage.me] = createVehicle(
-            new THREE.Vector3(block_size + -block_size / 4, 2, block_size)
+            new THREE.Vector3(block_size + -block_size / 4, 2, block_size),
+            true,
+            localStorage.vehicle
           )
         }
 
