@@ -242,7 +242,7 @@
             let wt = block.getWorldTransform()
             let pos = wt.getOrigin()
             let y =
-              block.y_orig +
+              block.startPosition.y +
               0.5 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
             pos.setValue(pos.x(), y, pos.z())
             block.mesh.position.y = y
@@ -371,7 +371,7 @@
           }
 
           body.mesh = mesh
-          body.y_orig = mesh.position.y
+          body.startPosition = mesh.position.clone()
 
           return body
         }
