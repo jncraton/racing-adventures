@@ -238,6 +238,16 @@
           let dt = Math.min(clock.getDelta(), 0.05)
           time += dt
 
+          groundBlocks.forEach(block => {
+            let wt = block.getWorldTransform()
+            let pos = wt.getOrigin()
+            let y =
+              block.y_orig +
+              0.5 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+            pos.setValue(pos.x(), y, pos.z())
+            block.mesh.position.y = y
+          })
+
           let numGhosts = parseInt(localStorage.ghosts)
 
           for (let i = 1; i <= numGhosts; i++) {
@@ -350,6 +360,20 @@
 
             syncList.push(sync)
           }
+
+          body.forceSync = () => {
+            let transform = new Ammo.btTransform()
+            body.getMotionState().getWorldTransform(transform)
+            let pos = transform.getOrigin()
+            let rot = transform.getRotation()
+            mesh.position.set(pos.x(), pos.y(), pos.z())
+            mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+          }
+
+          body.mesh = mesh
+          body.y_orig = mesh.position.y
+
+          return body
         }
 
         function createWheelMesh(radius, width, skin) {
@@ -606,6 +630,8 @@
           return vehicle
         }
 
+        const groundBlocks = []
+
         function createObjects() {
           const block_size = 16
           let block_height = block_size / 8
@@ -633,19 +659,21 @@
               let ramp = new THREE.Quaternion(0, 0, 0, 1)
               ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
               rot.multiply(ramp)
-              createBox(
-                new THREE.Vector3(
-                  block_size * chars.indexOf(hash[i + 1]),
-                  -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
-                  block_size * chars.indexOf(hash[i + 3])
-                ),
-                block_size,
-                block_height,
-                block_size * 1.023,
-                0,
-                1,
-                rot,
-                materialRoad
+              groundBlocks.push(
+                createBox(
+                  new THREE.Vector3(
+                    block_size * chars.indexOf(hash[i + 1]),
+                    -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
+                    block_size * chars.indexOf(hash[i + 3])
+                  ),
+                  block_size,
+                  block_height,
+                  block_size * 1.023,
+                  0,
+                  1,
+                  rot,
+                  materialRoad
+                )
               )
             } else {
               let material
@@ -694,36 +722,40 @@
                 material = materialGround
                 base_height = -block_height
                 for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
-                  createBox(
-                    new THREE.Vector3(
-                      block_size * chars.indexOf(hash[i + 1]),
-                      -block_height / 2 + block_size / 8 + (block_size / 4) * y,
-                      block_size * chars.indexOf(hash[i + 3])
-                    ),
-                    block_size,
-                    block_size / 4,
-                    block_size,
-                    0,
-                    1,
-                    rot,
-                    materialWall[blockStyle]
+                  groundBlocks.push(
+                    createBox(
+                      new THREE.Vector3(
+                        block_size * chars.indexOf(hash[i + 1]),
+                        -block_height / 2 + block_size / 8 + (block_size / 4) * y,
+                        block_size * chars.indexOf(hash[i + 3])
+                      ),
+                      block_size,
+                      block_size / 4,
+                      block_size,
+                      0,
+                      1,
+                      rot,
+                      materialWall[blockStyle]
+                    )
                   )
                 }
               }
 
-              createBox(
-                new THREE.Vector3(
-                  block_size * chars.indexOf(hash[i + 1]),
-                  base_height,
-                  block_size * chars.indexOf(hash[i + 3])
-                ),
-                block_size,
-                block_height,
-                block_size,
-                0,
-                1,
-                rot,
-                material
+              groundBlocks.push(
+                createBox(
+                  new THREE.Vector3(
+                    block_size * chars.indexOf(hash[i + 1]),
+                    base_height,
+                    block_size * chars.indexOf(hash[i + 3])
+                  ),
+                  block_size,
+                  block_height,
+                  block_size,
+                  0,
+                  1,
+                  rot,
+                  material
+                )
               )
             }
           }
