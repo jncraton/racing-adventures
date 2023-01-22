@@ -55,6 +55,10 @@
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
       let ghostSpacing = 450
       let sillyGhosts = 0
+      let quakeLateralMag = 0
+      let quakeVertialMag = 1
+      let quakeSpeed = 1
+      let quakeSize = 256
 
       const numVehicleSkins = 7
 
@@ -244,13 +248,25 @@
               let pos = wt.getOrigin()
               let y =
                 block.startPosition.y +
-                0.5 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+                quakeVertialMag *
+                  (1 +
+                    Math.cos(
+                      time * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                    ))
               let x =
                 block.startPosition.x +
-                1 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+                quakeLateralMag *
+                  (1 +
+                    Math.cos(
+                      time * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                    ))
               let z =
                 block.startPosition.z +
-                1 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+                quakeLateralMag *
+                  (1 +
+                    Math.cos(
+                      time * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                    ))
               pos.setValue(x, y, z)
               block.mesh.position.y = y
               block.mesh.position.x = x
