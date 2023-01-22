@@ -53,7 +53,6 @@
       ]
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
       const ghostSpacing = 450
-      const numGhosts = 8
       let sillyGhosts = 0
 
       const numVehicleSkins = 7
@@ -238,6 +237,8 @@
         function tick() {
           let dt = Math.min(clock.getDelta(), 0.05)
           time += dt
+
+          let numGhosts = parseInt(localStorage.ghosts)
 
           for (let i = 1; i <= numGhosts; i++) {
             if (routeHistory.length >= ghostSpacing * i) {

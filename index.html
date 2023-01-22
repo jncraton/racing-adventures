@@ -40,6 +40,7 @@
     <section id="enginePicker"></section>
     <section id="coursePicker"></section>
     <section id="timePicker"></section>
+    <section id="ghostsPicker"></section>
     <section id="themePicker"></section>
 
     <section>
@@ -59,12 +60,14 @@
       if (!localStorage.vehicle) localStorage.vehicle = '0'
       if (!localStorage.engine) localStorage.engine = '150HP'
       if (!localStorage.course) localStorage.course = '0'
+      if (!localStorage.ghosts) localStorage.ghosts = '0'
       if (!localStorage.time) localStorage.time = 'Day'
       if (!localStorage.theme) localStorage.theme = 'City'
       localStorage.isOwned_timeDay = true
       localStorage.isOwned_engine150HP = true
       localStorage.isOwned_vehicle0 = true
       localStorage.isOwned_course0 = true
+      localStorage.isOwned_ghosts0 = true
       localStorage.isOwned_themeCity = true
 
       const update = e => {
@@ -121,6 +124,7 @@
         createSection('engine', ['150HP', '250HP', '400HP', '700HP', '1000HP'])
         createSection('course', [0, 1, 2])
         createSection('time', ['Day', 'Night'])
+        createSection('ghosts', ['0', '1', '2', '4', '8'])
         createSection('theme', ['City', 'Forest'])
       }
 
