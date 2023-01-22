@@ -238,23 +238,25 @@
           let dt = Math.min(clock.getDelta(), 0.05)
           time += dt
 
-          groundBlocks.forEach(block => {
-            let wt = block.getWorldTransform()
-            let pos = wt.getOrigin()
-            let y =
-              block.startPosition.y +
-              0.5 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
-            let x =
-              block.startPosition.x +
-              1 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
-            let z =
-              block.startPosition.z +
-              1 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
-            pos.setValue(x, y, z)
-            block.mesh.position.y = y
-            block.mesh.position.x = x
-            block.mesh.position.z = z
-          })
+          if (localStorage.earthquake == 'On') {
+            groundBlocks.forEach(block => {
+              let wt = block.getWorldTransform()
+              let pos = wt.getOrigin()
+              let y =
+                block.startPosition.y +
+                0.5 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+              let x =
+                block.startPosition.x +
+                1 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+              let z =
+                block.startPosition.z +
+                1 * (1 + Math.cos(time * 4 + pos.x() / 32 + pos.z() / 32))
+              pos.setValue(x, y, z)
+              block.mesh.position.y = y
+              block.mesh.position.x = x
+              block.mesh.position.z = z
+            })
+          }
 
           let numGhosts = parseInt(localStorage.ghosts)
 
