@@ -55,9 +55,10 @@
       const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
       let ghostSpacing = 450
       let sillyGhosts = 0
-      let quakeLateralMag = 0
+
+      let quakeLateralMag = 0.1
       let quakeVertialMag = 0.5
-      let quakeSpeed = 2
+      let quakeSpeed = 1
       let quakeSize = 32
 
       const numVehicleSkins = 8
@@ -242,7 +243,9 @@
           let dt = Math.min(clock.getDelta(), 0.05)
           time += dt
 
-          if (localStorage.earthquake == 'On') {
+          let quakeMag = parseInt(localStorage.earthquake) - 3
+
+          if (quakeMag > 0) {
             groundBlocks.forEach(block => {
               let wt = block.getWorldTransform()
               let pos = wt.getOrigin()
@@ -251,21 +254,28 @@
                 quakeVertialMag *
                   (1 +
                     Math.cos(
-                      time * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                      time * quakeMag * quakeSpeed +
+                        pos.x() / quakeSize +
+                        pos.z() / quakeSize
                     ))
               let x =
                 block.startPosition.x +
                 quakeLateralMag *
                   (1 +
                     Math.cos(
-                      time * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                      time * quakeMag * quakeSpeed +
+                        pos.x() / quakeSize +
+                        pos.z() / quakeSize
                     ))
               let z =
                 block.startPosition.z +
-                quakeLateralMag *
+                quakeMag *
+                  quakeLateralMag *
                   (1 +
                     Math.cos(
-                      time * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                      time * quakeMag * quakeSpeed +
+                        pos.x() / quakeSize +
+                        pos.z() / quakeSize
                     ))
               pos.setValue(x, y, z)
               block.mesh.position.y = y
