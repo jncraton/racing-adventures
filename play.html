@@ -169,6 +169,7 @@
           materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
           const roadMaterial = loadMaterial('road.png')
           const roadCornerMaterial = loadMaterial('road-corner.png')
+          const roadSideMaterial = loadMaterial('road-side.png')
 
           for (let i = 0; i < 1; i++) {
             materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
@@ -194,22 +195,22 @@
           }
 
           materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
-          const materialRoadUntextured = new THREE.MeshPhongMaterial({color: 0x999999})
+
           materialRoad = [
-            materialRoadUntextured,
-            materialRoadUntextured,
+            roadSideMaterial,
+            roadSideMaterial,
             roadMaterial,
-            materialRoadUntextured,
-            materialRoadUntextured,
-            materialRoadUntextured,
+            roadSideMaterial,
+            roadSideMaterial,
+            roadSideMaterial,
           ]
           materialRoadCorner = [
-            materialRoadUntextured,
-            materialRoadUntextured,
+            roadSideMaterial,
+            roadSideMaterial,
             roadCornerMaterial,
-            materialRoadUntextured,
-            materialRoadUntextured,
-            materialRoadUntextured,
+            roadSideMaterial,
+            roadSideMaterial,
+            roadSideMaterial,
           ]
 
           materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
