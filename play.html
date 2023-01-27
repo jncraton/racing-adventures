@@ -514,6 +514,10 @@
           let BACK_RIGHT = 3
           let wheelMeshes = []
 
+          if (localStorage.theme == 'Snowy-Mountain') {
+            friction /= 100
+          }
+
           function addWheel(index, x, z) {
             let isFront = i => i < 2
             let wheelInfo = vehicle.addWheel(
