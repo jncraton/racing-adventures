@@ -142,14 +142,6 @@
               t => (t.magFilter = THREE.NearestFilter)
             )
 
-          const water = new THREE.Mesh(
-            new THREE.PlaneGeometry(10000, 10000),
-            new THREE.MeshPhongMaterial({color: 0x5555cc, side: THREE.DoubleSide})
-          )
-          water.quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2)
-          water.position.setY(-2)
-          scene.add(water)
-
           const loader = new THREE.TextureLoader()
           loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
@@ -163,6 +155,14 @@
               transparent: true,
             })
           }
+
+          const water = new THREE.Mesh(
+            new THREE.PlaneGeometry(10000, 10000),
+            loadMaterial('water.png')
+          )
+          water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
+          water.position.setY(-2)
+          scene.add(water)
 
           materialGround = new Array(6).fill(loadMaterial('ground.png'))
           materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
