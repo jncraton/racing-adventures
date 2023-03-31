@@ -1,7 +1,10 @@
-all: three.js ammo.js
+all: three.module.js ammo.js GLTFLoader.js
 
-three.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/build/three.js
+three.module.js:
+	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/build/three.module.js
+
+GLTFLoader.js:
+	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/examples/jsm/loaders/GLTFLoader.js
 
 ammo.js:
 	wget https://raw.githubusercontent.com/kripken/ammo.js/6ec2ce66f2fbd06fae2c0013274cffdacccc3343/builds/ammo.js
@@ -18,4 +21,4 @@ launch:
 	python3 -m http.server
 
 clean:
-	rm -f three.js ammo.js
+	rm -f three.module.js ammo.js GLTFLoader.js
