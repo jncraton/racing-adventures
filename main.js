@@ -209,18 +209,14 @@ Ammo().then(function (Ammo) {
           quakeVertialMag *
             (1 +
               Math.cos(
-                time * quakeMag * quakeSpeed +
-                  pos.x() / quakeSize +
-                  pos.z() / quakeSize
+                time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
               ))
         let x =
           block.startPosition.x +
           quakeLateralMag *
             (1 +
               Math.cos(
-                time * quakeMag * quakeSpeed +
-                  pos.x() / quakeSize +
-                  pos.z() / quakeSize
+                time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
               ))
         let z =
           block.startPosition.z +
@@ -228,9 +224,7 @@ Ammo().then(function (Ammo) {
             quakeLateralMag *
             (1 +
               Math.cos(
-                time * quakeMag * quakeSpeed +
-                  pos.x() / quakeSize +
-                  pos.z() / quakeSize
+                time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
               ))
         pos.setValue(x, y, z)
         block.mesh.position.y = y
@@ -295,9 +289,7 @@ Ammo().then(function (Ammo) {
   ) {
     let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
 
-    let geometry = new Ammo.btBoxShape(
-      new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5)
-    )
+    let geometry = new Ammo.btBoxShape(new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5))
 
     let mesh = new THREE.Mesh(shape, material)
 
@@ -378,9 +370,7 @@ Ammo().then(function (Ammo) {
   function createChassisMesh(w, h, l, skin = 0) {
     let chassis = new THREE.Object3D()
 
-    chassis.add(
-      new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase[skin])
-    )
+    chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase[skin]))
 
     let top = new THREE.Mesh(
       new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
@@ -422,11 +412,7 @@ Ammo().then(function (Ammo) {
 
     // Chassis
     let geometry = new Ammo.btBoxShape(
-      new Ammo.btVector3(
-        chassisWidth * 0.5,
-        chassisHeight * 0.5,
-        chassisLength * 0.5
-      )
+      new Ammo.btVector3(chassisWidth * 0.5, chassisHeight * 0.5, chassisLength * 0.5)
     )
     let transform = new Ammo.btTransform()
     transform.setIdentity()
@@ -515,12 +501,10 @@ Ammo().then(function (Ammo) {
           else engineForce = -maxEngineForce / 2
         }
         if (actions.left) {
-          if (vehicleSteering < steeringClamp)
-            vehicleSteering += steeringIncrement
+          if (vehicleSteering < steeringClamp) vehicleSteering += steeringIncrement
         } else {
           if (actions.right) {
-            if (vehicleSteering > -steeringClamp)
-              vehicleSteering -= steeringIncrement
+            if (vehicleSteering > -steeringClamp) vehicleSteering -= steeringIncrement
           } else {
             if (vehicleSteering < -steeringIncrement)
               vehicleSteering += steeringIncrement
@@ -615,9 +599,9 @@ Ammo().then(function (Ammo) {
           1
         )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos
           .z()
-          .toFixed(2)} ${Math.floor(1 / dt)} \$${parseFloat(
-          localStorage.money
-        ).toFixed(2)}`
+          .toFixed(2)} ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(
+          2
+        )}`
       }
     }
 
@@ -637,18 +621,14 @@ Ammo().then(function (Ammo) {
       hash = courses[parseInt(localStorage.course)]
     }
 
-    const chars =
-      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
 
     for (let i = 0; i < hash.length; i += 4) {
       let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
       let blockStyle = chars.indexOf(hash[i]) % 4
       let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
       let rot = new THREE.Quaternion(0, 0, 0, 1)
-      rot.setFromAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        (-blockStyle * Math.PI) / 2
-      )
+      rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
       if (blockType == blockNames.indexOf('Road Ramp')) {
         let ramp = new THREE.Quaternion(0, 0, 0, 1)
@@ -782,37 +762,35 @@ Ammo().then(function (Ammo) {
       ry: rot.y().toFixed(2),
       rz: rot.z().toFixed(2),
     })
-    fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(
-      response => {
-        response.json().then(newActors => {
-          Object.entries(newActors).forEach(actor => {
-            if (actor[0] == localStorage.me) {
-              return
-            }
-            if (!actors[actor[0]]) {
-              actors[actor[0]] = createVehicle(
-                new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
-                false
+    fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(response => {
+      response.json().then(newActors => {
+        Object.entries(newActors).forEach(actor => {
+          if (actor[0] == localStorage.me) {
+            return
+          }
+          if (!actors[actor[0]]) {
+            actors[actor[0]] = createVehicle(
+              new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
+              false
+            )
+          } else {
+            let wt = actors[actor[0]].getChassisWorldTransform()
+            let pos = wt.getOrigin()
+            pos.setValue(actor[1].x, actor[1].y, actor[1].z)
+            wt.setOrigin(pos)
+            let rot = wt.getRotation()
+            rot.setValue(actor[1].rx, actor[1].ry, actor[1].rz, actor[1].rw)
+            wt.setRotation(rot)
+            actors[actor[0]]
+              .getRigidBody()
+              .setLinearVelocity(
+                new Ammo.btVector3(actor[1].vx, actor[1].vy, actor[1].vz)
               )
-            } else {
-              let wt = actors[actor[0]].getChassisWorldTransform()
-              let pos = wt.getOrigin()
-              pos.setValue(actor[1].x, actor[1].y, actor[1].z)
-              wt.setOrigin(pos)
-              let rot = wt.getRotation()
-              rot.setValue(actor[1].rx, actor[1].ry, actor[1].rz, actor[1].rw)
-              wt.setRotation(rot)
-              actors[actor[0]]
-                .getRigidBody()
-                .setLinearVelocity(
-                  new Ammo.btVector3(actor[1].vx, actor[1].vy, actor[1].vz)
-                )
-            }
-          })
+          }
         })
-        networkUpdate()
-      }
-    )
+      })
+      networkUpdate()
+    })
   }
 
   // - Init -
