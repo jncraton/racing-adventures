@@ -9,6 +9,7 @@ const courses = [
 ]
 const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
 let ghostSpacing = 450
+let resetFrames = 90
 let sillyGhosts = 0
 
 let quakeLateralMag = 0.1
@@ -258,7 +259,7 @@ Ammo().then(function (Ammo) {
       }
     }
 
-    while (routeHistory.length > numGhosts * ghostSpacing) {
+    while (routeHistory.length > Math.max(resetFrames, numGhosts * ghostSpacing)) {
       routeHistory.shift()
     }
 
@@ -583,7 +584,7 @@ Ammo().then(function (Ammo) {
           spotLight.target.updateMatrixWorld()
         }
 
-        if (pos.y() > -1 && rot.x() < .3 && rot.x() > -.3) {
+        if (pos.y() > -1) {
           let wage = 5
           if (localStorage.time == 'Night') {
             wage += 10
@@ -592,7 +593,20 @@ Ammo().then(function (Ammo) {
           localStorage.money = parseFloat(localStorage.money) + earnings
         } else {
           localStorage.money = parseFloat(localStorage.money) - 100
-          location.reload()
+
+          for (let i = 0; i < resetFrames; i++) {
+            let old = routeHistory.pop()
+
+            if (old) {
+              let zeroRotation = new Ammo.btQuaternion(old.rot.x, old.rot.y, old.rot.z, old.rot.w)
+              let newPos = new Ammo.btVector3(old.pos.x, old.pos.y, old.pos.z)
+              let newTransform = new Ammo.btTransform(zeroRotation, newPos)
+              body.setWorldTransform(newTransform)
+            }
+          }
+
+          vehicle.body.setLinearVelocity(new Ammo.btVector3(0,0,0))
+          vehicle.body.setAngularVelocity(new Ammo.btVector3(0,0,0))
         }
 
         document.getElementById('speedometer').innerHTML = `${speed.toFixed(
