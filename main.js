@@ -597,9 +597,12 @@ Ammo().then(function (Ammo) {
 
         document.getElementById('speedometer').innerHTML = `${speed.toFixed(
           1
-        )} km/h ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} ${pos
-          .z()
-          .toFixed(2)} ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(
+        )} km/h 
+          ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} 
+          ${pos.z().toFixed(2)} 
+          ${rot.x().toFixed(2)} ${rot.y().toFixed(2)} 
+          ${rot.z().toFixed(2)} ${rot.w().toFixed(2)} 
+          ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(
           2
         )}`
       }
