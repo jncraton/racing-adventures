@@ -598,27 +598,28 @@ Ammo().then(function (Ammo) {
             let old = routeHistory.pop()
 
             if (old) {
-              let zeroRotation = new Ammo.btQuaternion(old.rot.x, old.rot.y, old.rot.z, old.rot.w)
+              let zeroRotation = new Ammo.btQuaternion(
+                old.rot.x,
+                old.rot.y,
+                old.rot.z,
+                old.rot.w
+              )
               let newPos = new Ammo.btVector3(old.pos.x, old.pos.y, old.pos.z)
               let newTransform = new Ammo.btTransform(zeroRotation, newPos)
               body.setWorldTransform(newTransform)
             }
           }
 
-          vehicle.body.setLinearVelocity(new Ammo.btVector3(0,0,0))
-          vehicle.body.setAngularVelocity(new Ammo.btVector3(0,0,0))
+          vehicle.body.setLinearVelocity(new Ammo.btVector3(0, 0, 0))
+          vehicle.body.setAngularVelocity(new Ammo.btVector3(0, 0, 0))
         }
 
-        document.getElementById('speedometer').innerHTML = `${speed.toFixed(
-          1
-        )} km/h 
+        document.getElementById('speedometer').innerHTML = `${speed.toFixed(1)} km/h 
           ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} 
           ${pos.z().toFixed(2)} 
           ${rot.x().toFixed(2)} ${rot.y().toFixed(2)} 
           ${rot.z().toFixed(2)} ${rot.w().toFixed(2)} 
-          ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(
-          2
-        )}`
+          ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(2)}`
       }
     }
 
