@@ -583,7 +583,7 @@ Ammo().then(function (Ammo) {
           spotLight.target.updateMatrixWorld()
         }
 
-        if (pos.y() > -1) {
+        if (pos.y() > -1 && rot.x() < .3 && rot.x() > -.3) {
           let wage = 5
           if (localStorage.time == 'Night') {
             wage += 10
