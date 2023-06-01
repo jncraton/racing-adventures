@@ -592,7 +592,6 @@ Ammo().then(function (Ammo) {
           localStorage.money = parseFloat(localStorage.money) + earnings
         } else {
           localStorage.money = parseFloat(localStorage.money) - 100
-          pos.setY(1000)
           location.reload()
         }
 
