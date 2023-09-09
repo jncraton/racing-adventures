@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -122,7 +122,7 @@
             el.querySelector('input').checked = localStorage[name] == values[i]
             el.querySelector('input').dataset.price = i * 10000
             el.querySelector(
-              'span'
+              'span',
             ).textContent = `${name[0].toUpperCase()}${name.substring(1)}: ${values[i]}`
             el.querySelector('img').src = get_img ? get_img(i) : ''
             if (!localStorage[`isOwned_${name}${values[i]}`]) {
@@ -139,7 +139,7 @@
         createSection(
           'vehicle',
           [0, 1, 2, 3, 4, 5, 6, 7],
-          i => `textures/vehicles/car/${i}/left.png`
+          i => `textures/vehicles/car/${i}/left.png`,
         )
         createSection('engine', ['150HP', '200HP', '300HP', '400HP', '700HP', '1000HP'])
         createSection('course', [0, 1, 2, 3, 4, 5])

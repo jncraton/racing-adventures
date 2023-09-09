@@ -70,7 +70,7 @@ Ammo().then(function (Ammo) {
       60,
       window.innerWidth / window.innerHeight,
       0.2,
-      2000
+      2000,
     )
 
     renderer = new THREE.WebGLRenderer({antialias: true})
@@ -96,7 +96,7 @@ Ammo().then(function (Ammo) {
       .setPath(`/textures/themes/${localStorage.theme.toLowerCase()}/`)
       .load(
         new Array(6).fill(`${localStorage.time.toLowerCase()}.png`),
-        t => (t.magFilter = THREE.NearestFilter)
+        t => (t.magFilter = THREE.NearestFilter),
       )
 
     const loader = new THREE.TextureLoader()
@@ -115,7 +115,7 @@ Ammo().then(function (Ammo) {
 
     const water = new THREE.Mesh(
       new THREE.PlaneGeometry(10000, 10000),
-      loadMaterial('water.png')
+      loadMaterial('water.png'),
     )
     water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
     water.position.setY(-2)
@@ -192,7 +192,7 @@ Ammo().then(function (Ammo) {
       new Ammo.btCollisionDispatcher(collisionConfig),
       new Ammo.btDbvtBroadphase(),
       new Ammo.btSequentialImpulseConstraintSolver(),
-      collisionConfig
+      collisionConfig,
     )
     physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0))
   }
@@ -212,14 +212,18 @@ Ammo().then(function (Ammo) {
           quakeVertialMag *
             (1 +
               Math.cos(
-                time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                time * quakeMag * quakeSpeed +
+                  pos.x() / quakeSize +
+                  pos.z() / quakeSize,
               ))
         let x =
           block.startPosition.x +
           quakeLateralMag *
             (1 +
               Math.cos(
-                time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                time * quakeMag * quakeSpeed +
+                  pos.x() / quakeSize +
+                  pos.z() / quakeSize,
               ))
         let z =
           block.startPosition.z +
@@ -227,7 +231,9 @@ Ammo().then(function (Ammo) {
             quakeLateralMag *
             (1 +
               Math.cos(
-                time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize
+                time * quakeMag * quakeSpeed +
+                  pos.x() / quakeSize +
+                  pos.z() / quakeSize,
               ))
         pos.setValue(x, y, z)
         block.mesh.position.y = y
@@ -244,7 +250,7 @@ Ammo().then(function (Ammo) {
           actors['ghost' + i] = createVehicle(
             new THREE.Vector3(),
             false,
-            i % numVehicleSkins
+            i % numVehicleSkins,
           )
         }
         let wt = actors['ghost' + i].getChassisWorldTransform()
@@ -288,7 +294,7 @@ Ammo().then(function (Ammo) {
     mass = 0,
     friction = 1,
     rot = new THREE.Quaternion(0, 0, 0, 1),
-    material = materialDynamic
+    material = materialDynamic,
   ) {
     let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
 
@@ -322,7 +328,7 @@ Ammo().then(function (Ammo) {
       mass,
       motionState,
       geometry,
-      localInertia
+      localInertia,
     )
     let body = new Ammo.btRigidBody(rbInfo)
 
@@ -377,7 +383,7 @@ Ammo().then(function (Ammo) {
 
     let top = new THREE.Mesh(
       new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
-      materialCarTop[skin]
+      materialCarTop[skin],
     )
     top.position.set(0, h, -l / 8)
     chassis.add(top)
@@ -415,7 +421,7 @@ Ammo().then(function (Ammo) {
 
     // Chassis
     let geometry = new Ammo.btBoxShape(
-      new Ammo.btVector3(chassisWidth * 0.5, chassisHeight * 0.5, chassisLength * 0.5)
+      new Ammo.btVector3(chassisWidth * 0.5, chassisHeight * 0.5, chassisLength * 0.5),
     )
     let transform = new Ammo.btTransform()
     transform.setIdentity()
@@ -428,15 +434,15 @@ Ammo().then(function (Ammo) {
         massVehicle,
         motionState,
         geometry,
-        localInertia
-      )
+        localInertia,
+      ),
     )
     physicsWorld.addRigidBody(body)
     let chassisMesh = createChassisMesh(
       chassisWidth,
       chassisHeight,
       chassisLength,
-      skin
+      skin,
     )
 
     // Raycast Vehicle
@@ -470,7 +476,7 @@ Ammo().then(function (Ammo) {
         suspensionRestLength,
         wheelRadius,
         tuning,
-        isFront(index)
+        isFront(index),
       )
 
       wheelInfo.set_m_suspensionStiffness(suspensionStiffness)
@@ -603,7 +609,7 @@ Ammo().then(function (Ammo) {
                 old.rot.x,
                 old.rot.y,
                 old.rot.z,
-                old.rot.w
+                old.rot.w,
               )
               let newPos = new Ammo.btVector3(old.pos.x, old.pos.y, old.pos.z)
               let newTransform = new Ammo.btTransform(zeroRotation, newPos)
@@ -658,7 +664,7 @@ Ammo().then(function (Ammo) {
             new THREE.Vector3(
               block_size * chars.indexOf(hash[i + 1]),
               -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
-              block_size * chars.indexOf(hash[i + 3])
+              block_size * chars.indexOf(hash[i + 3]),
             ),
             block_size,
             block_height,
@@ -666,8 +672,8 @@ Ammo().then(function (Ammo) {
             0,
             1,
             rot,
-            materialRoad
-          )
+            materialRoad,
+          ),
         )
       } else {
         let material
@@ -686,7 +692,7 @@ Ammo().then(function (Ammo) {
               new THREE.Vector3(
                 block_size * chars.indexOf(hash[i + 1]) + x_off[j],
                 block_height * chars.indexOf(hash[i + 2]),
-                block_size * chars.indexOf(hash[i + 3]) + y_off[j]
+                block_size * chars.indexOf(hash[i + 3]) + y_off[j],
               ),
               block_size / 16,
               block_height * (2 + j),
@@ -694,14 +700,14 @@ Ammo().then(function (Ammo) {
               1000,
               1,
               rot,
-              materialTreeTrunk
+              materialTreeTrunk,
             )
             // Canopy
             createBox(
               new THREE.Vector3(
                 block_size * chars.indexOf(hash[i + 1]) + x_off[j],
                 block_height * (2 + j + chars.indexOf(hash[i + 2])),
-                block_size * chars.indexOf(hash[i + 3]) + y_off[j]
+                block_size * chars.indexOf(hash[i + 3]) + y_off[j],
               ),
               block_size / 4,
               block_height * 2,
@@ -709,7 +715,7 @@ Ammo().then(function (Ammo) {
               100,
               1,
               rot,
-              materialTreeTop
+              materialTreeTop,
             )
           }
         } else if (blockType == blockNames.indexOf('Wall')) {
@@ -721,7 +727,7 @@ Ammo().then(function (Ammo) {
                 new THREE.Vector3(
                   block_size * chars.indexOf(hash[i + 1]),
                   -block_height / 2 + block_size / 8 + (block_size / 4) * y,
-                  block_size * chars.indexOf(hash[i + 3])
+                  block_size * chars.indexOf(hash[i + 3]),
                 ),
                 block_size,
                 block_size / 4,
@@ -729,8 +735,8 @@ Ammo().then(function (Ammo) {
                 0,
                 1,
                 rot,
-                materialWall[blockStyle]
-              )
+                materialWall[blockStyle],
+              ),
             )
           }
         }
@@ -740,7 +746,7 @@ Ammo().then(function (Ammo) {
             new THREE.Vector3(
               block_size * chars.indexOf(hash[i + 1]),
               base_height,
-              block_size * chars.indexOf(hash[i + 3])
+              block_size * chars.indexOf(hash[i + 3]),
             ),
             block_size,
             block_height,
@@ -748,8 +754,8 @@ Ammo().then(function (Ammo) {
             0,
             1,
             rot,
-            material
-          )
+            material,
+          ),
         )
       }
     }
@@ -757,7 +763,7 @@ Ammo().then(function (Ammo) {
     actors[localStorage.me] = createVehicle(
       new THREE.Vector3(block_size + -block_size / 4, 8, block_size),
       true,
-      localStorage.vehicle
+      localStorage.vehicle,
     )
   }
 
@@ -790,7 +796,7 @@ Ammo().then(function (Ammo) {
           if (!actors[actor[0]]) {
             actors[actor[0]] = createVehicle(
               new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
-              false
+              false,
             )
           } else {
             let wt = actors[actor[0]].getChassisWorldTransform()
@@ -803,7 +809,7 @@ Ammo().then(function (Ammo) {
             actors[actor[0]]
               .getRigidBody()
               .setLinearVelocity(
-                new Ammo.btVector3(actor[1].vx, actor[1].vy, actor[1].vz)
+                new Ammo.btVector3(actor[1].vx, actor[1].vy, actor[1].vz),
               )
           }
         })
