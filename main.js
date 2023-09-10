@@ -7,8 +7,9 @@ const courses = [
   'c868c768c668c568c468c86797777667a567c467c8666776c6664556c466c8656785c6652555c465c375c265c155c065c864879476847574746473547244a144c064c863c763c6634523c463c363c2634133c053c862c762c6624512c462c362c2624122c052c761c661851154115321h2210121c051c660c560c460c360c250c150c050',
   'c83897383638353874287318720831083008c8476737c647c537c447c337c247j107c0479806570636165516741673063206a106c0362805c725c635c545c435c345c2350105c0452804c724c644c2440104c0348803a703c633c2330103c043c8326702c642c532c442c332c2420102c032c841871156115521543113211201b101c041c830c740c630c540c430c340c230c140c030',
   '9747g647j547i447j347a24767460246675593353235a135982437243624a5246334424441242823475305238343b2434113282287521652b55241028821572116311531143113011201b101',
+  'c778c668c578c468c378c268c178c867976736677557n447n347n247a147c067c8764756i616h516c466c376c266k136c076c8654745h615i515c475i315h2150135c065c8744734i614h514c464h314i2140134c074c863m723h613i513c473i313h2134123c053c8724712i612h512c462h312i212k112c072c8618711l6115521143173217211b111c061c770c660c570c460c370c260c170',
 ]
-const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground']
+const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground', 'Elevator']
 let ghostSpacing = 450
 let resetFrames = 90
 let sillyGhosts = 0
@@ -200,6 +201,15 @@ Ammo().then(function (Ammo) {
   function tick() {
     let dt = Math.min(clock.getDelta(), 0.05)
     time += dt
+
+    elevatorBlocks.forEach(block => {
+      // Handle elevator blocks
+      let wt = block.getWorldTransform()
+      let pos = wt.getOrigin()
+      let y = block.startPosition.y + Math.abs(((time % 8) - 4) / 2)
+      pos.setValue(block.startPosition.x, y, block.startPosition.z)
+      block.mesh.position.y = y
+    })
 
     let quakeMag = parseInt(localStorage.earthquake) - 3
 
@@ -635,6 +645,7 @@ Ammo().then(function (Ammo) {
   }
 
   const groundBlocks = []
+  const elevatorBlocks = []
 
   function createObjects() {
     const block_size = 16
@@ -678,7 +689,7 @@ Ammo().then(function (Ammo) {
       } else {
         let material
 
-        if (blockType == blockNames.indexOf('Road Straight')) {
+        if (blockType == blockNames.indexOf('Road Straight') || blockType == blockNames.indexOf('Elevator')) {
           material = materialRoad
         } else if (blockType == blockNames.indexOf('Road Corner')) {
           material = materialRoadCorner
@@ -757,6 +768,10 @@ Ammo().then(function (Ammo) {
             material,
           ),
         )
+
+        if (blockType == blockNames.indexOf('Elevator')) {
+          elevatorBlocks.push(groundBlocks.slice(-1)[0])
+        }
       }
     }
 
