@@ -9,7 +9,14 @@ const courses = [
   '9747g647j547i447j347a24767460246675593353235a135982437243624a5246334424441242823475305238343b2434113282287521652b55241028821572116311531143113011201b101',
   'c778c668c578c468c378c268c178c867976736677557n447n347n247a147c067c8764756i616h516c466c376c266k136c076c8654745h615i515c475i315h2150135c065c8744734i614h514c464h314i2140134c074c863m723h613i513c473i313h2134123c053c8724712i612h512c462h312i212k112c072c8618711l6115521143173217211b111c061c770c660c570c460c370c260c170',
 ]
-const blockNames = ['Road Straight', 'Road Ramp', 'Road Corner', 'Wall', 'Ground', 'Elevator']
+const blockNames = [
+  'Road Straight',
+  'Road Ramp',
+  'Road Corner',
+  'Wall',
+  'Ground',
+  'Elevator',
+]
 let ghostSpacing = 450
 let resetFrames = 90
 let sillyGhosts = 0
@@ -689,7 +696,10 @@ Ammo().then(function (Ammo) {
       } else {
         let material
 
-        if (blockType == blockNames.indexOf('Road Straight') || blockType == blockNames.indexOf('Elevator')) {
+        if (
+          blockType == blockNames.indexOf('Road Straight') ||
+          blockType == blockNames.indexOf('Elevator')
+        ) {
           material = materialRoad
         } else if (blockType == blockNames.indexOf('Road Corner')) {
           material = materialRoadCorner
