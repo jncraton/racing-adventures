@@ -27,7 +27,7 @@ let quakeVertialMag = 0.5
 let quakeSpeed = 1
 let quakeSize = 32
 
-const numVehicleSkins = 8
+const numVehicleSkins = 10
 
 let routeHistory = []
 
