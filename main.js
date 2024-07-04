@@ -116,6 +116,25 @@ Ammo().then(function (Ammo) {
       const texture = loader.load(path)
       texture.minFilter = THREE.NearestFilter
       texture.magFilter = THREE.NearestFilter
+      
+      return new THREE.MeshPhongMaterial({
+        color: 0x999999,
+        map: texture,
+        transparent: true,
+      })
+    }
+
+    const loadMaterialRepeated = (path, repeat) => {
+      const texture = loader.load(path)
+      texture.minFilter = THREE.NearestFilter
+      texture.magFilter = THREE.NearestFilter
+      
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(repeat, repeat);
+
+      texture.needsUpdate = true;
+    
       return new THREE.MeshPhongMaterial({
         color: 0x999999,
         map: texture,
@@ -124,8 +143,8 @@ Ammo().then(function (Ammo) {
     }
 
     const water = new THREE.Mesh(
-      new THREE.PlaneGeometry(10000, 10000),
-      loadMaterial('water.png'),
+      new THREE.PlaneGeometry(1600, 1600),
+      loadMaterialRepeated('water.png', 100),
     )
     water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
     water.position.setY(-2)
