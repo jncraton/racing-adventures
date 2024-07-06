@@ -37,7 +37,7 @@ let showWireframe = false
 
 Ammo().then(function (Ammo) {
   // Graphics variables
-  let camera, scene, renderer, spotLight
+  let camera, scene, renderer, spotLight, water
   let clock = new THREE.Clock()
   let materialDynamic,
     materialGround,
@@ -140,7 +140,7 @@ Ammo().then(function (Ammo) {
       })
     }
 
-    const water = new THREE.Mesh(
+    water = new THREE.Mesh(
       new THREE.PlaneGeometry(1600, 1600),
       loadMaterialRepeated('water.png', 100),
     )
@@ -227,6 +227,12 @@ Ammo().then(function (Ammo) {
   function tick() {
     let dt = Math.min(clock.getDelta(), 0.05)
     time += dt
+
+    // Animate water
+    water.material.map.offset.x = .02*Math.sin(time*3)
+    water.material.map.offset.y = .01*Math.sin(time*3)
+    water.position.setY(-2 + .3*Math.sin(time*3))
+    water.material.map.needsUpdate = true
 
     elevatorBlocks.forEach(block => {
       // Handle elevator blocks
