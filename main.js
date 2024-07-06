@@ -69,6 +69,7 @@ Ammo().then(function (Ammo) {
     KeyS: 'braking',
     KeyA: 'left',
     KeyD: 'right',
+    KeyR: 'reset',
   }
 
   // - Functions -
@@ -633,16 +634,14 @@ Ammo().then(function (Ammo) {
           spotLight.target.updateMatrixWorld()
         }
 
-        if (pos.y() > -1) {
-          let wage = 5
-          if (localStorage.time == 'Night') {
-            wage += 10
-          }
-          const earnings = dt * Math.abs(speed) * wage
-          localStorage.money = parseFloat(localStorage.money) + earnings
-        } else {
-          localStorage.money = parseFloat(localStorage.money) - 100
+        let wage = 5
+        if (localStorage.time == 'Night') {
+          wage += 10
+        }
+        const earnings = dt * Math.abs(speed) * wage
+        localStorage.money = parseFloat(localStorage.money) + earnings
 
+        if (actions.reset || pos.y() <= -1) {
           for (let i = 0; i < resetFrames; i++) {
             let old = routeHistory.pop()
 
