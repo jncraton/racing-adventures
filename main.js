@@ -147,22 +147,27 @@ Ammo().then(function (Ammo) {
     }
 
     materialOcean = loadMaterialRepeated('water.png', 100)
-    materialWater = loadMaterialRepeated('water.png', 1)
 
     water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
     water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
     water.position.setY(-2)
     scene.add(water)
 
-    materialGround = new Array(6).fill(loadMaterial('ground.png'))
-    for (let i = 0; i < 6; i++) {
-      // Adjust ground sides to avoid stretching
-      if (i < 2 || i > 3) {
-        materialGround[i] = materialGround[i].clone()
-        materialGround[i].map = materialGround[i].map.clone()
-        materialGround[i].map.repeat.set(1.0, 0.25)
+    const loadBlockMaterials = filename => {
+      let materials = new Array(6).fill(loadMaterial(filename))
+      for (let i = 0; i < 6; i++) {
+        // Adjust ground sides to avoid stretching
+        if (i < 2 || i > 3) {
+          materials[i] = materials[i].clone()
+          materials[i].map = materials[i].map.clone()
+          materials[i].map.repeat.set(1.0, 0.25)
+        }
       }
+      return materials
     }
+
+    materialGround = loadBlockMaterials('ground.png')
+    materialWater = loadBlockMaterials('water.png')
     materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
     materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
     const roadMaterial = loadMaterial('road.png')
@@ -243,9 +248,9 @@ Ammo().then(function (Ammo) {
     time += dt
 
     // Animate water
-    materialWater.map.offset.x = 0.02 * Math.sin(time * 3)
-    materialWater.map.offset.y = 0.01 * Math.sin(time * 3)
-    materialWater.map.needsUpdate = true
+    materialWater[2].map.offset.x = 0.02 * Math.sin(time * 3)
+    materialWater[2].map.offset.y = 0.01 * Math.sin(time * 3)
+    materialWater[2].map.needsUpdate = true
 
     water.material.map.offset.x = 0.02 * Math.sin(time * 3)
     water.material.map.offset.y = 0.01 * Math.sin(time * 3)
