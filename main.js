@@ -119,7 +119,7 @@ Ammo().then(function (Ammo) {
       const texture = loader.load(path)
       texture.minFilter = THREE.NearestFilter
       texture.magFilter = THREE.NearestFilter
-      
+
       return new THREE.MeshPhongMaterial({
         color: 0x999999,
         map: texture,
@@ -129,13 +129,13 @@ Ammo().then(function (Ammo) {
 
     const loadMaterialRepeated = (path, repeat) => {
       const texture = loader.load(path)
-      
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(repeat, repeat);
 
-      texture.needsUpdate = true;
-    
+      texture.wrapS = THREE.RepeatWrapping
+      texture.wrapT = THREE.RepeatWrapping
+      texture.repeat.set(repeat, repeat)
+
+      texture.needsUpdate = true
+
       return new THREE.MeshPhongMaterial({
         color: 0x999999,
         map: texture,
@@ -232,9 +232,9 @@ Ammo().then(function (Ammo) {
     time += dt
 
     // Animate water
-    water.material.map.offset.x = .02*Math.sin(time*3)
-    water.material.map.offset.y = .01*Math.sin(time*3)
-    water.position.setY(-2 + .3*Math.sin(time*3))
+    water.material.map.offset.x = 0.02 * Math.sin(time * 3)
+    water.material.map.offset.y = 0.01 * Math.sin(time * 3)
+    water.position.setY(-2 + 0.3 * Math.sin(time * 3))
     water.material.map.needsUpdate = true
 
     elevatorBlocks.forEach(block => {
