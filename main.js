@@ -20,6 +20,7 @@ const blockNames = [
   'Wall',
   'Ground',
   'Elevator',
+  'Water',
 ]
 let ghostSpacing = 450
 let resetFrames = 90
@@ -51,7 +52,9 @@ Ammo().then(function (Ammo) {
     materialWheel = [],
     materialCarBase = [],
     materialCarTop = [],
-    materialWall = []
+    materialWall = [],
+    materialWater,
+    materialOcean
 
   // Player data
   if (!localStorage.money) localStorage.money = 0
@@ -143,10 +146,10 @@ Ammo().then(function (Ammo) {
       })
     }
 
-    water = new THREE.Mesh(
-      new THREE.PlaneGeometry(1600, 1600),
-      loadMaterialRepeated('water.png', 100),
-    )
+    materialOcean = loadMaterialRepeated('water.png', 100)
+    materialWater = loadMaterialRepeated('water.png', 1)
+
+    water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
     water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
     water.position.setY(-2)
     scene.add(water)
@@ -232,6 +235,10 @@ Ammo().then(function (Ammo) {
     time += dt
 
     // Animate water
+    materialWater.map.offset.x = 0.02 * Math.sin(time * 3)
+    materialWater.map.offset.y = 0.01 * Math.sin(time * 3)
+    materialWater.map.needsUpdate = true
+
     water.material.map.offset.x = 0.02 * Math.sin(time * 3)
     water.material.map.offset.y = 0.01 * Math.sin(time * 3)
     water.position.setY(-2 + 0.3 * Math.sin(time * 3))
@@ -340,6 +347,7 @@ Ammo().then(function (Ammo) {
     friction = 1,
     rot = new THREE.Quaternion(0, 0, 0, 1),
     material = materialDynamic,
+    physics = true,
   ) {
     let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
 
@@ -379,23 +387,25 @@ Ammo().then(function (Ammo) {
 
     body.setFriction(friction)
 
-    physicsWorld.addRigidBody(body)
+    if (physics) {
+      physicsWorld.addRigidBody(body)
 
-    if (mass > 0) {
-      // Sync physics and graphics
-      const sync = () => {
-        let ms = body.getMotionState()
-        if (ms) {
-          let transform = new Ammo.btTransform()
-          ms.getWorldTransform(transform)
-          let pos = transform.getOrigin()
-          let rot = transform.getRotation()
-          mesh.position.set(pos.x(), pos.y(), pos.z())
-          mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+      if (mass > 0) {
+        // Sync physics and graphics
+        const sync = () => {
+          let ms = body.getMotionState()
+          if (ms) {
+            let transform = new Ammo.btTransform()
+            ms.getWorldTransform(transform)
+            let pos = transform.getOrigin()
+            let rot = transform.getRotation()
+            mesh.position.set(pos.x(), pos.y(), pos.z())
+            mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+          }
         }
-      }
 
-      syncList.push(sync)
+        syncList.push(sync)
+      }
     }
 
     body.forceSync = () => {
@@ -719,6 +729,27 @@ Ammo().then(function (Ammo) {
             materialRoad,
           ),
         )
+      } else if (blockType == blockNames.indexOf('Water')) {
+        base_height = -block_height
+        for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
+          groundBlocks.push(
+            createBox(
+              new THREE.Vector3(
+                block_size * chars.indexOf(hash[i + 1]),
+                block_height * y - 0.2,
+                block_size * chars.indexOf(hash[i + 3]),
+              ),
+              block_size,
+              block_height,
+              block_size,
+              0,
+              1,
+              rot,
+              materialWater,
+              false,
+            ),
+          )
+        }
       } else {
         let material
 
