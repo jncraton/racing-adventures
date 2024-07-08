@@ -155,6 +155,14 @@ Ammo().then(function (Ammo) {
     scene.add(water)
 
     materialGround = new Array(6).fill(loadMaterial('ground.png'))
+    for (let i = 0; i < 6; i++) {
+      // Adjust ground sides to avoid stretching
+      if (i < 2 || i > 3) {
+        materialGround[i] = materialGround[i].clone()
+        materialGround[i].map = materialGround[i].map.clone()
+        materialGround[i].map.repeat.set(1.0, 0.25)
+      }
+    }
     materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
     materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
     const roadMaterial = loadMaterial('road.png')
