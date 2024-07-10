@@ -780,14 +780,17 @@ Ammo().then(function (Ammo) {
           const y_off = [0, 0.2 * block_size, -0.25 * block_size]
           for (let j = 0; j < blockStyle; j++) {
             // Trunk
+            let trunk_height = block_height * (2 + j)
+
             createBox(
               new THREE.Vector3(
                 block_size * chars.indexOf(hash[i + 1]) + x_off[j],
-                block_height * chars.indexOf(hash[i + 2]),
+                (trunk_height - block_height) / 2 +
+                  block_height * chars.indexOf(hash[i + 2]),
                 block_size * chars.indexOf(hash[i + 3]) + y_off[j],
               ),
               block_size / 16,
-              block_height * (2 + j),
+              trunk_height,
               block_size / 16,
               1000,
               1,
@@ -798,7 +801,9 @@ Ammo().then(function (Ammo) {
             createBox(
               new THREE.Vector3(
                 block_size * chars.indexOf(hash[i + 1]) + x_off[j],
-                block_height * (2 + j + chars.indexOf(hash[i + 2])),
+                block_height / 2 +
+                  trunk_height +
+                  block_height * chars.indexOf(hash[i + 2]),
                 block_size * chars.indexOf(hash[i + 3]) + y_off[j],
               ),
               block_size / 4,
