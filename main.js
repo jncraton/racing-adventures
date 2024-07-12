@@ -601,8 +601,18 @@ Ammo().then(function (Ammo) {
         vehicle.body.activate()
       }
 
-      vehicle.applyEngineForce(engineForce, BACK_LEFT)
-      vehicle.applyEngineForce(engineForce, BACK_RIGHT)
+      if (localStorage.drive == 'All') {
+        vehicle.applyEngineForce(engineForce / 2, FRONT_LEFT)
+        vehicle.applyEngineForce(engineForce / 2, FRONT_RIGHT)
+        vehicle.applyEngineForce(engineForce / 2, BACK_LEFT)
+        vehicle.applyEngineForce(engineForce / 2, BACK_RIGHT)
+      } else if (localStorage.drive == 'Front') {
+        vehicle.applyEngineForce(engineForce, FRONT_LEFT)
+        vehicle.applyEngineForce(engineForce, FRONT_RIGHT)
+      } else {
+        vehicle.applyEngineForce(engineForce, BACK_LEFT)
+        vehicle.applyEngineForce(engineForce, BACK_RIGHT)
+      }
 
       vehicle.setBrake(breakingForce / 2, FRONT_LEFT)
       vehicle.setBrake(breakingForce / 2, FRONT_RIGHT)
