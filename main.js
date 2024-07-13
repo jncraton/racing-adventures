@@ -23,6 +23,11 @@ const blockNames = [
   'Elevator',
   'Water',
 ]
+
+const config = {
+  treeCanopy: true,
+}
+
 let ghostSpacing = 450
 let resetFrames = 90
 let sillyGhosts = 0
@@ -797,22 +802,24 @@ function createObjects() {
             materialTreeTrunk,
           )
           // Canopy
-          createBox(
-            new THREE.Vector3(
-              block_size * chars.indexOf(hash[i + 1]) + x_off[j],
-              block_height / 2 +
-                trunk_height +
-                block_height * chars.indexOf(hash[i + 2]),
-              block_size * chars.indexOf(hash[i + 3]) + y_off[j],
-            ),
-            block_size / 4,
-            block_height * 2,
-            block_size / 4,
-            100,
-            1,
-            rot,
-            materialTreeTop,
-          )
+          if (config.treeCanopy) {
+            createBox(
+              new THREE.Vector3(
+                block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+                block_height / 2 +
+                  trunk_height +
+                  block_height * chars.indexOf(hash[i + 2]),
+                block_size * chars.indexOf(hash[i + 3]) + y_off[j],
+              ),
+              block_size / 4,
+              block_height * 2,
+              block_size / 4,
+              100,
+              1,
+              rot,
+              materialTreeTop,
+            )
+          }
         }
       } else if (blockType == blockNames.indexOf('Wall')) {
         material = materialGround
@@ -919,6 +926,13 @@ function networkUpdate() {
 }
 
 // - Init -
+try {
+  const response = await fetch(
+    `textures/themes/${localStorage.theme.toLowerCase()}/config.json`,
+  )
+  Object.assign(config, await response.json())
+} catch {}
+
 initGraphics()
 initPhysics()
 createObjects()
