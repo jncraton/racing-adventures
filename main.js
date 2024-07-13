@@ -25,7 +25,9 @@ const blockNames = [
 ]
 
 const config = {
-  treeCanopy: true,
+  treeCanopy: 'square',
+  treeCanopyHeight: 1,
+  treeTrunkHeight: 4,
 }
 
 let ghostSpacing = 450
@@ -362,8 +364,11 @@ function createBox(
   rot = new THREE.Quaternion(0, 0, 0, 1),
   material = materialDynamic,
   physics = true,
+  shape = '',
 ) {
-  let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+  if (!shape) {
+    shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+  }
 
   let geometry = new Ammo.btBoxShape(new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5))
 
@@ -782,7 +787,7 @@ function createObjects() {
         material = materialGround
         for (let j = 0; j < blockStyle; j++) {
           // Trunk
-          let trunk_height = block_height * (2 + j)
+          let trunk_height = (block_height * (2 + j) * config.treeTrunkHeight) / 4
 
           const x_off = block_size * ([0, -0.3, 0.3][j] + (0.12 * Math.random() - 0.06))
           const y_off = block_size * ([0, 0.3, -0.3][j] + (0.12 * Math.random() - 0.06))
@@ -804,21 +809,31 @@ function createObjects() {
           )
           // Canopy
           if (config.treeCanopy) {
+            let shape = undefined
+            let canopy_height = block_height * 2 * config.treeCanopyHeight
+
+            if (config.treeCanopy == 'cone') {
+              shape = new THREE.ConeGeometry(block_size / 4, canopy_height, 4)
+            }
+
             createBox(
               new THREE.Vector3(
                 block_size * chars.indexOf(hash[i + 1]) + x_off,
-                block_height / 2 +
+                block_height * chars.indexOf(hash[i + 2]) +
+                  -block_height / 2 +
                   trunk_height +
-                  block_height * chars.indexOf(hash[i + 2]),
+                  canopy_height / 2,
                 block_size * chars.indexOf(hash[i + 3]) + y_off,
               ),
               block_size / 4,
-              block_height * 2,
+              canopy_height,
               block_size / 4,
               100,
               1,
               rot,
               materialTreeTop,
+              true,
+              shape,
             )
           }
         }
