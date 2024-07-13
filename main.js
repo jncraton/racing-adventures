@@ -39,903 +39,903 @@ let routeHistory = []
 // Debug options
 let showWireframe = false
 
-Ammo().then(function (Ammo) {
-  // Graphics variables
-  let camera, scene, renderer, spotLight, water
-  let clock = new THREE.Clock()
-  let materialDynamic,
-    materialGround,
-    materialTreeTrunk,
-    materialTreeTop,
-    materialRoad,
-    materialRoadCorner,
-    materialInteractive,
-    materialWheel = [],
-    materialCarBase = [],
-    materialCarTop = [],
-    materialWall = [],
-    materialWater,
-    materialOcean
+await Ammo()
 
-  // Player data
-  if (!localStorage.money) localStorage.money = 0
-  if (!localStorage.vehicle) localStorage.vehicle = '0'
-  if (!localStorage.me) localStorage.me = Math.floor(Math.random() * 10000)
+// Graphics variables
+let camera, scene, renderer, spotLight, water
+let clock = new THREE.Clock()
+let materialDynamic,
+  materialGround,
+  materialTreeTrunk,
+  materialTreeTop,
+  materialRoad,
+  materialRoadCorner,
+  materialInteractive,
+  materialWheel = [],
+  materialCarBase = [],
+  materialCarTop = [],
+  materialWall = [],
+  materialWater,
+  materialOcean
 
-  // Physics variables
-  let physicsWorld
-  let syncList = []
-  let time = 0
-  let actors = {}
+// Player data
+if (!localStorage.money) localStorage.money = 0
+if (!localStorage.vehicle) localStorage.vehicle = '0'
+if (!localStorage.me) localStorage.me = Math.floor(Math.random() * 10000)
 
-  // Keybord actions
-  let actions = {}
-  let keysActions = {
-    KeyW: 'acceleration',
-    KeyS: 'braking',
-    KeyA: 'left',
-    KeyD: 'right',
-    KeyR: 'reset',
+// Physics variables
+let physicsWorld
+let syncList = []
+let time = 0
+let actors = {}
+
+// Keybord actions
+let actions = {}
+let keysActions = {
+  KeyW: 'acceleration',
+  KeyS: 'braking',
+  KeyA: 'left',
+  KeyD: 'right',
+  KeyR: 'reset',
+}
+
+// - Functions -
+
+function initGraphics() {
+  scene = new THREE.Scene()
+
+  camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.2,
+    2000,
+  )
+
+  renderer = new THREE.WebGLRenderer({antialias: true})
+  renderer.setClearColor(0xa7cbfa)
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(window.innerWidth, window.innerHeight)
+
+  let lightLevel = localStorage.time == 'Day' ? 1.0 : 0.25
+
+  scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
+  const sun = new THREE.DirectionalLight(0xffffff, lightLevel)
+  sun.position.set(1000, 1000, 1000)
+  scene.add(sun)
+
+  if (localStorage.headlights != 'Off') {
+    spotLight = new THREE.SpotLight(0xf7e51b)
+    spotLight.angle = Math.PI / 4
+    spotLight.distance = 100.0
+    scene.add(spotLight)
   }
 
-  // - Functions -
-
-  function initGraphics() {
-    scene = new THREE.Scene()
-
-    camera = new THREE.PerspectiveCamera(
-      60,
-      window.innerWidth / window.innerHeight,
-      0.2,
-      2000,
+  scene.background = new THREE.CubeTextureLoader()
+    .setPath(`/textures/themes/${localStorage.theme.toLowerCase()}/`)
+    .load(
+      new Array(6).fill(`${localStorage.time.toLowerCase()}.png`),
+      t => (t.magFilter = THREE.NearestFilter),
     )
 
-    renderer = new THREE.WebGLRenderer({antialias: true})
-    renderer.setClearColor(0xa7cbfa)
-    renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.setSize(window.innerWidth, window.innerHeight)
+  const loader = new THREE.TextureLoader()
+  loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
-    let lightLevel = localStorage.time == 'Day' ? 1.0 : 0.25
+  const loadMaterial = path => {
+    const texture = loader.load(path)
+    texture.minFilter = THREE.NearestFilter
+    texture.magFilter = THREE.NearestFilter
 
-    scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
-    const sun = new THREE.DirectionalLight(0xffffff, lightLevel)
-    sun.position.set(1000, 1000, 1000)
-    scene.add(sun)
+    return new THREE.MeshPhongMaterial({
+      color: 0x999999,
+      map: texture,
+      transparent: true,
+    })
+  }
 
-    if (localStorage.headlights != 'Off') {
-      spotLight = new THREE.SpotLight(0xf7e51b)
-      spotLight.angle = Math.PI / 4
-      spotLight.distance = 100.0
-      scene.add(spotLight)
-    }
+  const loadMaterialRepeated = (path, repeat) => {
+    const texture = loader.load(path)
 
-    scene.background = new THREE.CubeTextureLoader()
-      .setPath(`/textures/themes/${localStorage.theme.toLowerCase()}/`)
-      .load(
-        new Array(6).fill(`${localStorage.time.toLowerCase()}.png`),
-        t => (t.magFilter = THREE.NearestFilter),
-      )
+    texture.wrapS = THREE.RepeatWrapping
+    texture.wrapT = THREE.RepeatWrapping
+    texture.repeat.set(repeat, repeat)
 
-    const loader = new THREE.TextureLoader()
-    loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
+    texture.needsUpdate = true
 
-    const loadMaterial = path => {
-      const texture = loader.load(path)
-      texture.minFilter = THREE.NearestFilter
-      texture.magFilter = THREE.NearestFilter
+    return new THREE.MeshPhongMaterial({
+      color: 0x999999,
+      map: texture,
+      transparent: true,
+    })
+  }
 
-      return new THREE.MeshPhongMaterial({
-        color: 0x999999,
-        map: texture,
-        transparent: true,
-      })
-    }
+  materialOcean = loadMaterialRepeated('water.png', 100)
 
-    const loadMaterialRepeated = (path, repeat) => {
-      const texture = loader.load(path)
+  water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
+  water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
+  water.position.setY(-2)
+  scene.add(water)
 
-      texture.wrapS = THREE.RepeatWrapping
-      texture.wrapT = THREE.RepeatWrapping
-      texture.repeat.set(repeat, repeat)
-
-      texture.needsUpdate = true
-
-      return new THREE.MeshPhongMaterial({
-        color: 0x999999,
-        map: texture,
-        transparent: true,
-      })
-    }
-
-    materialOcean = loadMaterialRepeated('water.png', 100)
-
-    water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
-    water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
-    water.position.setY(-2)
-    scene.add(water)
-
-    const loadBlockMaterials = filename => {
-      let materials = new Array(6).fill(loadMaterial(filename))
-      for (let i = 0; i < 6; i++) {
-        // Adjust ground sides to avoid stretching
-        if (i < 2 || i > 3) {
-          materials[i] = materials[i].clone()
-          materials[i].map = materials[i].map.clone()
-          materials[i].map.repeat.set(1.0, 0.25)
-        }
+  const loadBlockMaterials = filename => {
+    let materials = new Array(6).fill(loadMaterial(filename))
+    for (let i = 0; i < 6; i++) {
+      // Adjust ground sides to avoid stretching
+      if (i < 2 || i > 3) {
+        materials[i] = materials[i].clone()
+        materials[i].map = materials[i].map.clone()
+        materials[i].map.repeat.set(1.0, 0.25)
       }
-      return materials
     }
-
-    materialGround = loadBlockMaterials('ground.png')
-    materialWater = loadBlockMaterials('water.png')
-    materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
-    materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
-    const roadMaterial = loadMaterial('road.png')
-    const roadCornerMaterial = loadMaterial('road-corner.png')
-    const roadSideMaterial = loadMaterial('road-side.png')
-
-    for (let i = 0; i < 1; i++) {
-      materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
-      materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
-    }
-
-    for (let i = 0; i < numVehicleSkins; i++) {
-      loader.setPath(`textures/vehicles/car/${i}/`)
-      materialCarBase.push([
-        loadMaterial('left.png'),
-        loadMaterial('right.png'),
-        loadMaterial('hood.png'),
-        loadMaterial('hood.png'),
-        loadMaterial('front.png'),
-        loadMaterial('back.png'),
-      ])
-      materialCarTop.push(new Array(6).fill(loadMaterial('top.png')))
-      materialWheel.push([
-        loadMaterial('tire.png'),
-        loadMaterial('hubcap.png'),
-        loadMaterial('hubcap.png'),
-      ])
-    }
-
-    materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
-
-    materialRoad = [
-      roadSideMaterial,
-      roadSideMaterial,
-      roadMaterial,
-      roadSideMaterial,
-      roadSideMaterial,
-      roadSideMaterial,
-    ]
-    materialRoadCorner = [
-      roadSideMaterial,
-      roadSideMaterial,
-      roadCornerMaterial,
-      roadSideMaterial,
-      roadSideMaterial,
-      roadSideMaterial,
-    ]
-
-    materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
-
-    document.getElementById('container').replaceChildren(renderer.domElement)
-
-    window.addEventListener('resize', onWindowResize, false)
-    window.addEventListener('keydown', keychange)
-    window.addEventListener('keyup', keychange)
+    return materials
   }
 
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight
-    camera.updateProjectionMatrix()
+  materialGround = loadBlockMaterials('ground.png')
+  materialWater = loadBlockMaterials('water.png')
+  materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
+  materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
+  const roadMaterial = loadMaterial('road.png')
+  const roadCornerMaterial = loadMaterial('road-corner.png')
+  const roadSideMaterial = loadMaterial('road-side.png')
 
-    renderer.setSize(window.innerWidth, window.innerHeight)
+  for (let i = 0; i < 1; i++) {
+    materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
+    materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
   }
 
-  function initPhysics() {
-    let collisionConfig = new Ammo.btDefaultCollisionConfiguration()
-    physicsWorld = new Ammo.btDiscreteDynamicsWorld(
-      new Ammo.btCollisionDispatcher(collisionConfig),
-      new Ammo.btDbvtBroadphase(),
-      new Ammo.btSequentialImpulseConstraintSolver(),
-      collisionConfig,
-    )
-    physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0))
+  for (let i = 0; i < numVehicleSkins; i++) {
+    loader.setPath(`textures/vehicles/car/${i}/`)
+    materialCarBase.push([
+      loadMaterial('left.png'),
+      loadMaterial('right.png'),
+      loadMaterial('hood.png'),
+      loadMaterial('hood.png'),
+      loadMaterial('front.png'),
+      loadMaterial('back.png'),
+    ])
+    materialCarTop.push(new Array(6).fill(loadMaterial('top.png')))
+    materialWheel.push([
+      loadMaterial('tire.png'),
+      loadMaterial('hubcap.png'),
+      loadMaterial('hubcap.png'),
+    ])
   }
 
-  function tick() {
-    let dt = Math.min(clock.getDelta(), 0.05)
-    time += dt
+  materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
 
-    // Animate water
-    materialWater[2].map.offset.x = 0.02 * Math.sin(time * 3)
-    materialWater[2].map.offset.y = 0.01 * Math.sin(time * 3)
-    materialWater[2].map.needsUpdate = true
+  materialRoad = [
+    roadSideMaterial,
+    roadSideMaterial,
+    roadMaterial,
+    roadSideMaterial,
+    roadSideMaterial,
+    roadSideMaterial,
+  ]
+  materialRoadCorner = [
+    roadSideMaterial,
+    roadSideMaterial,
+    roadCornerMaterial,
+    roadSideMaterial,
+    roadSideMaterial,
+    roadSideMaterial,
+  ]
 
-    water.material.map.offset.x = 0.02 * Math.sin(time * 3)
-    water.material.map.offset.y = 0.01 * Math.sin(time * 3)
-    water.position.setY(-2 + 0.3 * Math.sin(time * 3))
-    water.material.map.needsUpdate = true
+  materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
-    elevatorBlocks.forEach(block => {
-      // Handle elevator blocks
+  document.getElementById('container').replaceChildren(renderer.domElement)
+
+  window.addEventListener('resize', onWindowResize, false)
+  window.addEventListener('keydown', keychange)
+  window.addEventListener('keyup', keychange)
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
+
+  renderer.setSize(window.innerWidth, window.innerHeight)
+}
+
+function initPhysics() {
+  let collisionConfig = new Ammo.btDefaultCollisionConfiguration()
+  physicsWorld = new Ammo.btDiscreteDynamicsWorld(
+    new Ammo.btCollisionDispatcher(collisionConfig),
+    new Ammo.btDbvtBroadphase(),
+    new Ammo.btSequentialImpulseConstraintSolver(),
+    collisionConfig,
+  )
+  physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0))
+}
+
+function tick() {
+  let dt = Math.min(clock.getDelta(), 0.05)
+  time += dt
+
+  // Animate water
+  materialWater[2].map.offset.x = 0.02 * Math.sin(time * 3)
+  materialWater[2].map.offset.y = 0.01 * Math.sin(time * 3)
+  materialWater[2].map.needsUpdate = true
+
+  water.material.map.offset.x = 0.02 * Math.sin(time * 3)
+  water.material.map.offset.y = 0.01 * Math.sin(time * 3)
+  water.position.setY(-2 + 0.3 * Math.sin(time * 3))
+  water.material.map.needsUpdate = true
+
+  elevatorBlocks.forEach(block => {
+    // Handle elevator blocks
+    let wt = block.getWorldTransform()
+    let pos = wt.getOrigin()
+    let y = block.startPosition.y + Math.abs(((time % 8) - 4) / 2)
+    pos.setValue(block.startPosition.x, y, block.startPosition.z)
+    block.mesh.position.y = y
+  })
+
+  let quakeMag = parseInt(localStorage.earthquake) - 3
+
+  if (quakeMag > 0) {
+    groundBlocks.forEach(block => {
       let wt = block.getWorldTransform()
       let pos = wt.getOrigin()
-      let y = block.startPosition.y + Math.abs(((time % 8) - 4) / 2)
-      pos.setValue(block.startPosition.x, y, block.startPosition.z)
-      block.mesh.position.y = y
-    })
-
-    let quakeMag = parseInt(localStorage.earthquake) - 3
-
-    if (quakeMag > 0) {
-      groundBlocks.forEach(block => {
-        let wt = block.getWorldTransform()
-        let pos = wt.getOrigin()
-        let y =
-          block.startPosition.y +
-          quakeVertialMag *
-            (1 +
-              Math.cos(
-                time * quakeMag * quakeSpeed +
-                  pos.x() / quakeSize +
-                  pos.z() / quakeSize,
-              ))
-        let x =
-          block.startPosition.x +
+      let y =
+        block.startPosition.y +
+        quakeVertialMag *
+          (1 +
+            Math.cos(
+              time * quakeMag * quakeSpeed +
+                pos.x() / quakeSize +
+                pos.z() / quakeSize,
+            ))
+      let x =
+        block.startPosition.x +
+        quakeLateralMag *
+          (1 +
+            Math.cos(
+              time * quakeMag * quakeSpeed +
+                pos.x() / quakeSize +
+                pos.z() / quakeSize,
+            ))
+      let z =
+        block.startPosition.z +
+        quakeMag *
           quakeLateralMag *
-            (1 +
-              Math.cos(
-                time * quakeMag * quakeSpeed +
-                  pos.x() / quakeSize +
-                  pos.z() / quakeSize,
-              ))
-        let z =
-          block.startPosition.z +
-          quakeMag *
-            quakeLateralMag *
-            (1 +
-              Math.cos(
-                time * quakeMag * quakeSpeed +
-                  pos.x() / quakeSize +
-                  pos.z() / quakeSize,
-              ))
-        pos.setValue(x, y, z)
-        block.mesh.position.y = y
-        block.mesh.position.x = x
-        block.mesh.position.z = z
-      })
-    }
+          (1 +
+            Math.cos(
+              time * quakeMag * quakeSpeed +
+                pos.x() / quakeSize +
+                pos.z() / quakeSize,
+            ))
+      pos.setValue(x, y, z)
+      block.mesh.position.y = y
+      block.mesh.position.x = x
+      block.mesh.position.z = z
+    })
+  }
 
-    let numGhosts = parseInt(localStorage.ghosts)
+  let numGhosts = parseInt(localStorage.ghosts)
 
-    for (let i = 1; i <= numGhosts; i++) {
-      if (routeHistory.length >= ghostSpacing * i) {
-        if (!actors['ghost' + i]) {
-          actors['ghost' + i] = createVehicle(
-            new THREE.Vector3(),
-            false,
-            i % numVehicleSkins,
-          )
-        }
-        let wt = actors['ghost' + i].getChassisWorldTransform()
-        let pos = wt.getOrigin()
-        let hist = routeHistory[routeHistory.length - ghostSpacing * i]
-        pos.setValue(hist.pos.x, hist.pos.y + 0.3 + sillyGhosts, hist.pos.z)
-        wt.setOrigin(pos)
-        if (!sillyGhosts) {
-          let rot = wt.getRotation()
-          rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
-          wt.setRotation(rot)
-        }
+  for (let i = 1; i <= numGhosts; i++) {
+    if (routeHistory.length >= ghostSpacing * i) {
+      if (!actors['ghost' + i]) {
+        actors['ghost' + i] = createVehicle(
+          new THREE.Vector3(),
+          false,
+          i % numVehicleSkins,
+        )
+      }
+      let wt = actors['ghost' + i].getChassisWorldTransform()
+      let pos = wt.getOrigin()
+      let hist = routeHistory[routeHistory.length - ghostSpacing * i]
+      pos.setValue(hist.pos.x, hist.pos.y + 0.3 + sillyGhosts, hist.pos.z)
+      wt.setOrigin(pos)
+      if (!sillyGhosts) {
+        let rot = wt.getRotation()
+        rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
+        wt.setRotation(rot)
       }
     }
-
-    while (routeHistory.length > Math.max(resetFrames, numGhosts * ghostSpacing)) {
-      routeHistory.shift()
-    }
-
-    for (let i = 0; i < syncList.length; i++) syncList[i](dt)
-    physicsWorld.stepSimulation(dt, 0)
-    renderer.render(scene, camera)
-
-    requestAnimationFrame(() => requestAnimationFrame(tick))
   }
 
-  function keychange(e) {
-    if (keysActions[e.code]) {
-      actions[keysActions[e.code]] = e.type == 'keydown'
-      e.preventDefault()
-      e.stopPropagation()
-      return false
+  while (routeHistory.length > Math.max(resetFrames, numGhosts * ghostSpacing)) {
+    routeHistory.shift()
+  }
+
+  for (let i = 0; i < syncList.length; i++) syncList[i](dt)
+  physicsWorld.stepSimulation(dt, 0)
+  renderer.render(scene, camera)
+
+  requestAnimationFrame(() => requestAnimationFrame(tick))
+}
+
+function keychange(e) {
+  if (keysActions[e.code]) {
+    actions[keysActions[e.code]] = e.type == 'keydown'
+    e.preventDefault()
+    e.stopPropagation()
+    return false
+  }
+}
+
+function createBox(
+  pos,
+  w,
+  l,
+  h,
+  mass = 0,
+  friction = 1,
+  rot = new THREE.Quaternion(0, 0, 0, 1),
+  material = materialDynamic,
+  physics = true,
+) {
+  let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
+
+  let geometry = new Ammo.btBoxShape(new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5))
+
+  let mesh = new THREE.Mesh(shape, material)
+
+  mesh.position.copy(pos)
+  mesh.quaternion.copy(rot)
+  scene.add(mesh)
+
+  if (showWireframe) {
+    const geo = new THREE.WireframeGeometry(mesh.geometry)
+    const mat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5})
+    const wireframe = new THREE.LineSegments(geo, mat)
+    wireframe.position.copy(pos)
+    wireframe.quaternion.copy(rot)
+    scene.add(wireframe)
+  }
+
+  let transform = new Ammo.btTransform()
+  transform.setIdentity()
+  transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+  transform.setRotation(new Ammo.btQuaternion(rot.x, rot.y, rot.z, rot.w))
+  let motionState = new Ammo.btDefaultMotionState(transform)
+
+  let localInertia = new Ammo.btVector3(0, 0, 0)
+  geometry.calculateLocalInertia(mass, localInertia)
+
+  let rbInfo = new Ammo.btRigidBodyConstructionInfo(
+    mass,
+    motionState,
+    geometry,
+    localInertia,
+  )
+  let body = new Ammo.btRigidBody(rbInfo)
+
+  body.setFriction(friction)
+
+  if (physics) {
+    physicsWorld.addRigidBody(body)
+
+    if (mass > 0) {
+      // Sync physics and graphics
+      const sync = () => {
+        let ms = body.getMotionState()
+        if (ms) {
+          let transform = new Ammo.btTransform()
+          ms.getWorldTransform(transform)
+          let pos = transform.getOrigin()
+          let rot = transform.getRotation()
+          mesh.position.set(pos.x(), pos.y(), pos.z())
+          mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+        }
+      }
+
+      syncList.push(sync)
     }
   }
 
-  function createBox(
-    pos,
-    w,
-    l,
-    h,
-    mass = 0,
-    friction = 1,
-    rot = new THREE.Quaternion(0, 0, 0, 1),
-    material = materialDynamic,
-    physics = true,
-  ) {
-    let shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
-
-    let geometry = new Ammo.btBoxShape(new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5))
-
-    let mesh = new THREE.Mesh(shape, material)
-
-    mesh.position.copy(pos)
-    mesh.quaternion.copy(rot)
-    scene.add(mesh)
-
-    if (showWireframe) {
-      const geo = new THREE.WireframeGeometry(mesh.geometry)
-      const mat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5})
-      const wireframe = new THREE.LineSegments(geo, mat)
-      wireframe.position.copy(pos)
-      wireframe.quaternion.copy(rot)
-      scene.add(wireframe)
-    }
-
+  body.forceSync = () => {
     let transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-    transform.setRotation(new Ammo.btQuaternion(rot.x, rot.y, rot.z, rot.w))
-    let motionState = new Ammo.btDefaultMotionState(transform)
+    body.getMotionState().getWorldTransform(transform)
+    let pos = transform.getOrigin()
+    let rot = transform.getRotation()
+    mesh.position.set(pos.x(), pos.y(), pos.z())
+    mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+  }
 
-    let localInertia = new Ammo.btVector3(0, 0, 0)
-    geometry.calculateLocalInertia(mass, localInertia)
+  body.mesh = mesh
+  body.startPosition = mesh.position.clone()
 
-    let rbInfo = new Ammo.btRigidBodyConstructionInfo(
-      mass,
+  return body
+}
+
+function createWheelMesh(radius, width, skin) {
+  let t = new THREE.CylinderGeometry(radius, radius, width, 8, 1)
+  t.rotateZ(Math.PI / 2)
+  let mesh = new THREE.Mesh(t, materialWheel[skin])
+  scene.add(mesh)
+  return mesh
+}
+
+function createChassisMesh(w, h, l, skin = 0) {
+  let chassis = new THREE.Object3D()
+
+  chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase[skin]))
+
+  let top = new THREE.Mesh(
+    new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
+    materialCarTop[skin],
+  )
+  top.position.set(0, h, -l / 8)
+  chassis.add(top)
+
+  scene.add(chassis)
+  return chassis
+}
+
+function createVehicle(pos, player = true, skin = 0) {
+  // Vehicle contants
+  let chassisWidth = 2.0
+  let chassisHeight = 1.0
+  let chassisLength = 4.0
+  let massVehicle = 800
+
+  let wheelRadius = 0.5
+  let wheelWidth = 0.2
+
+  let axleFrontPos = 1.2
+  let axleBackPos = -1.0
+  let axleHalfLength = 1.0
+  let axleHeight = 0.1
+
+  let friction = 1000
+  let suspensionStiffness = 20.0
+  let suspensionDamping = 2.3
+  let suspensionCompression = 4.4
+  let suspensionRestLength = 0.6
+  let rollInfluence = 0.1
+
+  let steeringIncrement = 0.04
+  let steeringClamp = 0.5
+  let maxEngineForce = parseInt(localStorage.engine) * 5
+  let maxBreakingForce = 100
+
+  // Chassis
+  let geometry = new Ammo.btBoxShape(
+    new Ammo.btVector3(chassisWidth * 0.5, chassisHeight * 0.5, chassisLength * 0.5),
+  )
+  let transform = new Ammo.btTransform()
+  transform.setIdentity()
+  transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+  let motionState = new Ammo.btDefaultMotionState(transform)
+  let localInertia = new Ammo.btVector3(0, 0, 0)
+  geometry.calculateLocalInertia(massVehicle, localInertia)
+  let body = new Ammo.btRigidBody(
+    new Ammo.btRigidBodyConstructionInfo(
+      massVehicle,
       motionState,
       geometry,
       localInertia,
-    )
-    let body = new Ammo.btRigidBody(rbInfo)
+    ),
+  )
+  physicsWorld.addRigidBody(body)
+  let chassisMesh = createChassisMesh(
+    chassisWidth,
+    chassisHeight,
+    chassisLength,
+    skin,
+  )
 
-    body.setFriction(friction)
+  // Raycast Vehicle
+  let engineForce = 0
+  let vehicleSteering = 0
+  let breakingForce = 0
+  let tuning = new Ammo.btVehicleTuning()
+  let rayCaster = new Ammo.btDefaultVehicleRaycaster(physicsWorld)
+  let vehicle = new Ammo.btRaycastVehicle(tuning, body, rayCaster)
+  vehicle.setCoordinateSystem(0, 1, 2)
+  vehicle.body = body
+  physicsWorld.addAction(vehicle)
 
-    if (physics) {
-      physicsWorld.addRigidBody(body)
+  // Wheels
+  let FRONT_LEFT = 0
+  let FRONT_RIGHT = 1
+  let BACK_LEFT = 2
+  let BACK_RIGHT = 3
+  let wheelMeshes = []
 
-      if (mass > 0) {
-        // Sync physics and graphics
-        const sync = () => {
-          let ms = body.getMotionState()
-          if (ms) {
-            let transform = new Ammo.btTransform()
-            ms.getWorldTransform(transform)
-            let pos = transform.getOrigin()
-            let rot = transform.getRotation()
-            mesh.position.set(pos.x(), pos.y(), pos.z())
-            mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
-          }
-        }
-
-        syncList.push(sync)
-      }
-    }
-
-    body.forceSync = () => {
-      let transform = new Ammo.btTransform()
-      body.getMotionState().getWorldTransform(transform)
-      let pos = transform.getOrigin()
-      let rot = transform.getRotation()
-      mesh.position.set(pos.x(), pos.y(), pos.z())
-      mesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
-    }
-
-    body.mesh = mesh
-    body.startPosition = mesh.position.clone()
-
-    return body
+  if (localStorage.theme == 'Snowy-Mountain') {
+    friction /= 100
   }
 
-  function createWheelMesh(radius, width, skin) {
-    let t = new THREE.CylinderGeometry(radius, radius, width, 8, 1)
-    t.rotateZ(Math.PI / 2)
-    let mesh = new THREE.Mesh(t, materialWheel[skin])
-    scene.add(mesh)
-    return mesh
+  function addWheel(index, x, z) {
+    let isFront = i => i < 2
+    let wheelInfo = vehicle.addWheel(
+      new Ammo.btVector3(x, axleHeight, z),
+      new Ammo.btVector3(0, -1, 0),
+      new Ammo.btVector3(-1, 0, 0),
+      suspensionRestLength,
+      wheelRadius,
+      tuning,
+      isFront(index),
+    )
+
+    wheelInfo.set_m_suspensionStiffness(suspensionStiffness)
+    wheelInfo.set_m_wheelsDampingRelaxation(suspensionDamping)
+    wheelInfo.set_m_wheelsDampingCompression(suspensionCompression)
+    wheelInfo.set_m_frictionSlip(friction)
+    wheelInfo.set_m_rollInfluence(rollInfluence)
+
+    wheelMeshes[index] = createWheelMesh(wheelRadius, wheelWidth, skin)
   }
 
-  function createChassisMesh(w, h, l, skin = 0) {
-    let chassis = new THREE.Object3D()
+  addWheel(FRONT_LEFT, axleHalfLength, axleFrontPos)
+  addWheel(FRONT_RIGHT, -axleHalfLength, axleFrontPos)
+  addWheel(BACK_LEFT, -axleHalfLength, axleBackPos)
+  addWheel(BACK_RIGHT, axleHalfLength, axleBackPos)
 
-    chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase[skin]))
+  // Sync keybord actions and physics and graphics
+  function sync(dt) {
+    let speed = vehicle.getCurrentSpeedKmHour()
 
-    let top = new THREE.Mesh(
-      new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
-      materialCarTop[skin],
-    )
-    top.position.set(0, h, -l / 8)
-    chassis.add(top)
+    breakingForce = 0
+    engineForce = 0
 
-    scene.add(chassis)
-    return chassis
-  }
-
-  function createVehicle(pos, player = true, skin = 0) {
-    // Vehicle contants
-    let chassisWidth = 2.0
-    let chassisHeight = 1.0
-    let chassisLength = 4.0
-    let massVehicle = 800
-
-    let wheelRadius = 0.5
-    let wheelWidth = 0.2
-
-    let axleFrontPos = 1.2
-    let axleBackPos = -1.0
-    let axleHalfLength = 1.0
-    let axleHeight = 0.1
-
-    let friction = 1000
-    let suspensionStiffness = 20.0
-    let suspensionDamping = 2.3
-    let suspensionCompression = 4.4
-    let suspensionRestLength = 0.6
-    let rollInfluence = 0.1
-
-    let steeringIncrement = 0.04
-    let steeringClamp = 0.5
-    let maxEngineForce = parseInt(localStorage.engine) * 5
-    let maxBreakingForce = 100
-
-    // Chassis
-    let geometry = new Ammo.btBoxShape(
-      new Ammo.btVector3(chassisWidth * 0.5, chassisHeight * 0.5, chassisLength * 0.5),
-    )
-    let transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-    let motionState = new Ammo.btDefaultMotionState(transform)
-    let localInertia = new Ammo.btVector3(0, 0, 0)
-    geometry.calculateLocalInertia(massVehicle, localInertia)
-    let body = new Ammo.btRigidBody(
-      new Ammo.btRigidBodyConstructionInfo(
-        massVehicle,
-        motionState,
-        geometry,
-        localInertia,
-      ),
-    )
-    physicsWorld.addRigidBody(body)
-    let chassisMesh = createChassisMesh(
-      chassisWidth,
-      chassisHeight,
-      chassisLength,
-      skin,
-    )
-
-    // Raycast Vehicle
-    let engineForce = 0
-    let vehicleSteering = 0
-    let breakingForce = 0
-    let tuning = new Ammo.btVehicleTuning()
-    let rayCaster = new Ammo.btDefaultVehicleRaycaster(physicsWorld)
-    let vehicle = new Ammo.btRaycastVehicle(tuning, body, rayCaster)
-    vehicle.setCoordinateSystem(0, 1, 2)
-    vehicle.body = body
-    physicsWorld.addAction(vehicle)
-
-    // Wheels
-    let FRONT_LEFT = 0
-    let FRONT_RIGHT = 1
-    let BACK_LEFT = 2
-    let BACK_RIGHT = 3
-    let wheelMeshes = []
-
-    if (localStorage.theme == 'Snowy-Mountain') {
-      friction /= 100
-    }
-
-    function addWheel(index, x, z) {
-      let isFront = i => i < 2
-      let wheelInfo = vehicle.addWheel(
-        new Ammo.btVector3(x, axleHeight, z),
-        new Ammo.btVector3(0, -1, 0),
-        new Ammo.btVector3(-1, 0, 0),
-        suspensionRestLength,
-        wheelRadius,
-        tuning,
-        isFront(index),
-      )
-
-      wheelInfo.set_m_suspensionStiffness(suspensionStiffness)
-      wheelInfo.set_m_wheelsDampingRelaxation(suspensionDamping)
-      wheelInfo.set_m_wheelsDampingCompression(suspensionCompression)
-      wheelInfo.set_m_frictionSlip(friction)
-      wheelInfo.set_m_rollInfluence(rollInfluence)
-
-      wheelMeshes[index] = createWheelMesh(wheelRadius, wheelWidth, skin)
-    }
-
-    addWheel(FRONT_LEFT, axleHalfLength, axleFrontPos)
-    addWheel(FRONT_RIGHT, -axleHalfLength, axleFrontPos)
-    addWheel(BACK_LEFT, -axleHalfLength, axleBackPos)
-    addWheel(BACK_RIGHT, axleHalfLength, axleBackPos)
-
-    // Sync keybord actions and physics and graphics
-    function sync(dt) {
-      let speed = vehicle.getCurrentSpeedKmHour()
-
-      breakingForce = 0
-      engineForce = 0
-
-      if (player) {
-        if (actions.acceleration) {
-          if (speed < -1) breakingForce = maxBreakingForce
-          else engineForce = maxEngineForce
-        }
-        if (actions.braking) {
-          if (speed > 1) breakingForce = maxBreakingForce
-          else engineForce = -maxEngineForce / 2
-        }
-        if (actions.left) {
-          if (vehicleSteering < steeringClamp) vehicleSteering += steeringIncrement
-        } else {
-          if (actions.right) {
-            if (vehicleSteering > -steeringClamp) vehicleSteering -= steeringIncrement
-          } else {
-            if (vehicleSteering < -steeringIncrement)
-              vehicleSteering += steeringIncrement
-            else {
-              if (vehicleSteering > steeringIncrement)
-                vehicleSteering -= steeringIncrement
-              else {
-                vehicleSteering = 0
-              }
-            }
-          }
-        }
+    if (player) {
+      if (actions.acceleration) {
+        if (speed < -1) breakingForce = maxBreakingForce
+        else engineForce = maxEngineForce
       }
-
-      if (engineForce) {
-        vehicle.body.activate()
+      if (actions.braking) {
+        if (speed > 1) breakingForce = maxBreakingForce
+        else engineForce = -maxEngineForce / 2
       }
-
-      if (localStorage.drive == 'All') {
-        vehicle.applyEngineForce(engineForce / 2, FRONT_LEFT)
-        vehicle.applyEngineForce(engineForce / 2, FRONT_RIGHT)
-        vehicle.applyEngineForce(engineForce / 2, BACK_LEFT)
-        vehicle.applyEngineForce(engineForce / 2, BACK_RIGHT)
-      } else if (localStorage.drive == 'Front') {
-        vehicle.applyEngineForce(engineForce, FRONT_LEFT)
-        vehicle.applyEngineForce(engineForce, FRONT_RIGHT)
+      if (actions.left) {
+        if (vehicleSteering < steeringClamp) vehicleSteering += steeringIncrement
       } else {
-        vehicle.applyEngineForce(engineForce, BACK_LEFT)
-        vehicle.applyEngineForce(engineForce, BACK_RIGHT)
-      }
-
-      vehicle.setBrake(breakingForce / 2, FRONT_LEFT)
-      vehicle.setBrake(breakingForce / 2, FRONT_RIGHT)
-      vehicle.setBrake(breakingForce, BACK_LEFT)
-      vehicle.setBrake(breakingForce, BACK_RIGHT)
-
-      vehicle.setSteeringValue(vehicleSteering, FRONT_LEFT)
-      vehicle.setSteeringValue(vehicleSteering, FRONT_RIGHT)
-
-      for (let i = 0; i < vehicle.getNumWheels(); i++) {
-        vehicle.updateWheelTransform(i, true)
-        let wheel_transform = vehicle.getWheelTransformWS(i)
-        let pos = wheel_transform.getOrigin()
-        let rot = wheel_transform.getRotation()
-        wheelMeshes[i].position.set(pos.x(), pos.y(), pos.z())
-        wheelMeshes[i].quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
-      }
-
-      let chassis_transform = vehicle.getChassisWorldTransform()
-      let pos = chassis_transform.getOrigin()
-      let rot = chassis_transform.getRotation()
-      chassisMesh.position.set(pos.x(), pos.y(), pos.z())
-      chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
-
-      if (player) {
-        let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
-        camera_offset.applyQuaternion(chassisMesh.quaternion)
-
-        camera.position.copy(camera_offset.add(chassisMesh.position))
-        camera.lookAt(chassisMesh.position)
-
-        routeHistory.push({
-          time: time,
-          pos: {
-            x: pos.x(),
-            y: pos.y(),
-            z: pos.z(),
-          },
-          rot: {
-            x: rot.x(),
-            y: rot.y(),
-            z: rot.z(),
-            w: rot.w(),
-          },
-        })
-
-        if (localStorage.headlights != 'Off') {
-          let position_offset = new THREE.Vector3(0, 0.5, 2)
-          position_offset.applyQuaternion(chassisMesh.quaternion)
-          spotLight.position.copy(position_offset.add(chassisMesh.position))
-          let target_offset = new THREE.Vector3(0, 0, 10)
-          target_offset.applyQuaternion(chassisMesh.quaternion)
-          spotLight.target = new THREE.Object3D()
-          spotLight.target.position.copy(target_offset.add(chassisMesh.position))
-          spotLight.target.updateMatrixWorld()
-        }
-
-        let wage = 5
-        if (localStorage.time == 'Night') {
-          wage += 10
-        }
-        const earnings = dt * Math.abs(speed) * wage
-        localStorage.money = parseFloat(localStorage.money) + earnings
-
-        if (actions.reset || pos.y() <= -1) {
-          for (let i = 0; i < resetFrames; i++) {
-            let old = routeHistory.pop()
-
-            if (old) {
-              let zeroRotation = new Ammo.btQuaternion(
-                old.rot.x,
-                old.rot.y,
-                old.rot.z,
-                old.rot.w,
-              )
-              let newPos = new Ammo.btVector3(old.pos.x, old.pos.y, old.pos.z)
-              let newTransform = new Ammo.btTransform(zeroRotation, newPos)
-              body.setWorldTransform(newTransform)
+        if (actions.right) {
+          if (vehicleSteering > -steeringClamp) vehicleSteering -= steeringIncrement
+        } else {
+          if (vehicleSteering < -steeringIncrement)
+            vehicleSteering += steeringIncrement
+          else {
+            if (vehicleSteering > steeringIncrement)
+              vehicleSteering -= steeringIncrement
+            else {
+              vehicleSteering = 0
             }
           }
-
-          vehicle.body.setLinearVelocity(new Ammo.btVector3(0, 0, 0))
-          vehicle.body.setAngularVelocity(new Ammo.btVector3(0, 0, 0))
         }
-
-        document.getElementById('speedometer').innerHTML = `${speed.toFixed(1)} km/h 
-          ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} 
-          ${pos.z().toFixed(2)} 
-          ${rot.x().toFixed(2)} ${rot.y().toFixed(2)} 
-          ${rot.z().toFixed(2)} ${rot.w().toFixed(2)} 
-          ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(2)}`
       }
     }
 
-    syncList.push(sync)
-    return vehicle
-  }
-
-  const groundBlocks = []
-  const elevatorBlocks = []
-
-  function createObjects() {
-    const block_size = 16
-    let block_height = block_size / 8
-
-    let hash = location.hash.slice(1)
-
-    if (!hash) {
-      hash = courses[parseInt(localStorage.course)]
+    if (engineForce) {
+      vehicle.body.activate()
     }
 
-    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+    if (localStorage.drive == 'All') {
+      vehicle.applyEngineForce(engineForce / 2, FRONT_LEFT)
+      vehicle.applyEngineForce(engineForce / 2, FRONT_RIGHT)
+      vehicle.applyEngineForce(engineForce / 2, BACK_LEFT)
+      vehicle.applyEngineForce(engineForce / 2, BACK_RIGHT)
+    } else if (localStorage.drive == 'Front') {
+      vehicle.applyEngineForce(engineForce, FRONT_LEFT)
+      vehicle.applyEngineForce(engineForce, FRONT_RIGHT)
+    } else {
+      vehicle.applyEngineForce(engineForce, BACK_LEFT)
+      vehicle.applyEngineForce(engineForce, BACK_RIGHT)
+    }
 
-    for (let i = 0; i < hash.length; i += 4) {
-      let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
-      let blockStyle = chars.indexOf(hash[i]) % 4
-      let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
-      let rot = new THREE.Quaternion(0, 0, 0, 1)
-      rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
+    vehicle.setBrake(breakingForce / 2, FRONT_LEFT)
+    vehicle.setBrake(breakingForce / 2, FRONT_RIGHT)
+    vehicle.setBrake(breakingForce, BACK_LEFT)
+    vehicle.setBrake(breakingForce, BACK_RIGHT)
 
-      if (blockType == blockNames.indexOf('Road Ramp')) {
-        let ramp = new THREE.Quaternion(0, 0, 0, 1)
-        ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
-        rot.multiply(ramp)
+    vehicle.setSteeringValue(vehicleSteering, FRONT_LEFT)
+    vehicle.setSteeringValue(vehicleSteering, FRONT_RIGHT)
+
+    for (let i = 0; i < vehicle.getNumWheels(); i++) {
+      vehicle.updateWheelTransform(i, true)
+      let wheel_transform = vehicle.getWheelTransformWS(i)
+      let pos = wheel_transform.getOrigin()
+      let rot = wheel_transform.getRotation()
+      wheelMeshes[i].position.set(pos.x(), pos.y(), pos.z())
+      wheelMeshes[i].quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+    }
+
+    let chassis_transform = vehicle.getChassisWorldTransform()
+    let pos = chassis_transform.getOrigin()
+    let rot = chassis_transform.getRotation()
+    chassisMesh.position.set(pos.x(), pos.y(), pos.z())
+    chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
+
+    if (player) {
+      let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
+      camera_offset.applyQuaternion(chassisMesh.quaternion)
+
+      camera.position.copy(camera_offset.add(chassisMesh.position))
+      camera.lookAt(chassisMesh.position)
+
+      routeHistory.push({
+        time: time,
+        pos: {
+          x: pos.x(),
+          y: pos.y(),
+          z: pos.z(),
+        },
+        rot: {
+          x: rot.x(),
+          y: rot.y(),
+          z: rot.z(),
+          w: rot.w(),
+        },
+      })
+
+      if (localStorage.headlights != 'Off') {
+        let position_offset = new THREE.Vector3(0, 0.5, 2)
+        position_offset.applyQuaternion(chassisMesh.quaternion)
+        spotLight.position.copy(position_offset.add(chassisMesh.position))
+        let target_offset = new THREE.Vector3(0, 0, 10)
+        target_offset.applyQuaternion(chassisMesh.quaternion)
+        spotLight.target = new THREE.Object3D()
+        spotLight.target.position.copy(target_offset.add(chassisMesh.position))
+        spotLight.target.updateMatrixWorld()
+      }
+
+      let wage = 5
+      if (localStorage.time == 'Night') {
+        wage += 10
+      }
+      const earnings = dt * Math.abs(speed) * wage
+      localStorage.money = parseFloat(localStorage.money) + earnings
+
+      if (actions.reset || pos.y() <= -1) {
+        for (let i = 0; i < resetFrames; i++) {
+          let old = routeHistory.pop()
+
+          if (old) {
+            let zeroRotation = new Ammo.btQuaternion(
+              old.rot.x,
+              old.rot.y,
+              old.rot.z,
+              old.rot.w,
+            )
+            let newPos = new Ammo.btVector3(old.pos.x, old.pos.y, old.pos.z)
+            let newTransform = new Ammo.btTransform(zeroRotation, newPos)
+            body.setWorldTransform(newTransform)
+          }
+        }
+
+        vehicle.body.setLinearVelocity(new Ammo.btVector3(0, 0, 0))
+        vehicle.body.setAngularVelocity(new Ammo.btVector3(0, 0, 0))
+      }
+
+      document.getElementById('speedometer').innerHTML = `${speed.toFixed(1)} km/h 
+        ${pos.x().toFixed(2)} ${pos.y().toFixed(2)} 
+        ${pos.z().toFixed(2)} 
+        ${rot.x().toFixed(2)} ${rot.y().toFixed(2)} 
+        ${rot.z().toFixed(2)} ${rot.w().toFixed(2)} 
+        ${Math.floor(1 / dt)} \$${parseFloat(localStorage.money).toFixed(2)}`
+    }
+  }
+
+  syncList.push(sync)
+  return vehicle
+}
+
+const groundBlocks = []
+const elevatorBlocks = []
+
+function createObjects() {
+  const block_size = 16
+  let block_height = block_size / 8
+
+  let hash = location.hash.slice(1)
+
+  if (!hash) {
+    hash = courses[parseInt(localStorage.course)]
+  }
+
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+
+  for (let i = 0; i < hash.length; i += 4) {
+    let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
+    let blockStyle = chars.indexOf(hash[i]) % 4
+    let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
+    let rot = new THREE.Quaternion(0, 0, 0, 1)
+    rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
+
+    if (blockType == blockNames.indexOf('Road Ramp')) {
+      let ramp = new THREE.Quaternion(0, 0, 0, 1)
+      ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -0.12435)
+      rot.multiply(ramp)
+      groundBlocks.push(
+        createBox(
+          new THREE.Vector3(
+            block_size * chars.indexOf(hash[i + 1]),
+            -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
+            block_size * chars.indexOf(hash[i + 3]),
+          ),
+          block_size,
+          block_height,
+          block_size * 1.023,
+          0,
+          1,
+          rot,
+          materialRoad,
+        ),
+      )
+    } else if (blockType == blockNames.indexOf('Water')) {
+      base_height = -block_height
+      for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
         groundBlocks.push(
           createBox(
             new THREE.Vector3(
               block_size * chars.indexOf(hash[i + 1]),
-              -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
+              block_height * y - 0.2,
               block_size * chars.indexOf(hash[i + 3]),
             ),
             block_size,
             block_height,
-            block_size * 1.023,
+            block_size,
             0,
             1,
             rot,
-            materialRoad,
+            materialWater,
+            false,
           ),
         )
-      } else if (blockType == blockNames.indexOf('Water')) {
+      }
+    } else {
+      let material
+
+      if (
+        blockType == blockNames.indexOf('Road Straight') ||
+        blockType == blockNames.indexOf('Elevator')
+      ) {
+        material = materialRoad
+      } else if (blockType == blockNames.indexOf('Road Corner')) {
+        material = materialRoadCorner
+      } else if (blockType == blockNames.indexOf('Ground')) {
+        material = materialGround
+        const x_off = [0, -0.3 * block_size, 0.2 * block_size]
+        const y_off = [0, 0.2 * block_size, -0.25 * block_size]
+        for (let j = 0; j < blockStyle; j++) {
+          // Trunk
+          let trunk_height = block_height * (2 + j)
+
+          createBox(
+            new THREE.Vector3(
+              block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+              (trunk_height - block_height) / 2 +
+                block_height * chars.indexOf(hash[i + 2]),
+              block_size * chars.indexOf(hash[i + 3]) + y_off[j],
+            ),
+            block_size / 16,
+            trunk_height,
+            block_size / 16,
+            1000,
+            1,
+            rot,
+            materialTreeTrunk,
+          )
+          // Canopy
+          createBox(
+            new THREE.Vector3(
+              block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+              block_height / 2 +
+                trunk_height +
+                block_height * chars.indexOf(hash[i + 2]),
+              block_size * chars.indexOf(hash[i + 3]) + y_off[j],
+            ),
+            block_size / 4,
+            block_height * 2,
+            block_size / 4,
+            100,
+            1,
+            rot,
+            materialTreeTop,
+          )
+        }
+      } else if (blockType == blockNames.indexOf('Wall')) {
+        material = materialGround
         base_height = -block_height
         for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
           groundBlocks.push(
             createBox(
               new THREE.Vector3(
                 block_size * chars.indexOf(hash[i + 1]),
-                block_height * y - 0.2,
+                -block_height / 2 + block_size / 8 + (block_size / 4) * y,
                 block_size * chars.indexOf(hash[i + 3]),
               ),
               block_size,
-              block_height,
+              block_size / 4,
               block_size,
               0,
               1,
               rot,
-              materialWater,
-              false,
+              materialWall[blockStyle],
             ),
           )
         }
-      } else {
-        let material
+      }
 
-        if (
-          blockType == blockNames.indexOf('Road Straight') ||
-          blockType == blockNames.indexOf('Elevator')
-        ) {
-          material = materialRoad
-        } else if (blockType == blockNames.indexOf('Road Corner')) {
-          material = materialRoadCorner
-        } else if (blockType == blockNames.indexOf('Ground')) {
-          material = materialGround
-          const x_off = [0, -0.3 * block_size, 0.2 * block_size]
-          const y_off = [0, 0.2 * block_size, -0.25 * block_size]
-          for (let j = 0; j < blockStyle; j++) {
-            // Trunk
-            let trunk_height = block_height * (2 + j)
-
-            createBox(
-              new THREE.Vector3(
-                block_size * chars.indexOf(hash[i + 1]) + x_off[j],
-                (trunk_height - block_height) / 2 +
-                  block_height * chars.indexOf(hash[i + 2]),
-                block_size * chars.indexOf(hash[i + 3]) + y_off[j],
-              ),
-              block_size / 16,
-              trunk_height,
-              block_size / 16,
-              1000,
-              1,
-              rot,
-              materialTreeTrunk,
-            )
-            // Canopy
-            createBox(
-              new THREE.Vector3(
-                block_size * chars.indexOf(hash[i + 1]) + x_off[j],
-                block_height / 2 +
-                  trunk_height +
-                  block_height * chars.indexOf(hash[i + 2]),
-                block_size * chars.indexOf(hash[i + 3]) + y_off[j],
-              ),
-              block_size / 4,
-              block_height * 2,
-              block_size / 4,
-              100,
-              1,
-              rot,
-              materialTreeTop,
-            )
-          }
-        } else if (blockType == blockNames.indexOf('Wall')) {
-          material = materialGround
-          base_height = -block_height
-          for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
-            groundBlocks.push(
-              createBox(
-                new THREE.Vector3(
-                  block_size * chars.indexOf(hash[i + 1]),
-                  -block_height / 2 + block_size / 8 + (block_size / 4) * y,
-                  block_size * chars.indexOf(hash[i + 3]),
-                ),
-                block_size,
-                block_size / 4,
-                block_size,
-                0,
-                1,
-                rot,
-                materialWall[blockStyle],
-              ),
-            )
-          }
-        }
-
-        groundBlocks.push(
-          createBox(
-            new THREE.Vector3(
-              block_size * chars.indexOf(hash[i + 1]),
-              base_height,
-              block_size * chars.indexOf(hash[i + 3]),
-            ),
-            block_size,
-            block_height,
-            block_size,
-            0,
-            1,
-            rot,
-            material,
+      groundBlocks.push(
+        createBox(
+          new THREE.Vector3(
+            block_size * chars.indexOf(hash[i + 1]),
+            base_height,
+            block_size * chars.indexOf(hash[i + 3]),
           ),
-        )
+          block_size,
+          block_height,
+          block_size,
+          0,
+          1,
+          rot,
+          material,
+        ),
+      )
 
-        if (blockType == blockNames.indexOf('Elevator')) {
-          elevatorBlocks.push(groundBlocks.slice(-1)[0])
-        }
+      if (blockType == blockNames.indexOf('Elevator')) {
+        elevatorBlocks.push(groundBlocks.slice(-1)[0])
       }
     }
-
-    actors[localStorage.me] = createVehicle(
-      new THREE.Vector3(block_size + -block_size / 4, 8, block_size),
-      true,
-      localStorage.vehicle,
-    )
   }
 
-  function networkUpdate() {
-    let vehicle = actors[localStorage.me]
+  actors[localStorage.me] = createVehicle(
+    new THREE.Vector3(block_size + -block_size / 4, 8, block_size),
+    true,
+    localStorage.vehicle,
+  )
+}
 
-    let chassis_transform = vehicle.getChassisWorldTransform()
-    let pos = chassis_transform.getOrigin()
-    let rot = chassis_transform.getRotation()
-    let vel = vehicle.getRigidBody().getLinearVelocity()
+function networkUpdate() {
+  let vehicle = actors[localStorage.me]
 
-    const data = JSON.stringify({
-      x: pos.x().toFixed(2),
-      y: pos.y().toFixed(2),
-      z: pos.z().toFixed(2),
-      vx: vel.x().toFixed(2),
-      vy: vel.y().toFixed(2),
-      vz: vel.z().toFixed(2),
-      rw: rot.w().toFixed(2),
-      rx: rot.x().toFixed(2),
-      ry: rot.y().toFixed(2),
-      rz: rot.z().toFixed(2),
-    })
-    fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(response => {
-      response.json().then(newActors => {
-        Object.entries(newActors).forEach(actor => {
-          if (actor[0] == localStorage.me) {
-            return
-          }
-          if (!actors[actor[0]]) {
-            actors[actor[0]] = createVehicle(
-              new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
-              false,
+  let chassis_transform = vehicle.getChassisWorldTransform()
+  let pos = chassis_transform.getOrigin()
+  let rot = chassis_transform.getRotation()
+  let vel = vehicle.getRigidBody().getLinearVelocity()
+
+  const data = JSON.stringify({
+    x: pos.x().toFixed(2),
+    y: pos.y().toFixed(2),
+    z: pos.z().toFixed(2),
+    vx: vel.x().toFixed(2),
+    vy: vel.y().toFixed(2),
+    vz: vel.z().toFixed(2),
+    rw: rot.w().toFixed(2),
+    rx: rot.x().toFixed(2),
+    ry: rot.y().toFixed(2),
+    rz: rot.z().toFixed(2),
+  })
+  fetch(`/update/${localStorage.me}`, {method: 'POST', body: data}).then(response => {
+    response.json().then(newActors => {
+      Object.entries(newActors).forEach(actor => {
+        if (actor[0] == localStorage.me) {
+          return
+        }
+        if (!actors[actor[0]]) {
+          actors[actor[0]] = createVehicle(
+            new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
+            false,
+          )
+        } else {
+          let wt = actors[actor[0]].getChassisWorldTransform()
+          let pos = wt.getOrigin()
+          pos.setValue(actor[1].x, actor[1].y, actor[1].z)
+          wt.setOrigin(pos)
+          let rot = wt.getRotation()
+          rot.setValue(actor[1].rx, actor[1].ry, actor[1].rz, actor[1].rw)
+          wt.setRotation(rot)
+          actors[actor[0]]
+            .getRigidBody()
+            .setLinearVelocity(
+              new Ammo.btVector3(actor[1].vx, actor[1].vy, actor[1].vz),
             )
-          } else {
-            let wt = actors[actor[0]].getChassisWorldTransform()
-            let pos = wt.getOrigin()
-            pos.setValue(actor[1].x, actor[1].y, actor[1].z)
-            wt.setOrigin(pos)
-            let rot = wt.getRotation()
-            rot.setValue(actor[1].rx, actor[1].ry, actor[1].rz, actor[1].rw)
-            wt.setRotation(rot)
-            actors[actor[0]]
-              .getRigidBody()
-              .setLinearVelocity(
-                new Ammo.btVector3(actor[1].vx, actor[1].vy, actor[1].vz),
-              )
-          }
-        })
+        }
       })
-      networkUpdate()
     })
-  }
-
-  // - Init -
-  initGraphics()
-  initPhysics()
-  createObjects()
-  tick()
-
-  if (localStorage.netplay) {
     networkUpdate()
-  }
-})
+  })
+}
+
+// - Init -
+initGraphics()
+initPhysics()
+createObjects()
+tick()
+
+if (localStorage.netplay) {
+  networkUpdate()
+}
