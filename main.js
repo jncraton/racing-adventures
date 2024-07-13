@@ -735,47 +735,27 @@ function createObjects() {
     let rot = new THREE.Quaternion(0, 0, 0, 1)
     rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
-    if (blockType == blockNames.indexOf('Road Ramp')) {
+    if (
+      blockType == blockNames.indexOf('Road Ramp') ||
+      blockType == blockNames.indexOf('Road Ramp 2')
+    ) {
+      let rise = block_height
+
+      if (blockType == blockNames.indexOf('Road Ramp 2')) {
+        rise = block_height * 2
+      }
+
       let ramp = new THREE.Quaternion(0, 0, 0, 1)
-      ramp.setFromAxisAngle(
-        new THREE.Vector3(1, 0, 0),
-        -Math.atan(block_height / block_size),
-      )
+      ramp.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.atan(rise / block_size))
       rot.multiply(ramp)
 
-      let new_length = Math.sqrt(block_size ** 2 + block_height ** 2)
+      let new_length = Math.sqrt(block_size ** 2 + rise ** 2)
 
       groundBlocks.push(
         createBox(
           new THREE.Vector3(
             block_size * chars.indexOf(hash[i + 1]),
-            -block_height / 2 + block_height * chars.indexOf(hash[i + 2]),
-            block_size * chars.indexOf(hash[i + 3]),
-          ),
-          block_size,
-          block_height,
-          new_length,
-          0,
-          1,
-          rot,
-          materialRoad,
-        ),
-      )
-    } else if (blockType == blockNames.indexOf('Road Ramp 2')) {
-      let ramp = new THREE.Quaternion(0, 0, 0, 1)
-      ramp.setFromAxisAngle(
-        new THREE.Vector3(1, 0, 0),
-        -Math.atan((2 * block_height) / block_size),
-      )
-      rot.multiply(ramp)
-
-      let new_length = Math.sqrt(block_size ** 2 + (2 * block_height) ** 2)
-
-      groundBlocks.push(
-        createBox(
-          new THREE.Vector3(
-            block_size * chars.indexOf(hash[i + 1]),
-            block_height * chars.indexOf(hash[i + 2]),
+            -block_height + rise / 2 + block_height * chars.indexOf(hash[i + 2]),
             block_size * chars.indexOf(hash[i + 3]),
           ),
           block_size,
