@@ -279,18 +279,14 @@ function tick() {
         quakeVertialMag *
           (1 +
             Math.cos(
-              time * quakeMag * quakeSpeed +
-                pos.x() / quakeSize +
-                pos.z() / quakeSize,
+              time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize,
             ))
       let x =
         block.startPosition.x +
         quakeLateralMag *
           (1 +
             Math.cos(
-              time * quakeMag * quakeSpeed +
-                pos.x() / quakeSize +
-                pos.z() / quakeSize,
+              time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize,
             ))
       let z =
         block.startPosition.z +
@@ -298,9 +294,7 @@ function tick() {
           quakeLateralMag *
           (1 +
             Math.cos(
-              time * quakeMag * quakeSpeed +
-                pos.x() / quakeSize +
-                pos.z() / quakeSize,
+              time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize,
             ))
       pos.setValue(x, y, z)
       block.mesh.position.y = y
@@ -508,12 +502,7 @@ function createVehicle(pos, player = true, skin = 0) {
     ),
   )
   physicsWorld.addRigidBody(body)
-  let chassisMesh = createChassisMesh(
-    chassisWidth,
-    chassisHeight,
-    chassisLength,
-    skin,
-  )
+  let chassisMesh = createChassisMesh(chassisWidth, chassisHeight, chassisLength, skin)
 
   // Raycast Vehicle
   let engineForce = 0
@@ -585,8 +574,7 @@ function createVehicle(pos, player = true, skin = 0) {
         if (actions.right) {
           if (vehicleSteering > -steeringClamp) vehicleSteering -= steeringIncrement
         } else {
-          if (vehicleSteering < -steeringIncrement)
-            vehicleSteering += steeringIncrement
+          if (vehicleSteering < -steeringIncrement) vehicleSteering += steeringIncrement
           else {
             if (vehicleSteering > steeringIncrement)
               vehicleSteering -= steeringIncrement
