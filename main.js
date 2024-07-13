@@ -780,18 +780,19 @@ function createObjects() {
         material = materialRoadCorner
       } else if (blockType == blockNames.indexOf('Ground')) {
         material = materialGround
-        const x_off = [0, -0.3 * block_size, 0.2 * block_size]
-        const y_off = [0, 0.2 * block_size, -0.25 * block_size]
         for (let j = 0; j < blockStyle; j++) {
           // Trunk
           let trunk_height = block_height * (2 + j)
 
+          const x_off = block_size * ([0, -0.3, 0.3][j] + (0.12 * Math.random() - 0.06))
+          const y_off = block_size * ([0, 0.3, -0.3][j] + (0.12 * Math.random() - 0.06))
+
           createBox(
             new THREE.Vector3(
-              block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+              block_size * chars.indexOf(hash[i + 1]) + x_off,
               (trunk_height - block_height) / 2 +
                 block_height * chars.indexOf(hash[i + 2]),
-              block_size * chars.indexOf(hash[i + 3]) + y_off[j],
+              block_size * chars.indexOf(hash[i + 3]) + y_off,
             ),
             block_size / 16,
             trunk_height,
@@ -805,11 +806,11 @@ function createObjects() {
           if (config.treeCanopy) {
             createBox(
               new THREE.Vector3(
-                block_size * chars.indexOf(hash[i + 1]) + x_off[j],
+                block_size * chars.indexOf(hash[i + 1]) + x_off,
                 block_height / 2 +
                   trunk_height +
                   block_height * chars.indexOf(hash[i + 2]),
-                block_size * chars.indexOf(hash[i + 3]) + y_off[j],
+                block_size * chars.indexOf(hash[i + 3]) + y_off,
               ),
               block_size / 4,
               block_height * 2,
