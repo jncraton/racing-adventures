@@ -375,9 +375,9 @@ function createBox(
   let mesh = new THREE.Mesh(shape, material)
 
   mesh.position.copy(pos)
-  mesh.geometry.translate(0, -l/2, 0)
+  mesh.geometry.translate(0, -l / 2, 0)
   mesh.geometry.applyQuaternion(rot)
-  mesh.geometry.translate(0, l/2, 0)
+  mesh.geometry.translate(0, l / 2, 0)
   scene.add(mesh)
 
   if (showWireframe) {
