@@ -448,13 +448,13 @@ function createWheelMesh(radius, width, skin) {
 function createChassisMesh(w, h, l, skin = 0) {
   let chassis = new THREE.Object3D()
 
-  chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h, l), materialCarBase[skin]))
+  chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h/2, l), materialCarBase[skin]))
 
   let top = new THREE.Mesh(
-    new THREE.BoxGeometry(w * (15 / 16), h, l / 2),
+    new THREE.BoxGeometry(w * (15 / 16), h/2, l / 2),
     materialCarTop[skin],
   )
-  top.position.set(0, h, -l / 8)
+  top.position.set(0, h/2, -l / 8)
   chassis.add(top)
 
   scene.add(chassis)
@@ -464,7 +464,7 @@ function createChassisMesh(w, h, l, skin = 0) {
 function createVehicle(pos, player = true, skin = 0) {
   // Vehicle contants
   let chassisWidth = 2.0
-  let chassisHeight = 1.0
+  let chassisHeight = 2.0
   let chassisLength = 4.0
   let massVehicle = 800
 
@@ -474,7 +474,7 @@ function createVehicle(pos, player = true, skin = 0) {
   let axleFrontPos = 1.2
   let axleBackPos = -1.0
   let axleHalfLength = 1.0
-  let axleHeight = 0.1
+  let axleHeight = 0.0
 
   let friction = 1000
   let suspensionStiffness = 20.0
