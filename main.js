@@ -963,6 +963,7 @@ try {
   const response = await fetch(
     `textures/themes/${localStorage.theme.toLowerCase()}/config.json`,
   )
+  const vehicleConfig = await fetch(`textures/vehicles/config.json`)
   Object.assign(config, await response.json())
 } catch {}
 
