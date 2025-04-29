@@ -482,8 +482,8 @@ function createVehicle(pos, player = true, skin = 0, name = "car") {
   let wheelRadius = 0.5
   let wheelWidth = 0.2
 
-  let axleFrontPos = 1.2
-  let axleBackPos = -1.0
+  let axleFrontPos = config.vehicles[name].axleFrontPos
+  let axleBackPos = config.vehicles[name].axleBackPos
   let axleHalfLength = 1.0
   let axleHeight = 0.0
 

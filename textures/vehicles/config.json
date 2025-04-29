@@ -3,6 +3,16 @@
     "numSkins": 10,
     "chassisWidth": 2.0,
     "chassisHeight": 2.0,
-    "chassisLength": 4.0
+    "chassisLength": 4.0,
+    "axleFrontPos": 1.2,
+    "axleBackPos": -1.0
+  },
+  "Limo": {
+    "numSkins": 10,
+    "chassisWidth": 2.0,
+    "chassisHeight": 2.0,
+    "chassisLength": 18.0,
+    "axleFrontPos": 2.4,
+    "axleBackPos": -2.0
   }
 }
