@@ -1,5 +1,5 @@
 {
-  "car": {
+  "Car": {
     "numSkins": 10,
     "chassisWidth": 2.0,
     "chassisHeight": 2.0,

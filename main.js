@@ -472,11 +472,11 @@ function createChassisMesh(w, h, l, skin = 0) {
   return chassis
 }
 
-function createVehicle(pos, player = true, skin = 0) {
+function createVehicle(pos, player = true, skin = 0, name = "car") {
   // Vehicle contants
-  let chassisWidth = 2.0
-  let chassisHeight = 2.0
-  let chassisLength = 4.0
+  let chassisWidth = config.vehicles[name].chassisWidth
+  let chassisHeight = config.vehicles[name].chassisHeight
+  let chassisLength = config.vehicles[name].chassisLength
   let massVehicle = 800
 
   let wheelRadius = 0.5
@@ -905,6 +905,7 @@ function createObjects() {
     new THREE.Vector3(block_size + -block_size / 4, 8, block_size),
     true,
     localStorage.skin,
+    localStorage.vehicle
   )
 }
 
