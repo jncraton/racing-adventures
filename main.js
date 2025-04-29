@@ -484,8 +484,8 @@ function createVehicle(pos, player = true, skin = 0, name = "car") {
 
   let axleFrontPos = config.vehicles[name].axleFrontPos
   let axleBackPos = config.vehicles[name].axleBackPos
-  let axleHalfLength = 1.0
-  let axleHeight = 0.0
+  let axleHalfLength = config.vehicles[name].axleHalfLength
+  let axleHeight = config.vehicles[name].axleHeight
 
   let friction = 1000
   let suspensionStiffness = 20.0
