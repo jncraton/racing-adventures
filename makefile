@@ -7,7 +7,7 @@ GLTFLoader.js:
 	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/examples/jsm/loaders/GLTFLoader.js
 
 ammo.js:
-	wget https://raw.githubusercontent.com/kripken/ammo.js/6ec2ce66f2fbd06fae2c0013274cffdacccc3343/builds/ammo.js
+	wget https://raw.githubusercontent.com/kripken/ammo.js/1a601e4595511a560ff2baba092bbc553eb5082f/builds/ammo.js
 
 format:
 	npx prettier --write index.html editor.html play.html main.js
