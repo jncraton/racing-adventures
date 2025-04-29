@@ -71,7 +71,7 @@ let materialDynamic,
 // Player data
 if (!localStorage.money) localStorage.money = 0
 if (!localStorage.vehicle) localStorage.vehicle = 'car'
-if (!localStorage.paint) localStorage.paint = '0'
+if (!localStorage.skin) localStorage.skin = '0'
 if (!localStorage.me) localStorage.me = Math.floor(Math.random() * 10000)
 
 // Physics variables
@@ -904,7 +904,7 @@ function createObjects() {
   actors[localStorage.me] = createVehicle(
     new THREE.Vector3(block_size + -block_size / 4, 8, block_size),
     true,
-    localStorage.paint,
+    localStorage.skin,
   )
 }
 
