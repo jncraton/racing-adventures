@@ -18,5 +18,15 @@
     "axleBackPos": -2.0,
     "axleHalfLength": 1.0,
     "axleHeight": 0.0
+  },
+  "Off Roader": {
+    "numSkins": 10,
+    "chassisWidth": 2.0,
+    "chassisHeight": 2.5,
+    "chassisLength": 3.0,
+    "axleFrontPos": 1.0,
+    "axleBackPos": -0.8,
+    "axleHalfLength": 1.0,
+    "axleHeight": -0.5
   }
 }
