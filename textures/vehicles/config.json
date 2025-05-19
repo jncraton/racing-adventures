@@ -34,5 +34,17 @@
     "axleBackPos": -0.8,
     "axleHalfLength": 1.0,
     "axleHeight": -0.5
+  },
+  "Minicar": {
+    "numSkins": 10,
+    "chassisWidth": 1.0,
+    "chassisHeight": 1.0,
+    "chassisLength": 2.0,
+    "wheelRadius": 0.25,
+    "wheelWidth": 0.1,
+    "axleFrontPos": 0.6,
+    "axleBackPos": -0.5,
+    "axleHalfLength": 0.5,
+    "axleHeight": 0.1
   }
 }
