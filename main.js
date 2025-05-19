@@ -610,7 +610,13 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
     chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
     if (player) {
-      let camera_offset = new THREE.Vector3(-4 * vehicleSteering, 2, -6)
+      let chassisLength = config.vehicles[localStorage.vehicle].chassisLength
+
+      let camera_offset = new THREE.Vector3(
+        -chassisLength * vehicleSteering,
+        chassisLength / 2,
+        (-3 * chassisLength) / 2,
+      )
       camera_offset.applyQuaternion(chassisMesh.quaternion)
 
       camera.position.copy(camera_offset.add(chassisMesh.position))
