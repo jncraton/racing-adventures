@@ -27,12 +27,6 @@ const blockNames = [
   'Road Ramp 2',
 ]
 
-const config = {
-  treeCanopy: 'square',
-  treeCanopyHeight: 1,
-  treeTrunkHeight: 4,
-}
-
 let ghostSpacing = 450
 let resetFrames = 90
 let sillyGhosts = 0
@@ -961,15 +955,20 @@ function networkUpdate() {
 }
 
 // - Init -
+
+const config = {}
+const globalConfig = await fetch('config.json')
+Object.assign(config, await globalConfig.json())
+
 try {
-  const response = await fetch(
+  const themeConfig = await fetch(
     `textures/themes/${localStorage.theme.toLowerCase()}/config.json`,
   )
-  Object.assign(config, await response.json())
+  Object.assign(config, await themeConfig.json())
 } catch {}
 
-const response = await fetch(`textures/vehicles/config.json`)
-config.vehicles = await response.json()
+const vehicleConfig = await fetch(`textures/vehicles/config.json`)
+config.vehicles = await vehicleConfig.json()
 
 initGraphics()
 initPhysics()
