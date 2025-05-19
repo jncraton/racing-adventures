@@ -287,6 +287,7 @@ function tick() {
           new THREE.Vector3(),
           false,
           i % numVehicleSkins,
+          localStorage.vehicle,
         )
       }
       let wt = actors['ghost' + i].getChassisWorldTransform()
@@ -905,6 +906,8 @@ function networkUpdate() {
           actors[actor[0]] = createVehicle(
             new THREE.Vector3(actor[1].x, actor[1].y, actor[1].z),
             false,
+            localStorage.skin,
+            localStorage.vehicle,
           )
         } else {
           let wt = actors[actor[0]].getChassisWorldTransform()
