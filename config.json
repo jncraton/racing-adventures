@@ -11,5 +11,8 @@
     "Elevator",
     "Water",
     "Road Ramp 2"
-  ]
+  ],
+  "ghostSpacing": 450,
+  "resetFrames": 90,
+  "sillyGhosts": 0
 }

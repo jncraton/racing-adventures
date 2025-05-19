@@ -17,10 +17,6 @@ const courses = [
   '9828372856283538v41873083208a10828279567v4477337a2376107682665666236u116u8356575u24501356854u584h264s114886317635663t5735493a3a3s243410398c217c216c2b5c223a24232010208c1h5c163a14221u10188c037c036c035c074b0b3b08220b120',
 ]
 
-let ghostSpacing = 450
-let resetFrames = 90
-let sillyGhosts = 0
-
 let quakeLateralMag = 0.1
 let quakeVertialMag = 0.5
 let quakeSpeed = 1
@@ -301,7 +297,7 @@ function tick() {
   let numGhosts = parseInt(localStorage.ghosts)
 
   for (let i = 1; i <= numGhosts; i++) {
-    if (routeHistory.length >= ghostSpacing * i) {
+    if (routeHistory.length >= config.ghostSpacing * i) {
       if (!actors['ghost' + i]) {
         actors['ghost' + i] = createVehicle(
           new THREE.Vector3(),
@@ -311,10 +307,10 @@ function tick() {
       }
       let wt = actors['ghost' + i].getChassisWorldTransform()
       let pos = wt.getOrigin()
-      let hist = routeHistory[routeHistory.length - ghostSpacing * i]
-      pos.setValue(hist.pos.x, hist.pos.y + 0.3 + sillyGhosts, hist.pos.z)
+      let hist = routeHistory[routeHistory.length - config.ghostSpacing * i]
+      pos.setValue(hist.pos.x, hist.pos.y + 0.3 + config.sillyGhosts, hist.pos.z)
       wt.setOrigin(pos)
-      if (!sillyGhosts) {
+      if (!config.sillyGhosts) {
         let rot = wt.getRotation()
         rot.setValue(hist.rot.x, hist.rot.y, hist.rot.z, hist.rot.w)
         wt.setRotation(rot)
@@ -322,7 +318,9 @@ function tick() {
     }
   }
 
-  while (routeHistory.length > Math.max(resetFrames, numGhosts * ghostSpacing)) {
+  while (
+    routeHistory.length > Math.max(config.resetFrames, numGhosts * config.ghostSpacing)
+  ) {
     routeHistory.shift()
   }
 
@@ -667,7 +665,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
       localStorage.money = parseFloat(localStorage.money) + earnings
 
       if (actions.reset || pos.y() <= -1) {
-        for (let i = 0; i < resetFrames; i++) {
+        for (let i = 0; i < config.resetFrames; i++) {
           let old = routeHistory.pop()
 
           if (old) {
