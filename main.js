@@ -1,10 +1,5 @@
 import * as THREE from './three.module.js'
 
-let quakeLateralMag = 0.1
-let quakeVertialMag = 0.5
-let quakeSpeed = 1
-let quakeSize = 32
-
 const numVehicleSkins = 10
 
 let routeHistory = []
@@ -250,25 +245,31 @@ function tick() {
       let pos = wt.getOrigin()
       let y =
         block.startPosition.y +
-        quakeVertialMag *
+        config.quake.verticalMag *
           (1 +
             Math.cos(
-              time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize,
+              time * quakeMag * config.quake.speed +
+                pos.x() / config.quake.size +
+                pos.z() / config.quake.size,
             ))
       let x =
         block.startPosition.x +
-        quakeLateralMag *
+        config.quake.lateralMag *
           (1 +
             Math.cos(
-              time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize,
+              time * quakeMag * config.quake.speed +
+                pos.x() / config.quake.size +
+                pos.z() / config.quake.size,
             ))
       let z =
         block.startPosition.z +
         quakeMag *
-          quakeLateralMag *
+          config.quake.lateralMag *
           (1 +
             Math.cos(
-              time * quakeMag * quakeSpeed + pos.x() / quakeSize + pos.z() / quakeSize,
+              time * quakeMag * config.quake.speed +
+                pos.x() / config.quake.size +
+                pos.z() / config.quake.size,
             ))
       pos.setValue(x, y, z)
       block.mesh.position.y = y
