@@ -1,5 +1,15 @@
 {
   "treeCanopy": "square",
   "treeCanopyHeight": 1,
-  "treeTrunkHeight": 4
+  "treeTrunkHeight": 4,
+  "blocks": [
+    "Road Straight",
+    "Road Ramp",
+    "Road Corner",
+    "Wall",
+    "Ground",
+    "Elevator",
+    "Water",
+    "Road Ramp 2"
+  ]
 }

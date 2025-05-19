@@ -16,16 +16,6 @@ const courses = [
   'c877c767c667c557c477c357c267c187c067c8869786o6867586v46673563256a156c086c8854775c675c565c465c375c2650155c065c864j7747664v5447434a334c2744144c074c8734763c673c573c46383331233s123c073c862s742c662c552c472c372c2724112c062c86187415641v531j431j331v211b111c071c860c760c670c570c460c360c250c170c070',
   '9828372856283538v41873083208a10828279567v4477337a2376107682665666236u116u8356575u24501356854u584h264s114886317635663t5735493a3a3s243410398c217c216c2b5c223a24232010208c1h5c163a14221u10188c037c036c035c074b0b3b08220b120',
 ]
-const blockNames = [
-  'Road Straight',
-  'Road Ramp',
-  'Road Corner',
-  'Wall',
-  'Ground',
-  'Elevator',
-  'Water',
-  'Road Ramp 2',
-]
 
 let ghostSpacing = 450
 let resetFrames = 90
@@ -733,12 +723,12 @@ function createObjects() {
     rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
     if (
-      blockType == blockNames.indexOf('Road Ramp') ||
-      blockType == blockNames.indexOf('Road Ramp 2')
+      blockType == config.blocks.indexOf('Road Ramp') ||
+      blockType == config.blocks.indexOf('Road Ramp 2')
     ) {
       let rise = block_height
 
-      if (blockType == blockNames.indexOf('Road Ramp 2')) {
+      if (blockType == config.blocks.indexOf('Road Ramp 2')) {
         rise = block_height * 2
       }
 
@@ -764,7 +754,7 @@ function createObjects() {
           materialRoad,
         ),
       )
-    } else if (blockType == blockNames.indexOf('Water')) {
+    } else if (blockType == config.blocks.indexOf('Water')) {
       base_height = -block_height
       for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
         groundBlocks.push(
@@ -789,13 +779,13 @@ function createObjects() {
       let material
 
       if (
-        blockType == blockNames.indexOf('Road Straight') ||
-        blockType == blockNames.indexOf('Elevator')
+        blockType == config.blocks.indexOf('Road Straight') ||
+        blockType == config.blocks.indexOf('Elevator')
       ) {
         material = materialRoad
-      } else if (blockType == blockNames.indexOf('Road Corner')) {
+      } else if (blockType == config.blocks.indexOf('Road Corner')) {
         material = materialRoadCorner
-      } else if (blockType == blockNames.indexOf('Ground')) {
+      } else if (blockType == config.blocks.indexOf('Ground')) {
         material = materialGround
         for (let j = 0; j < blockStyle; j++) {
           // Trunk
@@ -849,7 +839,7 @@ function createObjects() {
             )
           }
         }
-      } else if (blockType == blockNames.indexOf('Wall')) {
+      } else if (blockType == config.blocks.indexOf('Wall')) {
         material = materialGround
         base_height = -block_height
         for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
@@ -889,7 +879,7 @@ function createObjects() {
         ),
       )
 
-      if (blockType == blockNames.indexOf('Elevator')) {
+      if (blockType == config.blocks.indexOf('Elevator')) {
         elevatorBlocks.push(groundBlocks.slice(-1)[0])
       }
     }
