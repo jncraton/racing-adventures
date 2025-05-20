@@ -4,9 +4,6 @@ const numVehicleSkins = 10
 
 let routeHistory = []
 
-// Debug options
-let showWireframe = false
-
 await Ammo()
 
 // Graphics variables
@@ -350,15 +347,6 @@ function createBox(
   mesh.geometry.applyQuaternion(rot)
   mesh.geometry.translate(0, l / 2, 0)
   scene.add(mesh)
-
-  if (showWireframe) {
-    const geo = new THREE.WireframeGeometry(mesh.geometry)
-    const mat = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 5})
-    const wireframe = new THREE.LineSegments(geo, mat)
-    wireframe.position.copy(pos)
-    wireframe.quaternion.copy(rot)
-    scene.add(wireframe)
-  }
 
   let transform = new Ammo.btTransform()
   transform.setIdentity()
