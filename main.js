@@ -186,7 +186,12 @@ function initGraphics() {
 
   document.getElementById('container').replaceChildren(renderer.domElement)
 
-  window.addEventListener('resize', onWindowResize)
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
+
+    renderer.setSize(window.innerWidth, window.innerHeight)
+  })
 
   window.addEventListener('keydown', e => {
     if (keysActions[e.code]) {
@@ -201,13 +206,6 @@ function initGraphics() {
       e.preventDefault()
     }
   })
-}
-
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight
-  camera.updateProjectionMatrix()
-
-  renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 function initPhysics() {
