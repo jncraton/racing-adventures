@@ -603,6 +603,40 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
       wheelMeshes[i].quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
     }
 
+    // Prevent flipping
+    const MAX_ANGLE = 30 * (Math.PI / 180)
+    const TORQUE_FACTOR = 10000
+    const DAMPING = 0.9
+
+    // 1. Get current up vector
+    const currentUp = new THREE.Vector3(0, 1, 0).applyQuaternion(chassisMesh.quaternion)
+
+    // 2. Calculate angle from vertical
+    const angle = currentUp.angleTo(new THREE.Vector3(0, 1, 0))
+
+    // 3. Apply corrective torque if beyond threshold
+    if (angle > MAX_ANGLE) {
+      console.log(angle, MAX_ANGLE)
+      const axis = new THREE.Vector3()
+        .crossVectors(currentUp, new THREE.Vector3(0, 1, 0))
+        .normalize()
+
+      // Calculate torque strength (proportional to angle)
+      const strength = TORQUE_FACTOR * (angle - MAX_ANGLE)
+
+      // Convert to ammo.js vector and apply
+      const torque = new Ammo.btVector3(
+        axis.x * strength,
+        axis.y * strength,
+        axis.z * strength,
+      )
+
+      // Apply torque with damping
+      vehicle.getRigidBody().applyTorque(torque)
+
+      Ammo.destroy(torque)
+    }
+
     let chassis_transform = vehicle.getChassisWorldTransform()
     let pos = chassis_transform.getOrigin()
     let rot = chassis_transform.getRotation()
