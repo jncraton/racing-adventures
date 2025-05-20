@@ -69,7 +69,8 @@ function initGraphics() {
 
   if (localStorage.headlights != 'Off') {
     headlight = new THREE.SpotLight(0xf7e51b, 1000.0)
-    headlight.angle = Math.PI / 4
+    headlight.angle = Math.PI / 8
+
     headlight.distance = 100.0
     scene.add(headlight)
   }
