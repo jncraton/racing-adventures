@@ -5,7 +5,7 @@ let routeHistory = []
 await Ammo()
 
 // Graphics variables
-let camera, scene, renderer, spotLight, water
+let camera, scene, renderer, headlight, water
 let clock = new THREE.Clock()
 let materialDynamic,
   materialGround,
@@ -68,10 +68,10 @@ function initGraphics() {
   scene.add(sun)
 
   if (localStorage.headlights != 'Off') {
-    spotLight = new THREE.SpotLight(0xf7e51b, 1000.0)
-    spotLight.angle = Math.PI / 4
-    spotLight.distance = 100.0
-    scene.add(spotLight)
+    headlight = new THREE.SpotLight(0xf7e51b, 1000.0)
+    headlight.angle = Math.PI / 4
+    headlight.distance = 100.0
+    scene.add(headlight)
   }
 
   scene.background = new THREE.CubeTextureLoader()
@@ -663,12 +663,12 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
       if (localStorage.headlights != 'Off') {
         let position_offset = new THREE.Vector3(0, 0.5, 2)
         position_offset.applyQuaternion(chassisMesh.quaternion)
-        spotLight.position.copy(position_offset.add(chassisMesh.position))
+        headlight.position.copy(position_offset.add(chassisMesh.position))
         let target_offset = new THREE.Vector3(0, 0, 10)
         target_offset.applyQuaternion(chassisMesh.quaternion)
-        spotLight.target = new THREE.Object3D()
-        spotLight.target.position.copy(target_offset.add(chassisMesh.position))
-        spotLight.target.updateMatrixWorld()
+        headlight.target = new THREE.Object3D()
+        headlight.target.position.copy(target_offset.add(chassisMesh.position))
+        headlight.target.updateMatrixWorld()
       }
 
       let wage = 5
