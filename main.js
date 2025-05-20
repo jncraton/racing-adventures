@@ -187,8 +187,20 @@ function initGraphics() {
   document.getElementById('container').replaceChildren(renderer.domElement)
 
   window.addEventListener('resize', onWindowResize, false)
-  window.addEventListener('keydown', keychange)
-  window.addEventListener('keyup', keychange)
+
+  window.addEventListener('keydown', e => {
+    if (keysActions[e.code]) {
+      actions[keysActions[e.code]] = true
+      e.preventDefault()
+    }
+  })
+
+  window.addEventListener('keyup', e => {
+    if (keysActions[e.code]) {
+      actions[keysActions[e.code]] = false
+      e.preventDefault()
+    }
+  })
 }
 
 function onWindowResize() {
@@ -311,15 +323,6 @@ function tick() {
   renderer.render(scene, camera)
 
   requestAnimationFrame(() => requestAnimationFrame(tick))
-}
-
-function keychange(e) {
-  if (keysActions[e.code]) {
-    actions[keysActions[e.code]] = e.type == 'keydown'
-    e.preventDefault()
-    e.stopPropagation()
-    return false
-  }
 }
 
 function createBox(
