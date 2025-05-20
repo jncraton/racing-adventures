@@ -1,7 +1,5 @@
 import * as THREE from './three.module.js'
 
-const numVehicleSkins = 10
-
 let routeHistory = []
 
 await Ammo()
@@ -147,7 +145,7 @@ function initGraphics() {
     materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
   }
 
-  for (let i = 0; i < numVehicleSkins; i++) {
+  for (let i = 0; i < config.numVehicleSkins; i++) {
     loader.setPath(`textures/vehicles/car/${i}/`)
     materialCarBase.push([
       loadMaterial('left.png'),
@@ -283,7 +281,7 @@ function tick() {
         actors['ghost' + i] = createVehicle(
           new THREE.Vector3(),
           false,
-          i % numVehicleSkins,
+          i % config.numVehicleSkins,
           localStorage.vehicle,
         )
       }

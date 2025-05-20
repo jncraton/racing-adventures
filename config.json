@@ -12,6 +12,7 @@
     "Water",
     "Road Ramp 2"
   ],
+  "numVehicleSkins": 10,
   "ghostSpacing": 450,
   "resetFrames": 90,
   "sillyGhosts": 0,
