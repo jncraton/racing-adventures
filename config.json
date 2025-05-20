@@ -3,6 +3,8 @@
   "treeCanopyHeight": 1,
   "treeTrunkHeight": 4,
   "gravity": -9.82,
+  "windX": 0.0,
+  "windZ": 0.0,
   "blocks": [
     "Road Straight",
     "Road Ramp",
