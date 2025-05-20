@@ -206,7 +206,7 @@ function initPhysics() {
     new Ammo.btSequentialImpulseConstraintSolver(),
     collisionConfig,
   )
-  physicsWorld.setGravity(new Ammo.btVector3(0, -9.82, 0))
+  physicsWorld.setGravity(new Ammo.btVector3(0.0, config.gravity, 0.0))
 }
 
 function tick() {

@@ -2,6 +2,7 @@
   "treeCanopy": "square",
   "treeCanopyHeight": 1,
   "treeTrunkHeight": 4,
+  "gravity": -9.82,
   "blocks": [
     "Road Straight",
     "Road Ramp",
