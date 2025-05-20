@@ -665,7 +665,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         let position_offset = new THREE.Vector3(0, 0.5, 2)
         position_offset.applyQuaternion(chassisMesh.quaternion)
         headlight.position.copy(position_offset.add(chassisMesh.position))
-        let target_offset = new THREE.Vector3(0, 0, 10)
+        let target_offset = new THREE.Vector3(0, -2, 10)
         target_offset.applyQuaternion(chassisMesh.quaternion)
         headlight.target = new THREE.Object3D()
         headlight.target.position.copy(target_offset.add(chassisMesh.position))
