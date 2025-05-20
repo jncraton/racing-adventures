@@ -186,7 +186,7 @@ function initGraphics() {
 
   document.getElementById('container').replaceChildren(renderer.domElement)
 
-  window.addEventListener('resize', onWindowResize, false)
+  window.addEventListener('resize', onWindowResize)
 
   window.addEventListener('keydown', e => {
     if (keysActions[e.code]) {
