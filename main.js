@@ -606,7 +606,6 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
 
     // 3. Apply corrective torque if beyond threshold
     if (angle > MAX_ANGLE) {
-      console.log(angle, MAX_ANGLE)
       const axis = new THREE.Vector3()
         .crossVectors(currentUp, new THREE.Vector3(0, 1, 0))
         .normalize()
