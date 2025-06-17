@@ -630,9 +630,13 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
     let pos = chassis_transform.getOrigin()
     let rot = chassis_transform.getRotation()
 
-    boostBounds.forEach((bound) => {
-      if (pos.x() > bound[0] && pos.x() < bound[2] &&
-          pos.z() > bound[1] && pos.z() < bound[3]) {
+    boostBounds.forEach(bound => {
+      if (
+        pos.x() > bound[0] &&
+        pos.x() < bound[2] &&
+        pos.z() > bound[1] &&
+        pos.z() < bound[3]
+      ) {
         // Apply boost
         const forward = new THREE.Vector3(0, 8000).applyQuaternion(
           chassisMesh.quaternion,
@@ -754,7 +758,12 @@ function createObjects() {
     let z = block_size * chars.indexOf(hash[i + 3])
 
     if (blockType == config.blocks.indexOf('Road Ramp 3')) {
-      boostBounds.push([x-block_size/2, z-block_size/2, x-block_size/2+block_size, z-block_size/2+block_size])
+      boostBounds.push([
+        x - block_size / 2,
+        z - block_size / 2,
+        x - block_size / 2 + block_size,
+        z - block_size / 2 + block_size,
+      ])
     }
 
     if (
