@@ -726,6 +726,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
 
 const groundBlocks = []
 const elevatorBlocks = []
+const boostBounds = []
 
 function createObjects() {
   const block_size = 16
@@ -746,6 +747,13 @@ function createObjects() {
     let rot = new THREE.Quaternion(0, 0, 0, 1)
     rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
+    let x = block_size * chars.indexOf(hash[i + 1])
+    let z = block_size * chars.indexOf(hash[i + 3])
+
+    if (blockType == config.blocks.indexOf('Road Ramp')) {
+      boostBounds.push([x, z, x+block_size, z+block_size])
+    }
+
     if (
       blockType == config.blocks.indexOf('Road Ramp') ||
       blockType == config.blocks.indexOf('Road Ramp 2')
@@ -765,9 +773,9 @@ function createObjects() {
       groundBlocks.push(
         createBox(
           new THREE.Vector3(
-            block_size * chars.indexOf(hash[i + 1]),
+            x,
             -block_height + rise / 2 + block_height * chars.indexOf(hash[i + 2]),
-            block_size * chars.indexOf(hash[i + 3]),
+            z,
           ),
           block_size,
           block_height,
