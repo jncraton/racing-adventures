@@ -630,7 +630,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
     let pos = chassis_transform.getOrigin()
     let rot = chassis_transform.getRotation()
 
-    if (False) {
+    if (false) {
       // Apply boost
       const forward = new THREE.Vector3(0, 0, 100000).applyQuaternion(
         chassisMesh.quaternion,
