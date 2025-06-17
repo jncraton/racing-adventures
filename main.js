@@ -629,6 +629,18 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
     let chassis_transform = vehicle.getChassisWorldTransform()
     let pos = chassis_transform.getOrigin()
     let rot = chassis_transform.getRotation()
+
+    if (False) {
+      // Apply boost
+      const forward = new THREE.Vector3(0, 0, 100000).applyQuaternion(
+        chassisMesh.quaternion,
+      )
+
+      const boost = new Ammo.btVector3(forward.x, forward.y, forward.z)
+      vehicle.getRigidBody().applyForce(boost)
+      Ammo.destroy(boost)
+    }
+
     chassisMesh.position.set(pos.x(), pos.y(), pos.z())
     chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
