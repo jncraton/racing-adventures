@@ -634,7 +634,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
       if (pos.x() > bound[0] && pos.x() < bound[2] &&
           pos.z() > bound[1] && pos.z() < bound[3]) {
         // Apply boost
-        const forward = new THREE.Vector3(0, 0, 10000).applyQuaternion(
+        const forward = new THREE.Vector3(0, 8000).applyQuaternion(
           chassisMesh.quaternion,
         )
 
@@ -753,18 +753,23 @@ function createObjects() {
     let x = block_size * chars.indexOf(hash[i + 1])
     let z = block_size * chars.indexOf(hash[i + 3])
 
-    if (blockType == config.blocks.indexOf('Road Ramp')) {
+    if (blockType == config.blocks.indexOf('Road Ramp 3')) {
       boostBounds.push([x-block_size/2, z-block_size/2, x-block_size/2+block_size, z-block_size/2+block_size])
     }
 
     if (
       blockType == config.blocks.indexOf('Road Ramp') ||
-      blockType == config.blocks.indexOf('Road Ramp 2')
+      blockType == config.blocks.indexOf('Road Ramp 2') ||
+      blockType == config.blocks.indexOf('Road Ramp 3')
     ) {
       let rise = block_height
 
       if (blockType == config.blocks.indexOf('Road Ramp 2')) {
         rise = block_height * 2
+      }
+
+      if (blockType == config.blocks.indexOf('Road Ramp 3')) {
+        rise = block_height * 3
       }
 
       let ramp = new THREE.Quaternion(0, 0, 0, 1)

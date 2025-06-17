@@ -13,7 +13,8 @@
     "Ground",
     "Elevator",
     "Water",
-    "Road Ramp 2"
+    "Road Ramp 2",
+    "Road Ramp 3"
   ],
   "numVehicleSkins": 10,
   "ghostSpacing": 450,
