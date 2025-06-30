@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title></title>
+    <style>
+      span {
+        border: 1px solid gray;
+        display: inline-block;
+        margin: 2px;
+        padding: 3px;
+        text-align: right;
+      }
+      label,
+      select {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section><a href="play.html#00" target="_newtab">Play</a></section>
+    <main></main>
+    <script>
+      let hash = location.hash.slice(1)
+
+      const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
+
+      const b64d = c => {
+        return chars.indexOf(c)
+      }
+
+      let blocks = {}
+
+      for (let i = 0; i < hash.length; i += 4) {
+        blocks[`${b64d(hash[i + 1])}${b64d(hash[i + 3])}`] = [
+          b64d(hash[i]),
+          b64d(hash[i + 2]),
+        ]
+      }
+
+      let inputs = ''
+      for (let z = 8; z >= 0; z--) {
+        for (let x = 8; x >= 0; x--) {
+          let block_type = ''
+          let y = 0
+
+          if (blocks[chars[x] + chars[z]]) {
+            block_type = blocks[chars[x] + chars[z]][0]
+            y = blocks[chars[x] + chars[z]][1]
+          }
+
+          inputs += `<span id=${chars[x]}${chars[z]}>
+          <select>
+            <option value="">Air</option>
+            <option value="0" ${
+              block_type === 0 ? 'selected' : ''
+            }>&#x2191; Flat N</option>
+            <option value="1" ${
+              block_type === 1 ? 'selected' : ''
+            }>&#x2192; Flat E</option>
+            <option value="2" ${
+              block_type === 2 ? 'selected' : ''
+            }>&#x2193; Flat S</option>
+            <option value="3" ${
+              block_type === 3 ? 'selected' : ''
+            }>&#x2190; Flat W</option>
+            <option value="4" ${
+              block_type === 4 ? 'selected' : ''
+            }>&#x2191; Ramp N</option>
+            <option value="5" ${
+              block_type === 5 ? 'selected' : ''
+            }>&#x2192; Ramp E</option>
+            <option value="6" ${
+              block_type === 6 ? 'selected' : ''
+            }>&#x2193; Ramp S</option>
+            <option value="7" ${
+              block_type === 7 ? 'selected' : ''
+            }>&#x2190; Ramp W</option>
+            <option value="28" ${
+              block_type === 28 ? 'selected' : ''
+            }>&#x2191; Ramp 2 N</option>
+            <option value="29" ${
+              block_type === 29 ? 'selected' : ''
+            }>&#x2192; Ramp 2 E</option>
+            <option value="30" ${
+              block_type === 30 ? 'selected' : ''
+            }>&#x2193; Ramp 2 S</option>
+            <option value="31" ${
+              block_type === 31 ? 'selected' : ''
+            }>&#x2190; Ramp 2 W</option>
+            <option value="32" ${
+              block_type === 32 ? 'selected' : ''
+            }>&#x2191; Ramp 3 N</option>
+            <option value="33" ${
+              block_type === 3 ? 'selected' : ''
+            }>&#x2192; Ramp 3 E</option>
+            <option value="34" ${
+              block_type === 34 ? 'selected' : ''
+            }>&#x2193; Ramp 3 S</option>
+            <option value="35" ${
+              block_type === 35 ? 'selected' : ''
+            }>&#x2190; Ramp 3 W</option>
+            <option value="8" ${
+              block_type === 8 ? 'selected' : ''
+            }>&#x2570; Corner</option>
+            <option value="9" ${
+              block_type === 9 ? 'selected' : ''
+            }>&#x256D; Corner</option>
+            <option value="10" ${
+              block_type === 10 ? 'selected' : ''
+            }>&#x256E; Corner</option>
+            <option value="11" ${
+              block_type === 11 ? 'selected' : ''
+            }>&#x256F; Corner </option>
+            <option value="12" ${block_type === 12 ? 'selected' : ''}>Wall 0</option>
+            <option value="13" ${block_type === 13 ? 'selected' : ''}>Wall 1</option>
+            <option value="14" ${block_type === 14 ? 'selected' : ''}>Wall 2</option>
+            <option value="15" ${block_type === 15 ? 'selected' : ''}>Wall 3</option>
+            <option value="16" ${block_type === 16 ? 'selected' : ''}>Ground 0</option>
+            <option value="17" ${block_type === 17 ? 'selected' : ''}>Ground 1</option>
+            <option value="18" ${block_type === 18 ? 'selected' : ''}>Ground 2</option>
+            <option value="19" ${block_type === 19 ? 'selected' : ''}>Ground 3</option>
+            <option value="20" ${
+              block_type === 20 ? 'selected' : ''
+            }>&#x2191; Elevator N</option>
+            <option value="21" ${
+              block_type === 21 ? 'selected' : ''
+            }>&#x2192; Elevator E</option>
+            <option value="22" ${
+              block_type === 22 ? 'selected' : ''
+            }>&#x2193; Elevator S</option>
+            <option value="23" ${
+              block_type === 23 ? 'selected' : ''
+            }>&#x2190; Elevator W</option>
+            <option value="24" ${
+              block_type === 24 ? 'selected' : ''
+            }>&#x2190; Water 0</option>
+            <option value="25" ${
+              block_type === 25 ? 'selected' : ''
+            }>&#x2190; Water 1</option>
+            <option value="26" ${
+              block_type === 26 ? 'selected' : ''
+            }>&#x2190; Water 2</option>
+            <option value="27" ${
+              block_type === 27 ? 'selected' : ''
+            }>&#x2190; Water 3</option>
+          </select>
+          <label>y=<input type="number" size=2 value=${y} min=0 max=7 /></label></span>`
+        }
+        inputs += '<br />'
+      }
+
+      document.querySelector('main').innerHTML = inputs
+
+      document.querySelectorAll('input,select').forEach(input => {
+        input.addEventListener('input', () => {
+          let href = 'play.html#'
+          document.querySelectorAll('span').forEach(block => {
+            let select = block.querySelector('select')
+            if (select.value != '') {
+              let input = block.querySelector('input')
+              href +=
+                chars[select.value] + block.id[0] + chars[input.value] + block.id[1]
+            }
+          })
+          document.querySelector('a').href = href
+        })
+      })
+    </script>
+  </body>
+</html>
