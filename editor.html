@@ -17,14 +17,15 @@
       select {
         display: block;
       }
-      textarea, iframe {
-        position:relative;
-        display:inline-block;
-        height:600px;
-        width:25%;
+      textarea,
+      iframe {
+        position: relative;
+        display: inline-block;
+        height: 600px;
+        width: 25%;
       }
       iframe {
-        width:70%;
+        width: 70%;
       }
     </style>
   </head>
@@ -32,8 +33,8 @@
   <body>
     <section><a href="play.html#00" target="_newtab">Play</a></section>
     <main>
-    <textarea id=src></textarea>
-    <iframe id=demo src=""></iframe>
+      <textarea id="src"></textarea>
+      <iframe id="demo" src=""></iframe>
     </main>
     <script>
       /* globals console, demo, src */
@@ -42,10 +43,10 @@
       src.value = hash
 
       src.addEventListener('input', () => {
-        console.log("Loading", src.value)
-        demo.src=""
+        console.log('Loading', src.value)
+        demo.src = ''
         setTimeout(() => {
-          demo.src=`play.html#${src.value}`
+          demo.src = `play.html#${src.value}`
         }, 10)
       })
     </script>
