@@ -46,5 +46,17 @@
     "axleBackPos": -0.5,
     "axleHalfLength": 0.5,
     "axleHeight": 0.3
+  },
+  "TRex": {
+    "numSkins": 10,
+    "chassisWidth": 2.0,
+    "chassisHeight": 2.0,
+    "chassisLength": 6.0,
+    "wheelRadius": 0.5,
+    "wheelWidth": 0.0,
+    "axleFrontPos": 1.2,
+    "axleBackPos": -1.0,
+    "axleHalfLength": 0.0,
+    "axleHeight": 0.0
   }
 }
