@@ -21,4 +21,4 @@ launch:
 	python3 -m http.server
 
 clean:
-	rm -f three.module.js ammo.js GLTFLoader.js
+	rm -f three.module.js three.core.js ammo.js GLTFLoader.js
