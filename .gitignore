@@ -1,4 +1,6 @@
 unused-assets/
 gl-matrix.js
 ammo.js
-three.js
+three.module.js
+three.core.js
+GLTFLoader.js
