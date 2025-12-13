@@ -1,7 +1,7 @@
-all: three.module.js ammo.js GLTFLoader.js
+all: three.module.js three.core.js ammo.js GLTFLoader.js
 
-three.module.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/build/three.module.js
+three.%.js:
+	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/build/$@
 
 GLTFLoader.js:
 	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/examples/jsm/loaders/GLTFLoader.js
