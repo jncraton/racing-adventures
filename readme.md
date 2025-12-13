@@ -2,6 +2,7 @@ Racing Adventures
 =================
 
 ![Check status](https://github.com/jncraton/racing-adventures/actions/workflows/check.yml/badge.svg)
+[![Deploy](https://github.com/jncraton/racing-adventures/actions/workflows/deploy.yml/badge.svg)](https://github.com/jncraton/racing-adventures/actions/workflows/deploy.yml)
 
 ![Screenshot](screenshot.png)
 
