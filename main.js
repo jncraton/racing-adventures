@@ -789,6 +789,27 @@ function createObjects() {
     let rot = new THREE.Quaternion(0, 0, 0, 1)
     rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
+    // Set appropriate material, overriding if desired
+    let materials = {
+      'Road Straight': materialRoad,
+      'Road Ramp': materialRoad,
+      'Road Corner': materialRoadCorner,
+      Wall: materialGround,
+      Ground: materialGround,
+      Elevator: materialRoad,
+      Water: materialWater,
+      'Road Ramp 2': materialRoad,
+      'Road Ramp 3': materialRoad,
+    }
+
+    let material
+
+    for (name of Object.keys(materials)) {
+      if (blockType == config.blocks.indexOf(name)) {
+        material = materials[name]
+      }
+    }
+
     let x = block_size * chars.indexOf(hash[i + 1])
     let z = block_size * chars.indexOf(hash[i + 3])
 
@@ -835,7 +856,7 @@ function createObjects() {
           0,
           1,
           rot,
-          materialRoad,
+          material,
         ),
       )
     } else if (blockType == config.blocks.indexOf('Water')) {
@@ -854,23 +875,13 @@ function createObjects() {
             0,
             1,
             rot,
-            materialWater,
+            material,
             false,
           ),
         )
       }
     } else {
-      let material
-
-      if (
-        blockType == config.blocks.indexOf('Road Straight') ||
-        blockType == config.blocks.indexOf('Elevator')
-      ) {
-        material = materialRoad
-      } else if (blockType == config.blocks.indexOf('Road Corner')) {
-        material = materialRoadCorner
-      } else if (blockType == config.blocks.indexOf('Ground')) {
-        material = materialGround
+      if (blockType == config.blocks.indexOf('Ground')) {
         for (let j = 0; j < blockStyle; j++) {
           // Trunk
           let trunk_height = (block_height * (2 + j) * config.treeTrunkHeight) / 4
@@ -924,7 +935,6 @@ function createObjects() {
           }
         }
       } else if (blockType == config.blocks.indexOf('Wall')) {
-        material = materialGround
         base_height = -block_height
         for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
           groundBlocks.push(
