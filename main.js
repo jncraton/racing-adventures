@@ -804,8 +804,14 @@ function createObjects() {
 
     let material
 
+    let materialType = blockType
+
+    if (hash[i + 4] == '.') {
+      materialType = Math.floor(chars.indexOf(hash[i + 5]) / 4)
+    }
+
     for (name of Object.keys(materials)) {
-      if (blockType == config.blocks.indexOf(name)) {
+      if (materialType == config.blocks.indexOf(name)) {
         material = materials[name]
       }
     }
@@ -976,6 +982,11 @@ function createObjects() {
       if (blockType == config.blocks.indexOf('Elevator')) {
         elevatorBlocks.push(groundBlocks.slice(-1)[0])
       }
+    }
+
+    // Skip ahead if we had extra trailer info
+    if (hash[i + 4] == '.') {
+      i += 2
     }
   }
 
