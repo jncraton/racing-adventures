@@ -915,14 +915,13 @@ function createObjects() {
           let trunk_height = (block_height * (2 + j) * config.treeTrunkHeight) / 4
 
           const x_off = block_size * ([0, -0.3, 0.3][j] + (0.12 * Math.random() - 0.06))
-          const y_off = block_size * ([0, 0.3, -0.3][j] + (0.12 * Math.random() - 0.06))
+          const z_off = block_size * ([0, 0.3, -0.3][j] + (0.12 * Math.random() - 0.06))
 
           createBox(
             new THREE.Vector3(
-              block_size * chars.indexOf(hash[i + 1]) + x_off,
-              (trunk_height - block_height) / 2 +
-                block_height * chars.indexOf(hash[i + 2]),
-              block_size * chars.indexOf(hash[i + 3]) + y_off,
+              x + x_off,
+              (trunk_height - block_height) / 2 + y + block_height,
+              z + z_off,
             ),
             block_size / 16,
             trunk_height,
@@ -943,12 +942,9 @@ function createObjects() {
 
             createBox(
               new THREE.Vector3(
-                block_size * chars.indexOf(hash[i + 1]) + x_off,
-                block_height * chars.indexOf(hash[i + 2]) +
-                  -block_height / 2 +
-                  trunk_height +
-                  canopy_height / 2,
-                block_size * chars.indexOf(hash[i + 3]) + y_off,
+                x + x_off,
+                y + block_height + -block_height / 2 + trunk_height + canopy_height / 2,
+                z + z_off,
               ),
               block_size / 4,
               canopy_height,
