@@ -801,7 +801,7 @@ function createObjects() {
       'Road Straight': materialRoad,
       'Road Ramp': materialRoad,
       'Road Corner': materialRoadCorner,
-      Wall: materialGround,
+      Wall: materialWall,
       Ground: materialGround,
       Elevator: materialRoad,
       Water: materialWater,
@@ -812,6 +812,7 @@ function createObjects() {
     let material
 
     let materialType = blockType
+    let blockStyleOverride
 
     // We support up to three extra bytes followed by a period
     // Only the first (material override is used currently
@@ -826,7 +827,11 @@ function createObjects() {
 
     for (name of Object.keys(materials)) {
       if (materialType == config.blocks.indexOf(name)) {
-        material = materials[name]
+        if (name == 'Wall') {
+          material = materialWall[blockStyleOverride || blockStyle]
+        } else {
+          material = materials[name]
+        }
       }
     }
 
@@ -976,10 +981,12 @@ function createObjects() {
               0,
               1,
               rot,
-              materialWall[blockStyle],
+              material,
             ),
           )
         }
+
+        material = materialGround
       }
 
       groundBlocks.push(
