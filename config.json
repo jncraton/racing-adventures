@@ -17,7 +17,7 @@
     "Road Ramp 3"
   ],
   "numVehicleSkins": 10,
-  "ghostSpacing": 450,
+  "ghostSpacing": 50,
   "resetFrames": 90,
   "sillyGhosts": 0,
   "quake": {
