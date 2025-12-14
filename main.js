@@ -794,7 +794,6 @@ function createObjects() {
     let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
     let blockStyle = chars.indexOf(hash[i]) % 4
     let textureRot = new THREE.Quaternion(0, 0, 0, 1)
-    let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
 
     // Set appropriate material, overriding if desired
     let materials = {
@@ -892,7 +891,6 @@ function createObjects() {
         ),
       )
     } else if (blockType == config.blocks.indexOf('Water')) {
-      base_height = -block_height
       for (let yi = 0; yi < y + block_height; yi += block_height) {
         groundBlocks.push(
           createBox(
@@ -908,6 +906,7 @@ function createObjects() {
           ),
         )
       }
+      y = -block_height
     } else {
       if (blockType == config.blocks.indexOf('Ground')) {
         for (let j = 0; j < blockStyle; j++) {
@@ -959,7 +958,6 @@ function createObjects() {
           }
         }
       } else if (blockType == config.blocks.indexOf('Wall')) {
-        base_height = -block_height
         for (let yi = 0; yi < y + block_size; yi += block_height * 2) {
           groundBlocks.push(
             createBox(
@@ -974,17 +972,14 @@ function createObjects() {
             ),
           )
         }
+        y = -block_height
 
         material = materialGround
       }
 
       groundBlocks.push(
         createBox(
-          new THREE.Vector3(
-            block_size * chars.indexOf(hash[i + 1]),
-            base_height,
-            block_size * chars.indexOf(hash[i + 3]),
-          ),
+          new THREE.Vector3(x, y, z),
           block_size,
           block_height,
           block_size,
