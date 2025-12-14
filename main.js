@@ -806,8 +806,10 @@ function createObjects() {
 
     let materialType = blockType
 
-    if (hash[i + 4] == '.') {
-      materialType = Math.floor(chars.indexOf(hash[i + 5]) / 4)
+    // We support up to three extra bytes followed by a period
+    // Only the first (material override is used currently
+    if (hash.slice(i+4, i+8).includes('.')) {
+      materialType = Math.floor(chars.indexOf(hash[i + 4]) / 4)
     }
 
     for (name of Object.keys(materials)) {
@@ -985,8 +987,8 @@ function createObjects() {
     }
 
     // Skip ahead if we had extra trailer info
-    if (hash[i + 4] == '.') {
-      i += 2
+    if (hash.slice(i+4, i+8).includes('.')) {
+      i = i + hash.slice(i+4, i+8).indexOf('.') + 1
     }
   }
 
