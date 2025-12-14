@@ -337,11 +337,17 @@ function createBox(
   shape = '',
   textureRot = new THREE.Quaternion(0, 0, 0, 1),
 ) {
+  let geometry = new Ammo.btBoxShape(new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5))
+
+  // When performing a quarter turn at the texture level,
+  // swap length and width
+  if (Math.abs(textureRot._y) > 0.7 && Math.abs(textureRot._y) < 0.8) {
+    ;[w, h] = [h, w]
+  }
+
   if (!shape) {
     shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
   }
-
-  let geometry = new Ammo.btBoxShape(new Ammo.btVector3(w * 0.5, l * 0.5, h * 0.5))
 
   let mesh = new THREE.Mesh(shape, material)
 
