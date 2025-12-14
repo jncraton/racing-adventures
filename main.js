@@ -814,7 +814,7 @@ function createObjects() {
       let blockStyleOverride = chars.indexOf(hash[i + 4]) % 4
       textureRot.setFromAxisAngle(
         new THREE.Vector3(0, 1, 0),
-        (-blockStyleOverride * Math.PI) / 2,
+        (-((blockStyleOverride - blockStyle) % 4) * Math.PI) / 2,
       )
     }
 
