@@ -791,6 +791,10 @@ function createObjects() {
   const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'
 
   for (let i = 0; i < hash.length; i += 4) {
+    let x = block_size * chars.indexOf(hash[i + 1])
+    let y = block_height * (chars.indexOf(hash[i + 2]) - 1)
+    let z = block_size * chars.indexOf(hash[i + 3])
+
     let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
     let blockStyle = chars.indexOf(hash[i]) % 4
     let textureRot = new THREE.Quaternion(0, 0, 0, 1)
@@ -836,10 +840,6 @@ function createObjects() {
 
     let rot = new THREE.Quaternion(0, 0, 0, 1)
     rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
-
-    let x = block_size * chars.indexOf(hash[i + 1])
-    let y = block_height * (chars.indexOf(hash[i + 2]) - 1)
-    let z = block_size * chars.indexOf(hash[i + 3])
 
     if (blockType == config.blocks.indexOf('Road Ramp 3')) {
       boostBounds.push([
