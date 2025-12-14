@@ -893,14 +893,10 @@ function createObjects() {
       )
     } else if (blockType == config.blocks.indexOf('Water')) {
       base_height = -block_height
-      for (let yi = 0; yi < y + block_height; yi+=block_height) {
+      for (let yi = 0; yi < y + block_height; yi += block_height) {
         groundBlocks.push(
           createBox(
-            new THREE.Vector3(
-              x,
-              yi - 0.2,
-              z,
-            ),
+            new THREE.Vector3(x, yi - 0.2, z),
             block_size,
             block_height,
             block_size,
