@@ -335,6 +335,7 @@ function createBox(
   material = materialDynamic,
   physics = true,
   shape = '',
+  textureRot = new THREE.Quaternion(0, 0, 0, 1),
 ) {
   if (!shape) {
     shape = new THREE.BoxGeometry(w, l, h, 1, 1, 1)
@@ -346,6 +347,7 @@ function createBox(
 
   mesh.position.copy(pos)
   mesh.geometry.translate(0, -l / 2, 0)
+  mesh.geometry.applyQuaternion(textureRot)
   mesh.geometry.applyQuaternion(rot)
   mesh.geometry.translate(0, l / 2, 0)
   scene.add(mesh)
@@ -785,7 +787,7 @@ function createObjects() {
   for (let i = 0; i < hash.length; i += 4) {
     let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
     let blockStyle = chars.indexOf(hash[i]) % 4
-    let textureRotation = blockStyle
+    let textureRot = new THREE.Quaternion(0, 0, 0, 1)
     let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
 
     // Set appropriate material, overriding if desired
@@ -809,7 +811,11 @@ function createObjects() {
     // Only the first (material override is used currently
     if (hash.slice(i + 4, i + 8).includes('.')) {
       materialType = Math.floor(chars.indexOf(hash[i + 4]) / 4)
-      textureRotation = chars.indexOf(hash[i + 4]) % 4
+      let blockStyleOverride = chars.indexOf(hash[i + 4]) % 4
+      textureRot.setFromAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        (-blockStyleOverride * Math.PI) / 2,
+      )
     }
 
     for (name of Object.keys(materials)) {
@@ -819,7 +825,7 @@ function createObjects() {
     }
 
     let rot = new THREE.Quaternion(0, 0, 0, 1)
-    rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-textureRotation * Math.PI) / 2)
+    rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
     let x = block_size * chars.indexOf(hash[i + 1])
     let z = block_size * chars.indexOf(hash[i + 3])
@@ -868,6 +874,9 @@ function createObjects() {
           1,
           rot,
           material,
+          true,
+          '',
+          textureRot,
         ),
       )
     } else if (blockType == config.blocks.indexOf('Water')) {
