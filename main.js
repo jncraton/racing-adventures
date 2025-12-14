@@ -808,7 +808,7 @@ function createObjects() {
 
     // We support up to three extra bytes followed by a period
     // Only the first (material override is used currently
-    if (hash.slice(i+4, i+8).includes('.')) {
+    if (hash.slice(i + 4, i + 8).includes('.')) {
       materialType = Math.floor(chars.indexOf(hash[i + 4]) / 4)
     }
 
@@ -987,8 +987,8 @@ function createObjects() {
     }
 
     // Skip ahead if we had extra trailer info
-    if (hash.slice(i+4, i+8).includes('.')) {
-      i = i + hash.slice(i+4, i+8).indexOf('.') + 1
+    if (hash.slice(i + 4, i + 8).includes('.')) {
+      i = i + hash.slice(i + 4, i + 8).indexOf('.') + 1
     }
   }
 
