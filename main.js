@@ -839,6 +839,7 @@ function createObjects() {
     rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
     let x = block_size * chars.indexOf(hash[i + 1])
+    let y = block_height * (chars.indexOf(hash[i + 2]) - 1)
     let z = block_size * chars.indexOf(hash[i + 3])
 
     if (blockType == config.blocks.indexOf('Road Ramp 3')) {
@@ -892,13 +893,13 @@ function createObjects() {
       )
     } else if (blockType == config.blocks.indexOf('Water')) {
       base_height = -block_height
-      for (let y = 0; y < chars.indexOf(hash[i + 2]); y++) {
+      for (let yi = 0; yi < y + block_height; yi+=block_height) {
         groundBlocks.push(
           createBox(
             new THREE.Vector3(
-              block_size * chars.indexOf(hash[i + 1]),
-              block_height * y - 0.2,
-              block_size * chars.indexOf(hash[i + 3]),
+              x,
+              yi - 0.2,
+              z,
             ),
             block_size,
             block_height,
