@@ -785,9 +785,8 @@ function createObjects() {
   for (let i = 0; i < hash.length; i += 4) {
     let blockType = Math.floor(chars.indexOf(hash[i]) / 4)
     let blockStyle = chars.indexOf(hash[i]) % 4
+    let textureRotation = blockStyle
     let base_height = -block_height + block_height * chars.indexOf(hash[i + 2])
-    let rot = new THREE.Quaternion(0, 0, 0, 1)
-    rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-blockStyle * Math.PI) / 2)
 
     // Set appropriate material, overriding if desired
     let materials = {
@@ -810,6 +809,7 @@ function createObjects() {
     // Only the first (material override is used currently
     if (hash.slice(i + 4, i + 8).includes('.')) {
       materialType = Math.floor(chars.indexOf(hash[i + 4]) / 4)
+      textureRotation = chars.indexOf(hash[i + 4]) % 4
     }
 
     for (name of Object.keys(materials)) {
@@ -817,6 +817,9 @@ function createObjects() {
         material = materials[name]
       }
     }
+
+    let rot = new THREE.Quaternion(0, 0, 0, 1)
+    rot.setFromAxisAngle(new THREE.Vector3(0, 1, 0), (-textureRotation * Math.PI) / 2)
 
     let x = block_size * chars.indexOf(hash[i + 1])
     let z = block_size * chars.indexOf(hash[i + 3])
