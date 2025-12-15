@@ -1,6 +1,6 @@
 {
   "Car": {
-    "numSkins": 10,
+    "numSkins": 12,
     "chassisWidth": 2.0,
     "chassisHeight": 2.0,
     "chassisLength": 4.0,
@@ -12,7 +12,7 @@
     "axleHeight": 0.0
   },
   "Limo": {
-    "numSkins": 10,
+    "numSkins": 12,
     "chassisWidth": 2.0,
     "chassisHeight": 2.0,
     "chassisLength": 8.0,
@@ -24,7 +24,7 @@
     "axleHeight": 0.0
   },
   "Off Roader": {
-    "numSkins": 10,
+    "numSkins": 12,
     "chassisWidth": 2.0,
     "chassisHeight": 2.5,
     "chassisLength": 3.0,
@@ -36,7 +36,7 @@
     "axleHeight": -0.5
   },
   "Minicar": {
-    "numSkins": 10,
+    "numSkins": 12,
     "chassisWidth": 1.0,
     "chassisHeight": 1.0,
     "chassisLength": 2.0,
@@ -48,7 +48,7 @@
     "axleHeight": 0.3
   },
   "TRex": {
-    "numSkins": 10,
+    "numSkins": 12,
     "chassisWidth": 2.0,
     "chassisHeight": 2.0,
     "chassisLength": 6.0,
