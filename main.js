@@ -935,6 +935,7 @@ function createObjects() {
           if (config.treeCanopy) {
             let shape = undefined
             let canopy_height = block_height * 2 * config.treeCanopyHeight
+            let canopy_width = block_height * 2 * config.treeCanopyWidth
 
             if (config.treeCanopy == 'cone') {
               shape = new THREE.ConeGeometry(block_size / 4, canopy_height, 4)
@@ -946,9 +947,9 @@ function createObjects() {
                 y + block_height + -block_height / 2 + trunk_height + canopy_height / 2,
                 z + z_off,
               ),
-              block_size / 4,
+              canopy_width,
               canopy_height,
-              block_size / 4,
+              canopy_width,
               100,
               1,
               rot,

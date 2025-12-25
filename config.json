@@ -1,6 +1,7 @@
 {
   "treeCanopy": "square",
   "treeCanopyHeight": 1,
+  "treeCanopyWidth": 1,
   "treeTrunkHeight": 4,
   "gravity": -9.82,
   "windX": 0.0,
