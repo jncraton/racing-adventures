@@ -958,7 +958,11 @@ function createObjects() {
           }
         }
       } else if (blockType == config.blocks.indexOf('Wall')) {
-        for (let yi = 0; yi < y + block_size; yi += block_height * 2) {
+        for (
+          let yi = block_height / 2;
+          yi < y * 2 + block_height * 2;
+          yi += block_height * 2
+        ) {
           groundBlocks.push(
             createBox(
               new THREE.Vector3(x, yi, z),
