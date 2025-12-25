@@ -1,4 +1,6 @@
 {
   "treeCanopy": true,
+  "treeCanopyHeight": 0.5,
+  "treeCanopyWidth": 0.5,
   "treeTrunkHeight": 0
 }
