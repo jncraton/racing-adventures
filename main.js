@@ -910,7 +910,7 @@ function createObjects() {
     } else {
       if (blockType == config.blocks.indexOf('Ground')) {
         for (let j = 0; j < blockStyle; j++) {
-          let trunk_height = (block_height * (2 + j) * config.treeTrunkHeight) / 4
+          const trunk_height = (block_height * (2 + j) * config.treeTrunkHeight) / 4
           const x_off = block_size * ([0, -0.3, 0.3][j] + (0.12 * Math.random() - 0.06))
           const z_off = block_size * ([0, 0.3, -0.3][j] + (0.12 * Math.random() - 0.06))
 
