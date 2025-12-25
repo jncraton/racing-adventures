@@ -76,7 +76,7 @@ function initGraphics() {
   }
 
   scene.background = new THREE.CubeTextureLoader()
-    .setPath(`/textures/themes/${localStorage.theme.toLowerCase()}/`)
+    .setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
     .load(
       new Array(6).fill(`${localStorage.time.toLowerCase()}.png`),
       t => (t.magFilter = THREE.NearestFilter),
