@@ -910,26 +910,27 @@ function createObjects() {
     } else {
       if (blockType == config.blocks.indexOf('Ground')) {
         for (let j = 0; j < blockStyle; j++) {
-          // Trunk
           let trunk_height = (block_height * (2 + j) * config.treeTrunkHeight) / 4
-
           const x_off = block_size * ([0, -0.3, 0.3][j] + (0.12 * Math.random() - 0.06))
           const z_off = block_size * ([0, 0.3, -0.3][j] + (0.12 * Math.random() - 0.06))
 
-          createBox(
-            new THREE.Vector3(
-              x + x_off,
-              (trunk_height - block_height) / 2 + y + block_height,
-              z + z_off,
-            ),
-            block_size / 16,
-            trunk_height,
-            block_size / 16,
-            1000,
-            1,
-            rot,
-            materialTreeTrunk,
-          )
+          // Trunk
+          if (config.treeTrunkHeight) {
+            createBox(
+              new THREE.Vector3(
+                x + x_off,
+                (trunk_height - block_height) / 2 + y + block_height,
+                z + z_off,
+              ),
+              block_size / 16,
+              trunk_height,
+              block_size / 16,
+              1000,
+              1,
+              rot,
+              materialTreeTrunk,
+            )
+          }
           // Canopy
           if (config.treeCanopy) {
             let shape = undefined
