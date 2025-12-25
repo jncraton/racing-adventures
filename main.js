@@ -818,7 +818,7 @@ function createObjects() {
     let blockStyleOverride
 
     // We support up to three extra bytes followed by a period
-    // Only the first (material override is used currently
+    // Only the first (material override) is used currently
     if (hash.slice(i + 4, i + 8).includes('.')) {
       materialType = Math.floor(chars.indexOf(hash[i + 4]) / 4)
       let blockStyleOverride = chars.indexOf(hash[i + 4]) % 4
