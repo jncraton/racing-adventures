@@ -229,13 +229,13 @@ function tick() {
   time += dt
 
   // Animate water
-  materialWater[2].map.offset.x = 0.02 * Math.sin(time * 3)
-  materialWater[2].map.offset.y = 0.01 * Math.sin(time * 3)
+  materialWater[2].map.offset.x = 0.02 * Math.sin(time)
+  materialWater[2].map.offset.y = 0.01 * Math.sin(time)
   materialWater[2].map.needsUpdate = true
 
-  water.material.map.offset.x = 0.02 * Math.sin(time * 3)
-  water.material.map.offset.y = 0.01 * Math.sin(time * 3)
-  water.position.setY(-2 + 0.3 * Math.sin(time * 3))
+  water.material.map.offset.x = 0.02 * Math.sin(time)
+  water.material.map.offset.y = 0.01 * Math.sin(time)
+  water.position.setY(-2 + 0.3 * Math.sin(time/2))
   water.material.map.needsUpdate = true
 
   // Animate grass
