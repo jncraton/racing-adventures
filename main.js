@@ -9,6 +9,7 @@ let camera, scene, renderer, headlight, water
 let clock = new THREE.Clock()
 let materialDynamic,
   materialGround,
+  materialGrass,
   materialTreeTrunk,
   materialTreeTop,
   materialRoad,
@@ -134,6 +135,8 @@ function initGraphics() {
   }
 
   materialGround = loadBlockMaterials('ground.png')
+  materialGrass = loadMaterial('grass.png')
+  materialGrass.side = THREE.DoubleSide
   materialWater = loadBlockMaterials('water.png')
   materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
   materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
@@ -957,6 +960,17 @@ function createObjects() {
               true,
               shape,
             )
+          }
+        }
+        if (blockStyle == 0 || true) {
+          for (let i = 0; i < 2; i++) {
+            const shape = new THREE.PlaneGeometry(block_size, block_height)
+            const grass = new THREE.Mesh(shape, materialGrass)
+            grass.rotation.y = i * Math.PI / 2
+            grass.position.x = x
+            grass.position.y = y + block_height
+            grass.position.z = z
+            scene.add(grass)
           }
         }
       } else if (blockType == config.blocks.indexOf('Wall')) {
