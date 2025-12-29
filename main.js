@@ -239,6 +239,10 @@ function tick() {
   water.position.setY(-2 + 0.3 * Math.sin(time * 3))
   water.material.map.needsUpdate = true
 
+  // Animate grass
+  materialGrass.map.offset.x = 0.01 * Math.sin(time * 2)
+  materialGrass.map.needsUpdate = true
+
   elevatorBlocks.forEach(block => {
     // Handle elevator blocks
     let wt = block.getWorldTransform()
