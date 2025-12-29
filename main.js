@@ -119,7 +119,6 @@ function initGraphics() {
     return new THREE.MeshPhongMaterial({
       color: 0x999999,
       map: texture,
-      transparent: true,
     })
   }
 
