@@ -100,6 +100,8 @@ function initGraphics() {
   const loadMaterialRepeated = (path, repeat) => {
     const texture = loader.load(path)
 
+    texture.minFilter = THREE.NearestFilter
+    texture.magFilter = THREE.NearestFilter
     texture.wrapS = THREE.RepeatWrapping
     texture.wrapT = THREE.RepeatWrapping
     texture.repeat.set(repeat, repeat)
@@ -110,7 +112,7 @@ function initGraphics() {
     })
   }
 
-  materialOcean = loadMaterialRepeated('water.png', 100)
+  materialOcean = loadMaterialRepeated('water.png', 32)
 
   water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
   water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
