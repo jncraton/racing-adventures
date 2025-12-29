@@ -970,7 +970,7 @@ function createObjects() {
           for (let i = 0; i < 2; i++) {
             const shape = new THREE.PlaneGeometry(block_size, block_height)
             const grass = new THREE.Mesh(shape, materialGrass)
-            grass.rotation.y = i * Math.PI / 2
+            grass.rotation.y = (i * Math.PI) / 2
             grass.position.x = x
             grass.position.y = y + block_height
             grass.position.z = z
