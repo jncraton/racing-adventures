@@ -57,7 +57,6 @@ function initGraphics() {
   )
 
   renderer = new THREE.WebGLRenderer({antialias: true})
-  renderer.setClearColor(0xa7cbfa)
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
 
