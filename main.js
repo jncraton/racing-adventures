@@ -87,7 +87,6 @@ function initGraphics() {
 
   const loadMaterial = path => {
     const texture = loader.load(path)
-    texture.minFilter = THREE.NearestFilter
     texture.magFilter = THREE.NearestFilter
 
     return new THREE.MeshPhongMaterial({
@@ -100,7 +99,6 @@ function initGraphics() {
   const loadMaterialRepeated = (path, repeat) => {
     const texture = loader.load(path)
 
-    texture.minFilter = THREE.NearestFilter
     texture.magFilter = THREE.NearestFilter
     texture.wrapS = THREE.RepeatWrapping
     texture.wrapT = THREE.RepeatWrapping
