@@ -49,15 +49,6 @@ let keysActions = {
 function initGraphics() {
   scene = new THREE.Scene()
 
-  camera = new THREE.OrthographicCamera(
-    -window.innerWidth / 64,
-    window.innerWidth / 64,
-    window.innerHeight / 64,
-    -window.innerHeight / 64,
-    0,
-    2000,
-  )
-
   camera = new THREE.PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
