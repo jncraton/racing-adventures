@@ -114,8 +114,6 @@ function initGraphics() {
     texture.wrapT = THREE.RepeatWrapping
     texture.repeat.set(repeat, repeat)
 
-    texture.needsUpdate = true
-
     return new THREE.MeshPhongMaterial({
       color: 0x999999,
       map: texture,
