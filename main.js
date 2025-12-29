@@ -103,7 +103,6 @@ function initGraphics() {
     return new THREE.MeshPhongMaterial({
       color: 0x999999,
       map: texture,
-      transparent: true,
     })
   }
 
@@ -146,6 +145,7 @@ function initGraphics() {
   materialGround = loadBlockMaterials('ground.png')
   materialGrass = loadMaterial('grass.png')
   materialGrass.side = THREE.DoubleSide
+  materialGrass.transparent = true
   materialWater = loadBlockMaterials('water.png')
   materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
   materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
