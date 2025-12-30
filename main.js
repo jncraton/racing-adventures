@@ -75,6 +75,7 @@ function initGraphics() {
     scene.add(headlight)
   }
 
+  // Set skybox for day or night
   scene.background = new THREE.CubeTextureLoader()
     .setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
     .load(
