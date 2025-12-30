@@ -80,7 +80,7 @@ function initGraphics() {
   const loader = new THREE.TextureLoader()
   loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
-  const loadMaterial = (path, materialType=THREE.MeshPhongMaterial) => {
+  const loadMaterial = (path, materialType = THREE.MeshPhongMaterial) => {
     const texture = loader.load(path)
     texture.magFilter = THREE.NearestFilter
 
@@ -130,8 +130,11 @@ function initGraphics() {
   materialGrass.side = THREE.DoubleSide
   materialGrass.transparent = true
   materialWater = loadBlockMaterials('water.png')
-  materialSun = loadMaterial(localStorage.time == 'Day' ? 'sun.png' : 'moon.png', THREE.SpriteMaterial)
-  materialSun.color = new THREE.Color(1,1,1)
+  materialSun = loadMaterial(
+    localStorage.time == 'Day' ? 'sun.png' : 'moon.png',
+    THREE.SpriteMaterial,
+  )
+  materialSun.color = new THREE.Color(1, 1, 1)
   materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
   materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
   const roadMaterial = loadMaterial('road.png')
@@ -185,7 +188,7 @@ function initGraphics() {
   let lightLevel = localStorage.time == 'Day' ? 5.0 : 0.05
 
   scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
-  const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel*2.0)
+  const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel * 2.0)
   sun.position.set(1000, 200, 1000)
   scene.add(sun)
 
@@ -242,7 +245,7 @@ function tick() {
 
   water.material.map.offset.x = 0.02 * Math.sin(time)
   water.material.map.offset.y = 0.01 * Math.sin(time)
-  water.position.setY(-2 + 0.3 * Math.sin(time/2))
+  water.position.setY(-2 + 0.3 * Math.sin(time / 2))
   water.material.map.needsUpdate = true
 
   // Animate grass
@@ -973,16 +976,16 @@ function createObjects() {
           }
         }
         if (blockStyle == 0 || true) {
-          for (let x_off of [-block_size/4, block_size/4]) {
-            for (let z_off of [-block_size/4, block_size/4]) {
-              x_off -= x_off * Math.random() / 3
-              z_off -= z_off * Math.random() / 3
+          for (let x_off of [-block_size / 4, block_size / 4]) {
+            for (let z_off of [-block_size / 4, block_size / 4]) {
+              x_off -= (x_off * Math.random()) / 3
+              z_off -= (z_off * Math.random()) / 3
               for (let i = 0; i < 2; i++) {
-                const shape = new THREE.PlaneGeometry(block_size/4, block_size)
+                const shape = new THREE.PlaneGeometry(block_size / 4, block_size)
                 const grass = new THREE.Mesh(shape, materialGrass)
                 grass.rotation.y = (i * Math.PI) / 2
                 grass.position.x = x + x_off
-                grass.position.y = y + block_size/2 + block_height/2
+                grass.position.y = y + block_size / 2 + block_height / 2
                 grass.position.z = z + z_off
                 scene.add(grass)
               }
