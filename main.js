@@ -12,6 +12,7 @@ let materialDynamic,
   materialGrass,
   materialTreeTrunk,
   materialTreeTop,
+  materialSun,
   materialRoad,
   materialRoadCorner,
   materialInteractive,
@@ -53,19 +54,12 @@ function initGraphics() {
     60,
     window.innerWidth / window.innerHeight,
     0.2,
-    2000,
+    20000,
   )
 
   renderer = new THREE.WebGLRenderer({antialias: true})
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
-
-  let lightLevel = localStorage.time == 'Day' ? 5.0 : 0.05
-
-  scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
-  const sun = new THREE.DirectionalLight(0xffffff, lightLevel*3)
-  sun.position.set(1000, 100, 1000)
-  scene.add(sun)
 
   if (localStorage.headlights != 'Off') {
     headlight = new THREE.SpotLight(0xf7e51b, 3000.0)
@@ -86,11 +80,11 @@ function initGraphics() {
   const loader = new THREE.TextureLoader()
   loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
-  const loadMaterial = path => {
+  const loadMaterial = (path, materialType=THREE.MeshPhongMaterial) => {
     const texture = loader.load(path)
     texture.magFilter = THREE.NearestFilter
 
-    return new THREE.MeshPhongMaterial({
+    return new materialType({
       color: 0x999999,
       map: texture,
       shininess: 0,
@@ -136,6 +130,8 @@ function initGraphics() {
   materialGrass.side = THREE.DoubleSide
   materialGrass.transparent = true
   materialWater = loadBlockMaterials('water.png')
+  materialSun = loadMaterial('sun.png', THREE.SpriteMaterial)
+  materialSun.color = new THREE.Color(1,1,1)
   materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
   materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
   const roadMaterial = loadMaterial('road.png')
@@ -185,6 +181,18 @@ function initGraphics() {
   ]
 
   materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
+
+  let lightLevel = localStorage.time == 'Day' ? 5.0 : 0.05
+
+  scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
+  const sun = new THREE.DirectionalLight(0xffffff, lightLevel*3)
+  sun.position.set(1000, 200, 1000)
+  scene.add(sun)
+
+  const sprite = new THREE.Sprite(materialSun)
+  sprite.scale.set(4000, 4000, 4000)
+  sprite.position.set(10000, 2000, 10000)
+  scene.add(sprite)
 
   document.getElementById('container').replaceChildren(renderer.domElement)
 
