@@ -130,7 +130,7 @@ function initGraphics() {
   materialGrass.side = THREE.DoubleSide
   materialGrass.transparent = true
   materialWater = loadBlockMaterials('water.png')
-  materialSun = loadMaterial('sun.png', THREE.SpriteMaterial)
+  materialSun = loadMaterial(localStorage.time == 'Day' ? 'sun.png' : 'moon.png', THREE.SpriteMaterial)
   materialSun.color = new THREE.Color(1,1,1)
   materialTreeTrunk = new Array(6).fill(loadMaterial('tree-trunk.png'))
   materialTreeTop = new Array(6).fill(loadMaterial('tree-top.png'))
