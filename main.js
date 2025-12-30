@@ -60,11 +60,11 @@ function initGraphics() {
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
 
-  let lightLevel = localStorage.time == 'Day' ? 2.0 : 0.05
+  let lightLevel = localStorage.time == 'Day' ? 5.0 : 0.05
 
   scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
-  const sun = new THREE.DirectionalLight(0xffffff, lightLevel*4)
-  sun.position.set(1000, 1000, 1000)
+  const sun = new THREE.DirectionalLight(0xffffff, lightLevel*3)
+  sun.position.set(1000, 100, 1000)
   scene.add(sun)
 
   if (localStorage.headlights != 'Off') {
