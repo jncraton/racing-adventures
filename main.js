@@ -460,13 +460,19 @@ function createWheelMesh(radius, width, skin) {
 function createChassisMesh(w, h, l, skin = 0) {
   let chassis = new THREE.Object3D()
 
-  chassis.add(new THREE.Mesh(new THREE.BoxGeometry(w, h / 2, l), materialCarBase[skin]))
+  const base = new THREE.Mesh(new THREE.BoxGeometry(w, h / 2, l), materialCarBase[skin])
+  base.castShadow = true
+  base.receiveShadow = true
+
+  chassis.add(base)
 
   let top = new THREE.Mesh(
     new THREE.BoxGeometry(w * (15 / 16), h / 2, l / 2),
     materialCarTop[skin],
   )
   top.position.set(0, h / 2, -l / 8)
+  top.castShadow = true
+  top.receiveShadow = true
   chassis.add(top)
 
   scene.add(chassis)
