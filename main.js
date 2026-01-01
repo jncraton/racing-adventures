@@ -172,14 +172,10 @@ function initGraphics() {
   for (let i = 0; i < 1; i++) {
     materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
     materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
-    for (let j = 0; j < 6; j++) {
-      materialWall[i][j].emissive.r = 1
-      materialWall[i][j].emissive.g = 1
-      materialWall[i][j].emissive.b = 1
-      materialWall[i][j].emissiveMap = new THREE.TextureLoader().load(
-        'textures/wall0.png',
-      )
-    }
+    ;[0, 1, 4, 5].forEach(j => {
+      materialWall[i][j].emissive = new THREE.Color('white')
+      materialWall[i][j].emissiveMap = loadTexture(`wall${i}-emissive.png`)
+    })
   }
 
   for (let i = 0; i < config.numVehicleSkins; i++) {
