@@ -92,11 +92,15 @@ function initGraphics() {
     )
 
   const loader = new THREE.TextureLoader()
-  loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
-  const loadMaterial = (path, materialType = THREE.MeshPhongMaterial) => {
+  const loadTexture = path => {
     const texture = loader.load(path)
     texture.magFilter = THREE.NearestFilter
+    return texture
+  }
+
+  const loadMaterial = (path, materialType = THREE.MeshPhongMaterial) => {
+    const texture = loadTexture(path)
 
     return new materialType({
       map: texture,
@@ -105,9 +109,8 @@ function initGraphics() {
   }
 
   const loadMaterialRepeated = (path, repeat) => {
-    const texture = loader.load(path)
+    const texture = loadTexture(path)
 
-    texture.magFilter = THREE.NearestFilter
     texture.wrapS = THREE.RepeatWrapping
     texture.wrapT = THREE.RepeatWrapping
     texture.repeat.set(repeat, repeat)
@@ -116,6 +119,9 @@ function initGraphics() {
       map: texture,
     })
   }
+
+  const materialVehicleBackEmissive = loadTexture('textures/vehicles/back-emissive.png')
+  loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
   materialOcean = loadMaterialRepeated('water.png', 32)
 
@@ -156,17 +162,28 @@ function initGraphics() {
   for (let i = 0; i < 1; i++) {
     materialWall[i] = new Array(6).fill(loadMaterial(`wall${i}.png`))
     materialWall[i][2] = loadMaterial(`wall${i}-top.png`)
+    for (let j = 0; j < 6; j++) {
+      materialWall[i][j].emissive.r = 1
+      materialWall[i][j].emissive.g = 1
+      materialWall[i][j].emissive.b = 1
+      materialWall[i][j].emissiveMap = new THREE.TextureLoader().load('textures/wall0.png')
+    }
   }
 
   for (let i = 0; i < config.numVehicleSkins; i++) {
     loader.setPath(`textures/vehicles/car/${i}/`)
+    const back = loadMaterial('back.png')
+    back.emissive.r = 1
+    back.emissive.g = 1
+    back.emissive.b = 1
+    back.emissiveMap = materialVehicleBackEmissive
     materialCarBase.push([
       loadMaterial('left.png'),
       loadMaterial('right.png'),
       loadMaterial('hood.png'),
       loadMaterial('hood.png'),
       loadMaterial('front.png'),
-      loadMaterial('back.png'),
+      back
     ])
     materialCarTop.push(new Array(6).fill(loadMaterial('top.png')))
     materialWheel.push([
