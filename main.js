@@ -70,8 +70,10 @@ function initGraphics() {
   renderer.toneMapping = true
   composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
-  const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
-  composer.addPass(new UnrealBloomPass(res, 1.5, 0.4, 0.85))
+  if (localStorage.bloom) {
+    const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
+    composer.addPass(new UnrealBloomPass(res, 1.0, 0.4, 0.75))
+  }
   composer.addPass(new OutputPass())
 
   if (localStorage.headlights != 'Off') {
