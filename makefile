@@ -7,7 +7,9 @@ all: \
 	three/addons/shaders/ConvolutionShader.js \
 	three/addons/shaders/BokehShader.js \
 	three/addons/shaders/OutputShader.js \
+	three/addons/shaders/LuminosityHighPassShader.js \
 	three/addons/postprocessing/Pass.js \
+	three/addons/postprocessing/UnrealBloomPass.js \
 	three/addons/postprocessing/BloomPass.js \
 	three/addons/postprocessing/BokehPass.js \
 	three/addons/postprocessing/ShaderPass.js \

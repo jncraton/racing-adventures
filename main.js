@@ -5,7 +5,7 @@ import {RenderPass} from 'three/addons/postprocessing/RenderPass.js'
 import {BloomPass} from 'three/addons/postprocessing/BloomPass.js'
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js'
 import {BokehPass} from 'three/addons/postprocessing/BokehPass.js'
-
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js'
 let routeHistory = []
 
 await Ammo()
@@ -70,6 +70,9 @@ function initGraphics() {
   renderer.toneMapping = true
   composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
+  const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
+  const bloomPass = new UnrealBloomPass(res, 1.5, 0.4, 0.85)
+  composer.addPass(bloomPass)
   composer.addPass(new OutputPass())
 
   if (localStorage.headlights != 'Off') {
