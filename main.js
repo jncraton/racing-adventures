@@ -193,13 +193,12 @@ function initGraphics() {
   sun.position.set(1000, 200, 1000)
   if (localStorage.shadows) {
     sun.castShadow = true
-    sun.shadow.camera.near = 1000
-    sun.shadow.camera.far = 2000
-    sun.shadow.camera.left *= 20
-    sun.shadow.camera.right *= 20
-    sun.shadow.camera.top *= 20
-    sun.shadow.camera.bottom *= 20
-    sun.shadow.camera.lookAt(new THREE.Vector3(100, 20, 100))
+    sun.shadow.camera.near = 100
+    sun.shadow.camera.far = 1500
+    sun.shadow.camera.left *= 32
+    sun.shadow.camera.right *= 32
+    sun.shadow.camera.top *= 32
+    sun.shadow.camera.bottom *= 32
     scene.add(sun)
 
     if (localStorage.debugShadows) {
