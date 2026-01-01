@@ -93,9 +93,15 @@ function initGraphics() {
 
   const loader = new THREE.TextureLoader()
 
-  const loadTexture = path => {
+  const loadTexture = (path, repeat) => {
     const texture = loader.load(path)
     texture.magFilter = THREE.NearestFilter
+
+    if (repeat) {
+      texture.wrapS = THREE.RepeatWrapping
+      texture.wrapT = THREE.RepeatWrapping
+      texture.repeat.set(repeat, repeat)    
+    }
     return texture
   }
 
@@ -109,11 +115,7 @@ function initGraphics() {
   }
 
   const loadMaterialRepeated = (path, repeat) => {
-    const texture = loadTexture(path)
-
-    texture.wrapS = THREE.RepeatWrapping
-    texture.wrapT = THREE.RepeatWrapping
-    texture.repeat.set(repeat, repeat)
+    const texture = loadTexture(path, repeat)
 
     return new THREE.MeshPhongMaterial({
       map: texture,
@@ -124,6 +126,10 @@ function initGraphics() {
   loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
   materialOcean = loadMaterialRepeated('water.png', 32)
+  if (config.emissiveWater) {
+    materialOcean.emissiveMap = loadTexture('water.png', 32)
+    materialOcean.emissive = new THREE.Color('white')
+  }
 
   water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
   water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
@@ -148,6 +154,10 @@ function initGraphics() {
   materialGrass.side = THREE.DoubleSide
   materialGrass.transparent = true
   materialWater = loadBlockMaterials('water.png')
+  if (config.emissiveWater) {
+    materialWater.forEach(s => s.emissive = new THREE.Color('white'))
+  }
+    
   materialSun = loadMaterial(
     localStorage.time == 'Day' ? 'sun.png' : 'moon.png',
     THREE.SpriteMaterial,

@@ -1,4 +1,5 @@
 {
+  "emissiveWater": true,
   "treeCanopy": true,
   "treeCanopyHeight": 0.5,
   "treeCanopyWidth": 0.5,
