@@ -100,7 +100,7 @@ function initGraphics() {
     if (repeat) {
       texture.wrapS = THREE.RepeatWrapping
       texture.wrapT = THREE.RepeatWrapping
-      texture.repeat.set(repeat, repeat)    
+      texture.repeat.set(repeat, repeat)
     }
     return texture
   }
@@ -155,9 +155,9 @@ function initGraphics() {
   materialGrass.transparent = true
   materialWater = loadBlockMaterials('water.png')
   if (config.emissiveWater) {
-    materialWater.forEach(s => s.emissive = new THREE.Color('white'))
+    materialWater.forEach(s => (s.emissive = new THREE.Color('white')))
   }
-    
+
   materialSun = loadMaterial(
     localStorage.time == 'Day' ? 'sun.png' : 'moon.png',
     THREE.SpriteMaterial,
@@ -176,7 +176,9 @@ function initGraphics() {
       materialWall[i][j].emissive.r = 1
       materialWall[i][j].emissive.g = 1
       materialWall[i][j].emissive.b = 1
-      materialWall[i][j].emissiveMap = new THREE.TextureLoader().load('textures/wall0.png')
+      materialWall[i][j].emissiveMap = new THREE.TextureLoader().load(
+        'textures/wall0.png',
+      )
     }
   }
 
@@ -193,7 +195,7 @@ function initGraphics() {
       loadMaterial('hood.png'),
       loadMaterial('hood.png'),
       loadMaterial('front.png'),
-      back
+      back,
     ])
     materialCarTop.push(new Array(6).fill(loadMaterial('top.png')))
     materialWheel.push([
