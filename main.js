@@ -71,8 +71,7 @@ function initGraphics() {
   composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
   const res = new THREE.Vector2(window.innerWidth, window.innerHeight)
-  const bloomPass = new UnrealBloomPass(res, 1.5, 0.4, 0.85)
-  composer.addPass(bloomPass)
+  composer.addPass(new UnrealBloomPass(res, 1.5, 0.4, 0.85))
   composer.addPass(new OutputPass())
 
   if (localStorage.headlights != 'Off') {
