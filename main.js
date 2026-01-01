@@ -60,6 +60,7 @@ function initGraphics() {
   renderer = new THREE.WebGLRenderer({antialias: true})
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.shadowMap.enabled = !!localStorage.shadows
 
   if (localStorage.headlights != 'Off') {
     headlight = new THREE.SpotLight(0xf7e51b, 3000.0)
@@ -190,7 +191,21 @@ function initGraphics() {
   scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
   const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel * 2.0)
   sun.position.set(1000, 200, 1000)
-  scene.add(sun)
+  if (localStorage.shadows) {
+    sun.castShadow = true
+    sun.shadow.camera.near = 1000
+    sun.shadow.camera.far = 2000
+    sun.shadow.camera.left *= 20
+    sun.shadow.camera.right *= 20
+    sun.shadow.camera.top *= 20
+    sun.shadow.camera.bottom *= 20
+    sun.shadow.camera.lookAt(new THREE.Vector3(100, 20, 100))
+    scene.add(sun)
+
+    if (localStorage.debugShadows) {
+      scene.add(new THREE.CameraHelper(sun.shadow.camera))
+    }
+  }
 
   const sprite = new THREE.Sprite(materialSun)
   sprite.scale.set(4000, 4000, 4000)
@@ -392,6 +407,11 @@ function createBox(
   let body = new Ammo.btRigidBody(rbInfo)
 
   body.setFriction(friction)
+
+  if (localStorage.shadows) {
+    mesh.receiveShadow = !mass
+    mesh.castShadow = true
+  }
 
   if (physics) {
     physicsWorld.addRigidBody(body)
@@ -746,6 +766,10 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         target_offset.applyQuaternion(chassisMesh.quaternion)
         headlight.target = new THREE.Object3D()
         headlight.target.position.copy(target_offset.add(chassisMesh.position))
+        if (localStorage.shadows && localStorage.headlightShaows) {
+          headlight.castShadow = true
+        }
+
         headlight.target.updateMatrixWorld()
       }
 
