@@ -77,7 +77,7 @@ function initGraphics() {
   composer.addPass(new OutputPass())
 
   if (localStorage.headlights != 'Off') {
-    headlight = new THREE.SpotLight(0xf7e51b, 3.0, 0, Math.PI/6, 0, 0)
+    headlight = new THREE.SpotLight(0xf7e51b, 3.0, 0, Math.PI / 6, 0, 0)
 
     headlight.distance = 100.0
     scene.add(headlight)
