@@ -189,7 +189,7 @@ function initGraphics() {
   let lightLevel = localStorage.time == 'Day' ? 5.0 : 0.05
 
   scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
-  const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel * 2.0)
+  const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel * 1.8)
   sun.position.set(1000, 200, 1000)
   if (localStorage.shadows) {
     sun.castShadow = true
