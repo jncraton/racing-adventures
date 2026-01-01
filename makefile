@@ -1,16 +1,25 @@
-all: three.module.js three.core.js ammo.js GLTFLoader.js EffectComposer.js RenderPass.js BloomPass.js
+all: three/three.module.js three/three.core.js ammo.js GLTFLoader.js \
+	three/addons/postprocessing/EffectComposer.js \
+	three/addons/shaders/CopyShader.js \
+	three/addons/shaders/ConvolutionShader.js \
+	three/addons/shaders/OutputShader.js \
+	three/addons/postprocessing/Pass.js \
+	three/addons/postprocessing/BloomPass.js \
+	three/addons/postprocessing/ShaderPass.js \
+	three/addons/postprocessing/MaskPass.js \
+	three/addons/postprocessing/OutputPass.js \
+	three/addons/postprocessing/RenderPass.js
 
-three.%.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/build/$@
+three/three.%.js:
+	cd three && wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r182/build/three.$*.js
 
-EffectComposer.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/examples/jsm/postprocessing/$@
+three/addons/postprocessing/%.js:
+	mkdir -p three/addons/postprocessing
+	cd three/addons/postprocessing && wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r182/examples/jsm/postprocessing/$*.js
 
-RenderPass.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/examples/jsm/postprocessing/$@
-
-BloomPass.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/examples/jsm/postprocessing/$@
+three/addons/shaders/%.js:
+	mkdir -p three/addons/shaders
+	cd three/addons/shaders && wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r182/examples/jsm/shaders/$*.js
 
 GLTFLoader.js:
 	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/examples/jsm/loaders/GLTFLoader.js
@@ -31,3 +40,4 @@ launch:
 
 clean:
 	rm -f three.module.js three.core.js ammo.js GLTFLoader.js EffectComposer.js RenderPass.js BloomPass.js
+	rm -rf three/*.js three/addons

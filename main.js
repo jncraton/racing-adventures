@@ -1,11 +1,16 @@
-import * as THREE from './three.module.js'
+import * as THREE from 'three'
+
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js'
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js'
+import {BloomPass} from 'three/addons/postprocessing/BloomPass.js'
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js'
 
 let routeHistory = []
 
 await Ammo()
 
 // Graphics variables
-let camera, scene, renderer, headlight, water
+let camera, scene, renderer, composer, headlight, water
 let clock = new THREE.Clock()
 let materialDynamic,
   materialGround,
@@ -61,6 +66,9 @@ function initGraphics() {
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.shadowMap.enabled = !!localStorage.shadows
+  composer = new EffectComposer(renderer)
+  composer.addPass(new RenderPass(scene, camera))
+  composer.addPass(new OutputPass())
 
   if (localStorage.headlights != 'Off') {
     headlight = new THREE.SpotLight(0xf7e51b, 3000.0)
@@ -350,7 +358,7 @@ function tick() {
 
   for (let i = 0; i < syncList.length; i++) syncList[i](dt)
   physicsWorld.stepSimulation(dt, 0)
-  renderer.render(scene, camera)
+  composer.render()
 
   requestAnimationFrame(() => requestAnimationFrame(tick))
 }
