@@ -209,7 +209,8 @@ function initGraphics() {
 
   const sprite = new THREE.Sprite(materialSun)
   sprite.scale.set(4000, 4000, 4000)
-  sprite.position.set(10000, 2000, 10000)
+  sprite.position.copy(sun.position)
+  sprite.position.multiplyScalar(10)
   scene.add(sprite)
 
   document.getElementById('container').replaceChildren(renderer.domElement)
