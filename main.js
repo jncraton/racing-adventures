@@ -141,7 +141,7 @@ function initGraphics() {
       if (i < 2 || i > 3) {
         materials[i] = materials[i].clone()
         materials[i].map = materials[i].map.clone()
-        materials[i].map.repeat.set(1.0, 0.25)
+        materials[i].map.repeat.set(1.0, 0.125)
       }
     }
     return materials
