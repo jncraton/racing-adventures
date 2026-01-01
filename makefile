@@ -1,7 +1,16 @@
-all: three.module.js three.core.js ammo.js GLTFLoader.js
+all: three.module.js three.core.js ammo.js GLTFLoader.js EffectComposer.js RenderPass.js BloomPass.js
 
 three.%.js:
 	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/build/$@
+
+EffectComposer.js:
+	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/examples/jsm/postprocessing/$@
+
+RenderPass.js:
+	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/examples/jsm/postprocessing/$@
+
+BloomPass.js:
+	wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r176/examples/jsm/postprocessing/$@
 
 GLTFLoader.js:
 	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/examples/jsm/loaders/GLTFLoader.js
@@ -21,4 +30,4 @@ launch:
 	python3 -m http.server
 
 clean:
-	rm -f three.module.js three.core.js ammo.js GLTFLoader.js
+	rm -f three.module.js three.core.js ammo.js GLTFLoader.js EffectComposer.js RenderPass.js BloomPass.js
