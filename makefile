@@ -1,4 +1,7 @@
-all: three/three.module.js three/three.core.js ammo.js GLTFLoader.js \
+all: \
+	ammo.js \
+	three/three.module.js \
+	three/three.core.js \
 	three/addons/postprocessing/EffectComposer.js \
 	three/addons/shaders/CopyShader.js \
 	three/addons/shaders/ConvolutionShader.js \
@@ -21,9 +24,6 @@ three/addons/shaders/%.js:
 	mkdir -p three/addons/shaders
 	cd three/addons/shaders && wget https://raw.githubusercontent.com/mrdoob/three.js/refs/tags/r182/examples/jsm/shaders/$*.js
 
-GLTFLoader.js:
-	wget https://raw.githubusercontent.com/mrdoob/three.js/1f61ed271920749fc4e519afb35aea52165026de/examples/jsm/loaders/GLTFLoader.js
-
 ammo.js:
 	wget https://raw.githubusercontent.com/kripken/ammo.js/1a601e4595511a560ff2baba092bbc553eb5082f/builds/ammo.js
 
@@ -39,5 +39,5 @@ launch:
 	python3 -m http.server
 
 clean:
-	rm -f three.module.js three.core.js ammo.js GLTFLoader.js EffectComposer.js RenderPass.js BloomPass.js
+	rm -f ammo.js
 	rm -rf three/*.js three/addons
