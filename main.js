@@ -208,7 +208,7 @@ function initGraphics() {
   }
 
   const sprite = new THREE.Sprite(materialSun)
-  sprite.scale.set(4000, 4000, 4000)
+  sprite.scale.set(sun.position.x * 4, sun.position.x * 4, sun.position.x * 4)
   sprite.position.copy(sun.position)
   sprite.position.multiplyScalar(10)
   scene.add(sprite)
