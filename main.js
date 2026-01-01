@@ -100,7 +100,6 @@ function initGraphics() {
     texture.magFilter = THREE.NearestFilter
 
     return new materialType({
-      color: 0x999999,
       map: texture,
       shininess: 0,
     })
@@ -115,7 +114,6 @@ function initGraphics() {
     texture.repeat.set(repeat, repeat)
 
     return new THREE.MeshPhongMaterial({
-      color: 0x999999,
       map: texture,
     })
   }
@@ -200,10 +198,10 @@ function initGraphics() {
 
   materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
-  let lightLevel = localStorage.time == 'Day' ? 5.0 : 0.05
+  let lightLevel = localStorage.time == 'Day' ? 1.0 : 0.05
 
   scene.add(new THREE.AmbientLight(0xffffff, lightLevel))
-  const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel * 1.8)
+  const sun = new THREE.DirectionalLight(0xffffff, 1.0 + lightLevel)
   sun.position.set(1000, 200, 1000)
   if (localStorage.shadows) {
     sun.castShadow = true
