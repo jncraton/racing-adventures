@@ -67,6 +67,7 @@ function initGraphics() {
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.shadowMap.enabled = !!localStorage.shadows
+  renderer.toneMapping = true
   composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
   composer.addPass(new OutputPass())
