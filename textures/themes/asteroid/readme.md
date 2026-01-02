@@ -1,0 +1,1 @@
+Background source: https://commons.wikimedia.org/wiki/File:Trifid_Nebula_by_Deddy_Dayag.jpg
