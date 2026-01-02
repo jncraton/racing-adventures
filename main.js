@@ -510,41 +510,6 @@ function createChassisMesh(w, h, l, skin = 0) {
   scene.add(chassis)
   return chassis
 }
-function createTRexMesh(w, h, l, skin = 0) {
-  let tRex = new THREE.Object3D()
-  let mat = materialCarBase[skin]
-
-  // 1. Legs: Two large, tall boxes to the left and right
-  // We scale them to be taller than the car height (h)
-  let legGeo = new THREE.BoxGeometry(w * 0.3, h * 1.2, l * 0.2)
-
-  let leftLeg = new THREE.Mesh(legGeo, mat)
-  leftLeg.position.set(-w * 0.4, h * 0.6, 0) // Offset to Left, raised to sit on ground
-  tRex.add(leftLeg)
-
-  let rightLeg = new THREE.Mesh(legGeo, mat)
-  rightLeg.position.set(w * 0.4, h * 0.6, 0) // Offset to Right
-  tRex.add(rightLeg)
-
-  // 2. Torso: Narrow body sitting on top of the legs
-  let torso = new THREE.Mesh(new THREE.BoxGeometry(w * 0.55, h * 0.7, l * 0.9), mat)
-  torso.position.set(0, h * 1.4, 0) // Lifted high up
-  tRex.add(torso)
-
-  // 3. Head: Box sitting on top/forward of the torso
-  // This brings total height to approx 2x the car height
-  let head = new THREE.Mesh(new THREE.BoxGeometry(w * 0.5, h * 0.6, l * 0.6), mat)
-  head.position.set(0, h * 2.0, l * 0.5) // High up and shifted forward
-  tRex.add(head)
-
-  // 4. Tail: Thinner box extending from the back
-  let tail = new THREE.Mesh(new THREE.BoxGeometry(w * 0.3, h * 0.4, l * 0.6), mat)
-  tail.position.set(0, h * 1.2, -l * 0.75) // Slightly lower than torso, shifted back
-  tRex.add(tail)
-
-  scene.add(tRex)
-  return tRex
-}
 
 function createVehicle(pos, player = true, skin = 0, name = 'car') {
   // Vehicle contants
