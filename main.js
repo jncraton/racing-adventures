@@ -512,7 +512,7 @@ function createChassisMesh(w, h, l, skin = 0) {
 }
 
 function createVehicle(pos, player = true, skin = 0, name = 'car') {
-  // Vehicle contants
+  // Vehicle constants
   let chassisWidth = config.vehicles[name].chassisWidth
   let chassisHeight = config.vehicles[name].chassisHeight
   let chassisLength = config.vehicles[name].chassisLength
