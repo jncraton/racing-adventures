@@ -1044,7 +1044,9 @@ function createObjects() {
               z_off -= (z_off * Math.random()) / 3
               for (let i = 0; i < 2; i++) {
                 const shape = new THREE.PlaneGeometry(block_size / 4, block_size)
-                const grass = new THREE.Mesh(shape, materialGrass)
+                const grass = new THREE.LOD()
+                grass.addLevel(new THREE.Mesh(shape, materialGrass), 0)
+                grass.addLevel(new THREE.Group(), 64)
                 grass.rotation.y = (i * Math.PI) / 2
                 grass.position.x = x + x_off
                 grass.position.y = y + block_size / 2 + block_height / 2
