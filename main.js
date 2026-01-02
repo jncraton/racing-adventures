@@ -39,7 +39,7 @@ let syncList = []
 let time = 0
 let actors = {}
 
-// Keybord actions
+// Keyboard actions
 let actions = {}
 let keysActions = {
   KeyW: 'acceleration',
