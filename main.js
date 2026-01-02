@@ -179,9 +179,7 @@ function initGraphics() {
   for (let i = 0; i < config.numVehicleSkins; i++) {
     loader.setPath(`textures/vehicles/car/${i}/`)
     const back = loadMaterial('back.png')
-    back.emissive.r = 1
-    back.emissive.g = 1
-    back.emissive.b = 1
+    back.emissive = new THREE.Color('white')
     back.emissiveMap = materialVehicleBackEmissive
     materialCarBase.push([
       loadMaterial('left.png'),
