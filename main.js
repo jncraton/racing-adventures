@@ -128,6 +128,7 @@ function initGraphics() {
     materialOcean.emissiveMap = loadTexture('water.png', 32)
     materialOcean.emissive = new THREE.Color('white')
   }
+  materialOcean.transparent = true
 
   water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
   water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
