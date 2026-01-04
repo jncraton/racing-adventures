@@ -621,9 +621,15 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         else engineForce = -maxEngineForce / 2
       }
       if (actions.left) {
+        const airTurn = new Ammo.btVector3(0, 1000, 0)
+        vehicle.getRigidBody().applyTorque(airTurn)
+        Ammo.destroy(airTurn)
         if (vehicleSteering < steeringClamp) vehicleSteering += steeringIncrement
       } else {
         if (actions.right) {
+          const airTurn = new Ammo.btVector3(0, -1000, 0)
+          vehicle.getRigidBody().applyTorque(airTurn)
+          Ammo.destroy(airTurn)
           if (vehicleSteering > -steeringClamp) vehicleSteering -= steeringIncrement
         } else {
           if (vehicleSteering < -steeringIncrement) vehicleSteering += steeringIncrement
