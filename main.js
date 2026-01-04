@@ -614,11 +614,11 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         Ammo.destroy(boost)
       }
       if (actions.acceleration) {
-        const up = new THREE.Vector3(0, 0, 1000).applyQuaternion(
+        const forward = new THREE.Vector3(0, 0, 1000).applyQuaternion(
           chassisMesh.quaternion,
         )
 
-        const boost = new Ammo.btVector3(up.x, up.y, up.z)
+        const boost = new Ammo.btVector3(forward.x, forward.y, forward.z)
         vehicle.getRigidBody().applyForce(boost)
         Ammo.destroy(boost)
 
@@ -626,12 +626,11 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         else engineForce = maxEngineForce
       }
       if (actions.boost) {
-        console.log('boosting')
-        const up = new THREE.Vector3(0, 0, 20000).applyQuaternion(
+        const forward = new THREE.Vector3(0, 0, +localStorage.boost).applyQuaternion(
           chassisMesh.quaternion,
         )
 
-        const boost = new Ammo.btVector3(up.x, up.y, up.z)
+        const boost = new Ammo.btVector3(forward.x, forward.y, forward.z)
         vehicle.getRigidBody().applyForce(boost)
         Ammo.destroy(boost)
       }

@@ -46,9 +46,11 @@
     <hr />
     <section id="enginePicker"></section>
     <hr />
+    <section id="drivePicker"></section>
+    <hr />
     <section id="jumpPicker"></section>
     <hr />
-    <section id="drivePicker"></section>
+    <section id="boostPicker"></section>
     <hr />
     <section id="headlightsPicker"></section>
     <hr />
@@ -82,6 +84,7 @@
       if (!localStorage.vehicle) localStorage.vehicle = '0'
       if (!localStorage.engine) localStorage.engine = '150HP'
       if (!localStorage.jump) localStorage.jump = '0'
+      if (!localStorage.boost) localStorage.boost = '0'
       if (!localStorage.course) localStorage.course = '0'
       if (!localStorage.ghosts) localStorage.ghosts = '0'
       if (!localStorage.time) localStorage.time = 'Day'
@@ -93,6 +96,8 @@
       localStorage.isOwned_earthquake0 = true
       localStorage.isOwned_engine150HP = true
       localStorage.isOwned_engine0 = true
+      localStorage.isOwned_jump0 = true
+      localStorage.isOwned_boost0 = true
       localStorage.isOwned_vehicle0 = true
       localStorage.isOwned_course0 = true
       localStorage.isOwned_ghosts0 = true
@@ -150,6 +155,7 @@
           i => `textures/vehicles/car/${i}/left.png`,
         )
         createSection('engine', ['150HP', '200HP', '300HP', '400HP', '700HP', '1000HP'])
+        createSection('boost', ['0', '5000', '10000', '20000'])
         createSection('jump', ['0', '20000'])
         createSection('drive', ['Rear', 'Front', 'All'])
         createSection('course', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
