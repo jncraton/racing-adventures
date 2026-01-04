@@ -47,7 +47,7 @@ let keysActions = {
   KeyD: 'right',
   KeyR: 'reset',
   Space: 'jump',
-  ControlLeft: 'boost',
+  ShiftLeft: 'boost',
 }
 
 // - Functions -
