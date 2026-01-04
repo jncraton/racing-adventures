@@ -19,7 +19,6 @@ let materialDynamic,
   materialSun,
   materialRoad,
   materialRoadCorner,
-  materialInteractive,
   materialWheel = [],
   materialCarBase = [],
   materialCarTop = [],
@@ -205,8 +204,6 @@ function initGraphics() {
     roadSideMaterial,
     roadSideMaterial,
   ]
-
-  materialInteractive = new THREE.MeshPhongMaterial({color: 0x990000})
 
   let lightLevel = localStorage.time == 'Day' ? 1.0 : 0.05
 
