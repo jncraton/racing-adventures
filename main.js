@@ -613,6 +613,14 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         Ammo.destroy(boost)
       }
       if (actions.acceleration) {
+        const up = new THREE.Vector3(0, 0, 1000).applyQuaternion(
+          chassisMesh.quaternion,
+        )
+
+        const boost = new Ammo.btVector3(up.x, up.y, up.z)
+        vehicle.getRigidBody().applyForce(boost)
+        Ammo.destroy(boost)
+
         if (speed < -1) breakingForce = maxBreakingForce
         else engineForce = maxEngineForce
       }
