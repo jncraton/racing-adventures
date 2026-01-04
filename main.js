@@ -9,7 +9,7 @@ let routeHistory = []
 await Ammo()
 
 // Graphics variables
-let camera, scene, renderer, composer, headlight, water
+let camera, scene, renderer, composer, headlight, ocean
 let clock = new THREE.Clock()
 let materialDynamic,
   materialGround,
@@ -119,11 +119,11 @@ function initGraphics() {
     materialOcean.emissive = new THREE.Color('white')
   }
 
-  water = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
-  water.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
-  water.position.setY(-2)
+  ocean = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), materialOcean)
+  ocean.quaternion.setFromAxisAngle(new THREE.Vector3(-1, 0, 0), Math.PI / 2)
+  ocean.position.setY(-2)
   if (config.oceanEnabled) {
-    scene.add(water)
+    scene.add(ocean)
   }
 
   const loadBlockMaterials = filename => {
@@ -277,15 +277,15 @@ function tick() {
   let dt = Math.min(clock.getDelta(), 0.05)
   time += dt
 
-  // Animate water
+  // Animate ocean
   materialWater[2].map.offset.x = 0.02 * Math.sin(time)
   materialWater[2].map.offset.y = 0.01 * Math.sin(time)
   materialWater[2].map.needsUpdate = true
 
-  water.material.map.offset.x = 0.02 * Math.sin(time)
-  water.material.map.offset.y = 0.01 * Math.sin(time)
-  water.position.setY(-2 + 0.3 * Math.sin(time / 2))
-  water.material.map.needsUpdate = true
+  ocean.material.map.offset.x = 0.02 * Math.sin(time)
+  ocean.material.map.offset.y = 0.01 * Math.sin(time)
+  ocean.position.setY(-2 + 0.3 * Math.sin(time / 2))
+  ocean.material.map.needsUpdate = true
 
   // Animate grass
   materialGrass.map.offset.x = 0.01 * Math.sin(time * 2)
