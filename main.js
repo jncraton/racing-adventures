@@ -46,6 +46,7 @@ let keysActions = {
   KeyA: 'left',
   KeyD: 'right',
   KeyR: 'reset',
+  Space: 'jump',
 }
 
 // - Functions -
@@ -602,6 +603,15 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
     engineForce = 0
 
     if (player) {
+      if (actions.jump) {
+        const up = new THREE.Vector3(0, 20000, 0).applyQuaternion(
+          chassisMesh.quaternion,
+        )
+
+        const boost = new Ammo.btVector3(up.x, up.y, up.z)
+        vehicle.getRigidBody().applyForce(boost)
+        Ammo.destroy(boost)
+      }
       if (actions.acceleration) {
         if (speed < -1) breakingForce = maxBreakingForce
         else engineForce = maxEngineForce
