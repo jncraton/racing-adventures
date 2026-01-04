@@ -1,4 +1,5 @@
 {
+  "oceanEnabled": false,
   "treeCanopy": "cone",
   "treeCanopyHeight": 0.5,
   "treeTrunkHeight": 0

@@ -3,6 +3,7 @@
   "treeCanopyHeight": 1,
   "treeCanopyWidth": 1,
   "treeTrunkHeight": 4,
+  "oceanEnabled": true,
   "gravity": -9.82,
   "windX": 0.0,
   "windZ": 0.0,
