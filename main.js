@@ -110,14 +110,10 @@ function initGraphics() {
     })
   }
 
-  const loadMaterialRepeated = (path, repeat) => {
-    return new THREE.MeshPhongMaterial({map: loadTexture(path, repeat)})
-  }
-
   const materialVehicleBackEmissive = loadTexture('textures/vehicles/back-emissive.png')
   loader.setPath(`textures/themes/${localStorage.theme.toLowerCase()}/`)
 
-  materialOcean = loadMaterialRepeated('water.png', 32)
+  materialOcean = new THREE.MeshPhongMaterial({map: loadTexture('water.png', 32)})
   if (config.emissiveWater) {
     materialOcean.emissiveMap = loadTexture('water.png', 32)
     materialOcean.emissive = new THREE.Color('white')
