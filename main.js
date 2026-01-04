@@ -11,7 +11,7 @@ await Ammo()
 // Graphics variables
 let camera, scene, renderer, composer, headlight, ocean
 let clock = new THREE.Clock()
-let materialDynamic,
+let materialDefault,
   materialGround,
   materialGrass,
   materialTreeTrunk,
@@ -186,7 +186,7 @@ function initGraphics() {
     ])
   }
 
-  materialDynamic = new THREE.MeshPhongMaterial({color: 0xfca400})
+  materialDefault = new THREE.MeshPhongMaterial({color: 0xfca400})
 
   materialRoad = [
     roadSideMaterial,
@@ -382,7 +382,7 @@ function createBox(
   mass = 0,
   friction = 1,
   rot = new THREE.Quaternion(0, 0, 0, 1),
-  material = materialDynamic,
+  material = materialDefault,
   physics = true,
   shape = '',
   textureRot = new THREE.Quaternion(0, 0, 0, 1),
