@@ -604,7 +604,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
 
     if (player) {
       if (actions.jump) {
-        const up = new THREE.Vector3(0, 20000, 0).applyQuaternion(
+        const up = new THREE.Vector3(0, +localStorage.jump, 0).applyQuaternion(
           chassisMesh.quaternion,
         )
 
@@ -613,9 +613,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         Ammo.destroy(boost)
       }
       if (actions.acceleration) {
-        const up = new THREE.Vector3(0, 0, 1000).applyQuaternion(
-          chassisMesh.quaternion,
-        )
+        const up = new THREE.Vector3(0, 0, 1000).applyQuaternion(chassisMesh.quaternion)
 
         const boost = new Ammo.btVector3(up.x, up.y, up.z)
         vehicle.getRigidBody().applyForce(boost)
