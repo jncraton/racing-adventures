@@ -47,6 +47,7 @@ let keysActions = {
   KeyD: 'right',
   KeyR: 'reset',
   Space: 'jump',
+  ControlLeft: 'boost',
 }
 
 // - Functions -
@@ -613,7 +614,9 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         Ammo.destroy(boost)
       }
       if (actions.acceleration) {
-        const up = new THREE.Vector3(0, 0, 1000).applyQuaternion(chassisMesh.quaternion)
+        const up = new THREE.Vector3(0, 0, 1000).applyQuaternion(
+          chassisMesh.quaternion,
+        )
 
         const boost = new Ammo.btVector3(up.x, up.y, up.z)
         vehicle.getRigidBody().applyForce(boost)
@@ -622,6 +625,17 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         if (speed < -1) breakingForce = maxBreakingForce
         else engineForce = maxEngineForce
       }
+      if (actions.boost) {
+        console.log('boosting')
+        const up = new THREE.Vector3(0, 0, 20000).applyQuaternion(
+          chassisMesh.quaternion,
+        )
+
+        const boost = new Ammo.btVector3(up.x, up.y, up.z)
+        vehicle.getRigidBody().applyForce(boost)
+        Ammo.destroy(boost)
+      }
+
       if (actions.braking) {
         if (speed > 1) breakingForce = maxBreakingForce
         else engineForce = -maxEngineForce / 2
