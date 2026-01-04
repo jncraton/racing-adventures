@@ -700,7 +700,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
     // Prevent flipping
     const MAX_ANGLE = 30 * (Math.PI / 180)
     const TORQUE_FACTOR = 10000
-    const DAMPING = 0.9
+    const DAMPING = 5.0
 
     // 1. Get current up vector
     const currentUp = new THREE.Vector3(0, 1, 0).applyQuaternion(chassisMesh.quaternion)
