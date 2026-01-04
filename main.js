@@ -104,20 +104,14 @@ function initGraphics() {
   }
 
   const loadMaterial = (path, materialType = THREE.MeshPhongMaterial) => {
-    const texture = loadTexture(path)
-
     return new materialType({
-      map: texture,
+      map: loadTexture(path),
       shininess: 0,
     })
   }
 
   const loadMaterialRepeated = (path, repeat) => {
-    const texture = loadTexture(path, repeat)
-
-    return new THREE.MeshPhongMaterial({
-      map: texture,
-    })
+    return new THREE.MeshPhongMaterial({map: loadTexture(path, repeat)})
   }
 
   const materialVehicleBackEmissive = loadTexture('textures/vehicles/back-emissive.png')
