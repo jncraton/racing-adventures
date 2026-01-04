@@ -128,14 +128,12 @@ function initGraphics() {
 
   const loadBlockMaterials = filename => {
     let materials = new Array(6).fill(loadMaterial(filename))
-    for (let i = 0; i < 6; i++) {
+    ;[0, 1, 4, 5].forEach(i => {
       // Adjust ground sides to avoid stretching
-      if (i < 2 || i > 3) {
-        materials[i] = materials[i].clone()
-        materials[i].map = materials[i].map.clone()
-        materials[i].map.repeat.set(1.0, 0.125)
-      }
-    }
+      materials[i] = materials[i].clone()
+      materials[i].map = materials[i].map.clone()
+      materials[i].map.repeat.set(1.0, 0.125)
+    })
     return materials
   }
 
