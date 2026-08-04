@@ -842,6 +842,7 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
 const groundBlocks = []
 const elevatorBlocks = []
 const boostBounds = []
+const exits = []
 
 function createObjects() {
   const block_size = 16
@@ -972,6 +973,8 @@ function createObjects() {
         )
       }
       y = -block_height
+    } else if (blockType == config.blocks.indexOf('Exit')) {
+      exits.push([x, z])
     } else {
       if (blockType == config.blocks.indexOf('Ground')) {
         for (let j = 0; j < blockStyle; j++) {
