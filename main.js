@@ -761,6 +761,8 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
         pos.z() > bound[1] - block_size / 2 &&
         pos.z() < bound[1] + block_size / 2
       ) {
+        alert('You get $20k for winning!')
+        localStorage.money = +localStorage.money + 20000
         location.href = 'index.html'
       }
     })
