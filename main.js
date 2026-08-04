@@ -50,6 +50,8 @@ let keysActions = {
   ShiftLeft: 'boost',
 }
 
+const block_size = 16
+
 // - Functions -
 
 function initGraphics() {
@@ -752,6 +754,17 @@ function createVehicle(pos, player = true, skin = 0, name = 'car') {
       }
     })
 
+    exits.forEach(bound => {
+      if (
+        pos.x() > bound[0] - block_size / 2 &&
+        pos.x() < bound[0] + block_size / 2 &&
+        pos.z() > bound[1] - block_size / 2 &&
+        pos.z() < bound[1] + block_size / 2
+      ) {
+        location.href = 'index.html'
+      }
+    })
+
     chassisMesh.position.set(pos.x(), pos.y(), pos.z())
     chassisMesh.quaternion.set(rot.x(), rot.y(), rot.z(), rot.w())
 
@@ -845,7 +858,6 @@ const boostBounds = []
 const exits = []
 
 function createObjects() {
-  const block_size = 16
   let block_height = block_size / 8
 
   let hash = location.hash.slice(1)
