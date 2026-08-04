@@ -12,6 +12,7 @@ await Ammo()
 let camera, scene, renderer, composer, headlight, ocean
 let clock = new THREE.Clock()
 let materialDefault,
+  materialExit,
   materialGround,
   materialGrass,
   materialTreeTrunk,
@@ -128,6 +129,8 @@ function initGraphics() {
   if (config.oceanEnabled) {
     scene.add(ocean)
   }
+
+  materialExit = new THREE.MeshPhongMaterial()
 
   const loadBlockMaterials = filename => {
     let materials = new Array(6).fill(loadMaterial(filename))
@@ -988,7 +991,18 @@ function createObjects() {
       }
       y = -block_height
     } else if (blockType == config.blocks.indexOf('Exit')) {
-      exits.push([x, z])
+      ;(createBox(
+        new THREE.Vector3(x, 0, z),
+        block_size,
+        block_height + 800,
+        block_size,
+        0,
+        1,
+        rot,
+        materialExit,
+        false,
+      ),
+        exits.push([x, z]))
     } else {
       if (blockType == config.blocks.indexOf('Ground')) {
         for (let j = 0; j < blockStyle; j++) {
