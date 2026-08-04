@@ -130,7 +130,12 @@ function initGraphics() {
     scene.add(ocean)
   }
 
-  materialExit = new THREE.MeshPhongMaterial()
+  materialExit = new THREE.MeshPhongMaterial({
+    color: new THREE.Color(0x00ff00),
+    emissive: new THREE.Color(0x00ff00),
+    alphaMap: loadTexture('water.png', 32),
+  })
+  materialExit.transparent = true
 
   const loadBlockMaterials = filename => {
     let materials = new Array(6).fill(loadMaterial(filename))
@@ -994,7 +999,7 @@ function createObjects() {
       ;(createBox(
         new THREE.Vector3(x, 0, z),
         block_size,
-        block_height + 800,
+        block_height + 10 ** 6,
         block_size,
         0,
         1,
