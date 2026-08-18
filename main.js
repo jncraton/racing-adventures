@@ -213,7 +213,7 @@ async function initGraphics() {
   }
 
   for (let i = 0; i < config.numVehicleSkins; i++) {
-    loader.setPath(`textures/vehicles/car/${i}/`)
+    loader.setPath(`textures/vehicles/car/`)
     const back = await loadVehicleMaterial('back.png', localStorage.vehicleColor)
     back.emissive = new THREE.Color('white')
     back.emissiveMap = materialVehicleBackEmissive
