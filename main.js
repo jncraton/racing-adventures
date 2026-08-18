@@ -55,7 +55,7 @@ const block_size = 16
 
 // - Functions -
 
-function initGraphics() {
+async function initGraphics() {
   scene = new THREE.Scene()
 
   camera = new THREE.PerspectiveCamera(
@@ -111,6 +111,41 @@ function initGraphics() {
     return new materialType({
       map: loadTexture(path),
       shininess: 0,
+    })
+  }
+
+  const loadVehicleMaterial = async (path, color) => {
+    const overlayTexture = await loader.loadAsync(path)
+    overlayTexture.magFilter = THREE.NearestFilter
+
+    const width = overlayTexture.image.width
+    const height = overlayTexture.image.height
+
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+
+    const ctx = canvas.getContext('2d')
+
+    ctx.imageSmoothingEnabled = false
+    ctx.fillStyle = color
+    ctx.fillRect(0, 0, width, height)
+
+    ctx.globalCompositeOperation = 'source-over'
+    ctx.globalAlpha = 1
+    ctx.drawImage(overlayTexture.image, 0, 0, width, height)
+
+    // Convert the composited canvas into a Three.js texture
+    const mergedTexture = new THREE.CanvasTexture(canvas)
+    mergedTexture.colorSpace = THREE.SRGBColorSpace
+    mergedTexture.wrapS = THREE.ClampToEdgeWrapping
+    mergedTexture.wrapT = THREE.ClampToEdgeWrapping
+    mergedTexture.minFilter = THREE.NearestFilter
+    mergedTexture.magFilter = THREE.NearestFilter
+    mergedTexture.needsUpdate = true
+
+    return new THREE.MeshPhongMaterial({
+      map: mergedTexture,
     })
   }
 
@@ -179,29 +214,27 @@ function initGraphics() {
 
   for (let i = 0; i < config.numVehicleSkins; i++) {
     loader.setPath(`textures/vehicles/car/${i}/`)
-    const back = loadMaterial('back.png')
+    const back = await loadVehicleMaterial('back.png', localStorage.vehicleColor)
     back.emissive = new THREE.Color('white')
     back.emissiveMap = materialVehicleBackEmissive
     materialCarBase.push([
-      loadMaterial('left.png'),
-      loadMaterial('right.png'),
-      loadMaterial('hood.png'),
-      loadMaterial('hood.png'),
-      loadMaterial('front.png'),
+      await loadVehicleMaterial('left.png', localStorage.vehicleColor),
+      await loadVehicleMaterial('right.png', localStorage.vehicleColor),
+      await loadVehicleMaterial('hood.png', localStorage.vehicleColor),
+      await loadVehicleMaterial('hood.png', localStorage.vehicleColor),
+      await loadVehicleMaterial('front.png', localStorage.vehicleColor),
       back,
     ])
-    materialCarTop.push(new Array(6).fill(loadMaterial('top.png')))
+    materialCarTop.push(
+      new Array(6).fill(
+        await loadVehicleMaterial('top.png', localStorage.vehicleColor),
+      ),
+    )
     materialWheel.push([
       loadMaterial('tire.png'),
       loadMaterial('hubcap.png'),
       loadMaterial('hubcap.png'),
     ])
-    materialCarBase[0].forEach(m => {
-      m.color.set(localStorage.vehicleColor)
-    })
-    materialCarTop[0].forEach(m => {
-      m.color.set(localStorage.vehicleColor)
-    })
   }
 
   materialDefault = new THREE.MeshPhongMaterial({color: 0xfca400})
@@ -1210,7 +1243,7 @@ try {
 const vehicleConfig = await fetch(`textures/vehicles/config.json`)
 config.vehicles = await vehicleConfig.json()
 
-initGraphics()
+await initGraphics()
 initPhysics()
 createObjects()
 tick()
