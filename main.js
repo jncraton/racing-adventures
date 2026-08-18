@@ -196,6 +196,12 @@ function initGraphics() {
       loadMaterial('hubcap.png'),
       loadMaterial('hubcap.png'),
     ])
+    materialCarBase[0].forEach(m => {
+      m.color.set(0xff0000)
+    })
+    materialCarTop[0].forEach(m => {
+      m.color.set(0xff0000)
+    })
   }
 
   materialDefault = new THREE.MeshPhongMaterial({color: 0xfca400})
