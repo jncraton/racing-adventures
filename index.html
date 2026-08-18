@@ -34,7 +34,8 @@
         font-size: 64px;
       }
       #jumpPicker,
-      #boostPicker {
+      #boostPicker,
+      #skinPicker {
         display: none;
       }
     </style>
@@ -48,6 +49,8 @@
     <section id="vehiclePicker"></section>
 
     <section id="skinPicker"></section>
+
+    <section id="vehicleColorPicker"></section>
 
     <section id="enginePicker"></section>
 
@@ -85,6 +88,7 @@
     <script>
       if (!localStorage.money) localStorage.money = 0
       if (!localStorage.vehicle) localStorage.vehicle = 'Car'
+      if (!localStorage.vehicleColor) localStorage.vehicleColor = '#ffffff'
       if (!localStorage.skin) localStorage.skin = '0'
       if (!localStorage.engine) localStorage.engine = '150HP'
       if (!localStorage.jump) localStorage.jump = '0'
@@ -154,6 +158,7 @@
         }
 
         createSection('vehicle', ['Car', 'Limo', 'Off Roader', 'Minicar'])
+        createSection('vehicleColor', ['White', 'Red', 'Blue'])
         createSection(
           'skin',
           [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
