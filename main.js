@@ -197,10 +197,10 @@ function initGraphics() {
       loadMaterial('hubcap.png'),
     ])
     materialCarBase[0].forEach(m => {
-      m.color.set(0xff0000)
+      m.color.set(localStorage.vehicleColor)
     })
     materialCarTop[0].forEach(m => {
-      m.color.set(0xff0000)
+      m.color.set(localStorage.vehicleColor)
     })
   }
 
